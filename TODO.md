@@ -53,14 +53,14 @@ Tick items as you finish them and push. Only edit your own lane's section, plus 
 
 ## Lane D: Khaliq (AI and API usage)
 
-- [ ] Define `src/types/roadmap.ts` first (follow-up round, verdict, improvements, roadmap, improved business plan, preview/paid flags) and announce it
-- [ ] Decide whether to rename the contract file now it holds the whole plan
-- [ ] Prompt: follow-up questions (up to about 5, plus an "enough" flag)
-- [ ] Prompt: call 1, JSON only, word ratings, honest reasons, cheap tests, professional advice
-- [ ] Prompt: call 2, improved business plan (build after stage 1 works)
-- [ ] Prompts forbid invented organisations, grants and statistics; local support only from Lane B's list
-- [ ] Anthropic API call code with key from `.env` and model from `CLAUDE_MODEL`
-- [ ] Strip code fences and parse inside `try/catch`
+- [x] Define `src/types/roadmap.ts` first (follow-up round, verdict, improvements, roadmap, improved business plan, preview/paid flags) and announce it
+- [x] Decide whether to rename the contract file now it holds the whole plan (kept as `roadmap.ts`)
+- [x] Prompt: follow-up questions (up to about 5, plus an "enough" flag)
+- [x] Prompt: call 1, JSON only, word ratings, honest reasons, cheap tests, professional advice
+- [x] Prompt: call 2, improved business plan (build after stage 1 works)
+- [x] Prompts forbid invented organisations, grants and statistics; local support only from Lane B's list
+- [x] Anthropic API call code with key from `.env` and model from `CLAUDE_MODEL`
+- [x] Strip code fences and parse inside `try/catch`
 - [ ] Log input and output tokens for every call; give Zac the real cost per person and per payer
 - [ ] Test with Lane B's three fictional ideas
 
