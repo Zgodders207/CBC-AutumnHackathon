@@ -164,8 +164,8 @@ h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height
 
 /* ---- Score page ---- */
 .score-top{padding-top:clamp(48px,6vw,88px)}
-.score-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,0.75fr);gap:clamp(24px,3vw,40px);align-items:start}
-.sheet{border-radius:26px;padding:clamp(26px,3vw,40px);position:relative;z-index:2;color:var(--ink);transform:translateY(120px)}
+.score-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,0.75fr);gap:clamp(24px,3vw,40px);align-items:stretch;position:relative;z-index:2;transform:translateY(120px)}
+.sheet{border-radius:26px;padding:clamp(26px,3vw,40px);position:relative;z-index:2;color:var(--ink)}
 .tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);background:rgba(255,255,255,0.6);border:1px solid rgba(15,34,27,0.08);border-radius:999px;padding:4px 11px}
 .idea{font-size:15px;color:var(--ink-2);margin:18px 0 2px}
 .overall{font-weight:500;font-variation-settings:"wdth" 118;font-size:clamp(2.6rem,4.6vw,4.2rem);line-height:1;letter-spacing:-0.04em;margin:6px 0 14px}
@@ -183,14 +183,15 @@ h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height
 .risks li{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:15.5px;line-height:1.5}
 .risks svg{color:var(--risk);margin-top:2px}
 .risks b{font-weight:500;color:var(--risk)}
-.pay{border-radius:24px;padding:clamp(24px,2.6vw,34px);color:var(--on-field)}
-.pay.paid{background:rgba(255,255,255,0.13);border-color:rgba(242,201,76,0.45);box-shadow:inset 0 1px 0 rgba(255,255,255,0.25),0 0 0 1px rgba(242,201,76,0.12),0 40px 80px -36px rgba(2,18,12,0.75)}
+.pay{border-radius:24px;padding:clamp(24px,2.6vw,34px);color:var(--on-field);display:flex;flex-direction:column}
+.pay.paid{background:linear-gradient(170deg,#1C4D3B 0%,#11291F 100%);border:1px solid rgba(242,201,76,0.45);box-shadow:inset 0 1px 0 rgba(255,255,255,0.14),0 0 0 1px rgba(242,201,76,0.12),0 50px 100px -40px rgba(4,26,18,0.55),0 14px 30px -14px rgba(4,26,18,0.28)}
 .price{font-weight:500;font-variation-settings:"wdth" 120;font-size:clamp(3rem,5vw,4.4rem);letter-spacing:-0.05em;line-height:1;margin:0 0 6px}
 .pay h3{font-size:20px;margin:0 0 18px}
 .pay ul{margin:0 0 26px;padding:0;list-style:none;display:grid;gap:12px;color:var(--on-field-2);font-size:16px}
 .pay li{display:grid;grid-template-columns:22px 1fr;gap:10px}
 .pay li svg{color:var(--signal);margin-top:3px}
 .pay .btn{width:100%}
+.pay .price{margin:auto 0 18px;padding-top:24px}
 .pay .fine{margin-top:12px}
 .score-bottom{padding-block:180px 40px}
 .limits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;max-width:860px}
@@ -266,7 +267,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 
 @media (max-width:900px){
   .hero-grid,.app,.gen,.score-grid,.err-grid,.plan-body{grid-template-columns:minmax(0,1fr)}
-  .sheet{transform:none}
+  .sheet,.score-grid{transform:none}
   .score-bottom{padding-top:56px}
   .home-sheet{display:none}
   .answers{position:static}
@@ -487,16 +488,16 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
             <li><svg class="i" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span><b>Risk</b> Cycling between jobs could use up most of your hours.</span></li>
           </ul>
         </article>
-        <aside class="pay smoke paid" aria-labelledby="pay-h">
-          <p class="price num">£4.99</p>
+        <aside class="pay paid" aria-labelledby="pay-h">
           <h3 id="pay-h">Unlock the full plan, one-off</h3>
           <ul>
             <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>What to improve for each of the four scores</li>
             <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>A roadmap of cheap tests that fit your budget and week</li>
             <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>An improved business plan, written for your idea</li>
           </ul>
+          <p class="price num">£4.99</p>
           <button class="btn" type="button" data-open="checkout">Unlock full plan, £4.99</button>
-          <p class="fine">Everything on the left stays free, including the bad news.</p>
+          <p class="fine">Your verdict and risks stay free, including the bad news.</p>
         </aside>
       </div>
     </div>
