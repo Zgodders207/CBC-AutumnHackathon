@@ -6,6 +6,8 @@ Owner: Lane C (Michael). Product behaviour lives in `idea.md`; this file only co
 
 **Reference build:** `docs/design/example.html`. Open it in a browser. It is the approved look (signed off by Zac as PM). When this file and the reference disagree, the reference wins and this file gets fixed. All content in it is fictional and "Groundwork" is a working name only.
 
+**App screens:** sections 6 and 7 extend the same look to every screen after the landing page (questions, generating, score page, checkout, full plan, error). They were written from a clickable prototype of the whole flow built on the reference.
+
 ## 1. Direction
 
 **Subject:** an honest business planner for people in the North East who are unsure whether their business idea would last.
@@ -77,8 +79,8 @@ Rules: `text-wrap: balance` on headings, reading columns max about 60 characters
 
 Glass is deliberate here, not decoration. It only works with texture behind it, which is why green fields carry contour lines.
 
-- **Frost** (light glass): the verdict sheet. `--glass-light`, `backdrop-filter: blur(28px) saturate(170%)`, 1px white border at 75%, a bright inner top highlight, and a deep soft shadow.
-- **Smoke** (dark glass on green): idea input, pricing panels, closing elements. `--glass-dark`, `blur(22px) saturate(150%)`, 1px white border at 16%, inner top highlight.
+- **Frost** (light glass): the verdict sheet and the checkout dialog. `--glass-light`, `backdrop-filter: blur(28px) saturate(170%)`, 1px white border at 75%, a bright inner top highlight, and a deep soft shadow.
+- **Smoke** (dark glass on green): idea input, pricing and paywall panels, the generating stage list, closing elements. `--glass-dark`, `blur(22px) saturate(150%)`, 1px white border at 16%, inner top highlight.
 - **Nav:** a floating frosted dark bar, sticky, with the persistent "Check my idea" button.
 - Only these surfaces get glass. Roadmap tiles and the honesty cards use solid light panels with an inner highlight instead.
 - Always include `-webkit-backdrop-filter`, and the `@supports not` fallback to near-solid panels from the reference.
@@ -89,23 +91,63 @@ Copy the `.frost`, `.smoke`, `.nav` and `.field` rules from the reference rather
 
 ## 6. Screens
 
-Use the reference for the landing page. App screens follow the same system:
+The landing page follows the reference. Every app screen after it uses one of three **page types**, so the whole flow feels like one product:
 
-- **Landing:** green hero, headline left, smoke-glass idea input with yellow button, frosted verdict sheet right overlapping into the page. Then roadmap, pricing band, honesty section, closing panel.
-- **Intake:** round 1 is one question per screen on paper. Follow-up rounds show the AI's questions together under "A few more questions" with "Round 2 of up to 3". A form, never chat bubbles.
-- **Generating:** staged messages that reflect real work ("Reading your answers…", "Checking whether it could last…"). Never a bare spinner.
-- **Verdict preview (free):** the frosted sheet: idea summary, overall word rating with the four-word scale (Not viable yet / Needs work / Promising / Strong) and the chosen one filled in ink, "A rough view, not a prediction", the three area ratings, the top 2 risks, then the paywall panel.
-- **Paywall:** "Unlock the full plan: improvements for each area, your roadmap and an improved business plan. £4.99, one-off." One yellow button. No timers or pressure.
-- **Writing your full plan (paid):** may take 20 to 40 seconds; staged progress, reveal sections as they arrive.
-- **Full plan:** improvements in three groups, the roadmap as the route (filled yellow stops for unlocked steps, hollow dashed tiles for locked ones), the improved business plan in a reading column, then "What this plan assumes" and "Where to get proper advice" as expandable sections.
-- **Error / fallback:** say what happened, offer "Try again" and "See an example plan". Never only "Something went wrong".
+| Page type | Background | Used for | Layout |
+|-----------|------------|----------|--------|
+| **Field page** | Full-height green `.field` with contour lines, nav sits on it | Landing, generating, error | Main column left, "Your answers" panel right (360 to 380px) |
+| **Paper page** | `--paper`, nav switches to its solid dark state | Round 1, follow-up rounds, PDF review | Question column left (max 720px), sticky "Your answers so far" panel right (360px) |
+| **Split page** | Green field band on top, paper below | Score page, full plan | Field band holds the headline content; paper holds the detail |
+
+Spacing: content starts `clamp(48px, 6vw, 80px)` below the nav. Column gap `clamp(32px, 5vw, 80px)`. Below 900px every layout becomes one column, the answers panel stops being sticky and moves under the main column. Use `padding-block` (not the `padding` shorthand) on any element that also has `.wrap`, or the side gutters disappear.
+
+### Screen by screen
+
+- **Landing (field):** as the reference. The right column is the frosted example verdict sheet, labelled "Example with fictional answers". Optional line under the input: "Already have a business plan or accounts? Upload a PDF to save time." (only if the team builds the upload).
+- **PDF review (paper, proposed feature):** heading "Here's what we found". File chip with the file name, one line saying what happens to the file ("read once for this check and not kept afterwards", only once Lane E confirms it), then a list of what was found, each row with "Edit". Fields not in the PDF say "Not in the PDF, we'll ask". Primary: "Looks right, continue"; text link: "Skip the PDF and answer questions instead".
+- **Round 1 (paper):** "Question 4 of 5" plus the progress bar, then the question as the heading, one helper sentence, answer tiles in two columns, "Not sure" always the last tile. Primary "Continue", text link "Back". The answers panel shows what is known so far; the current row says "Answering now…" and later rows say "Next".
+- **Follow-up round (paper):** "Round 2 of up to 3", heading "A few more questions", helper "Written by Claude from your answers so far. Skip any you can't answer." Questions are stacked rows separated by hairlines, each with a one-line "why we ask" in `--ink-2`, answered with chips or a text input. Never chat bubbles.
+- **Generating (field):** heading "Checking your idea…", a smoke panel listing the real stages, and the answers panel on the right. One line under the stages saying the example plan is shown if the connection drops.
+- **Score page (split):** frosted verdict sheet on the left of the field band, overlapping 120px down into the paper (signature moment 1). Paywall smoke panel on the right of the band. Under the band, two short notes on paper: "What it can't know" and "When to get proper advice".
+- **Checkout (dialog over the score page):** frost dialog, line item "Full plan, one-off £4.99", a dashed note "Test mode. No real payment is taken in this demo.", primary "Pay £4.99", text link "Not now". Escape closes it.
+- **Writing your full plan (split):** the full plan page with an ink "Writing your improved business plan…" card at the top of the paper column and grey placeholder lines where the improved business plan will appear. Improvements and roadmap show straight away.
+- **Full plan (split):** field band with the "Example with fictional answers" tag (when it is the example), the heading "Your plan: [idea], [place]", one line of all five ratings, and a quiet "Download as PDF" button (export format still TBD). Paper below: section nav on the left (200px, sticky), then improvements, roadmap, improved business plan, and the two expandable sections.
+- **Error (field):** heading "Your check didn't finish", one sentence on what happened and that answers are kept, primary "Try again", quiet "See an example plan", answers panel on the right.
+
+### The verdict: four scores
+
+The verdict shows an **overall** rating plus four scores, all as words on the four-word scale (Not viable yet / Needs work / Promising / Strong):
+
+1. Financial stability
+2. Long-term sustainability
+3. Room in the market (higher always means better for the person, so never "Saturation")
+4. Skills and ability
+
+Each score has a one-line reason under it. The top 2 risks follow, always free. Improvements in the full plan are grouped by the same four scores, in the same order.
 
 ## 7. Components
 
-- **Primary button:** `--signal` fill, `--signal-ink` label, radius 11px, min height 46px (44px minimum on mobile), inner top highlight, warm soft shadow. Label names the action: "Check my idea", "Unlock full plan, £4.99".
-- **Input:** at least 16px text (prevents iOS zoom), visible label (visually hidden is fine if the placeholder is an example), yellow caret, 2px focus outline.
-- **Panels:** radius 18 to 26px; children always have a smaller radius than their parent.
-- **Icons:** thin line icons, one consistent stroke, `currentColor`. No emoji.
+Build to these specs, and copy `.btn`, `.frost`, `.smoke`, `.field`, `.nav`, `.sheet`, `.scale` and the route (`.line`, `.stop`, `.dot`) from the reference rather than inventing new ones. Radii nest: page panels 18 to 26px, tiles 16px, chips and inputs 11 to 12px.
+
+- **Primary button:** `--signal` fill, `--signal-ink` label, radius 11px, min height 46px (44px minimum on mobile), inner top highlight, warm soft shadow. Label names the action: "Check my idea", "Continue", "Unlock full plan, £4.99", "Try again". One per view.
+- **Quiet button:** transparent, 1px border at 22% ink (28% white on green), same height and radius as primary. For secondary actions such as "See an example plan" or "Download as PDF".
+- **Text link:** 15px, `--ink-2`, underlined. For "Back", "Skip…", "Change an answer".
+- **Nav:** the reference's floating smoke bar. On paper pages use the solid state, `background: rgba(16,44,33,0.86)`, so it stays readable without green behind it. Right side holds "Example plan" and "Start again" links; the yellow nav button only appears on the landing page.
+- **Step label and progress bar:** 14px `--ink-2` label ("Question 4 of 5", "Round 2 of up to 3"), then a bar of 6px segments with 6px gaps, filled segments `--field`, empty segments `rgba(27,85,65,0.18)`, max width 380px.
+- **Answer tile (single choice):** radius 16px, padding 18px 20px, `rgba(255,255,255,0.6)` with an inner white highlight, a 20px radio ring, a 17px label and an optional 14.5px description. **Selected:** filled `--ink` with light text and a yellow dot in the ring. Use `role="radio"` with `aria-checked`. Two columns on desktop, one on mobile.
+- **Chip (single choice in follow-up rounds):** 15.5px text, padding 9px 15px, radius 11px, light panel; selected chip is filled `--ink` with light text.
+- **Text input:** 17px, radius 12px, `rgba(255,255,255,0.7)` with a 16% ink border, yellow focus ring.
+- **"Your answers" panel:** radius 20px, solid light panel on paper; on green it becomes `rgba(255,255,255,0.08)` with a 16% white border. Rows are label (96px, `--ink-2`) and value, split by hairlines. Ends with a "Change an answer" text link. Sticky at `top: 100px` on desktop only.
+- **Stage list (loading):** a smoke panel, radius 22px, 18px rows. Each row has a 28px marker: empty ring (to do), yellow ring with a static yellow dot (now, text at weight 500), yellow fill with a dark tick (done). No looping animations, no spinners.
+- **Score list:** inside the frost sheet, a light panel (radius 18px) of rows: score name (500) left, rating word right (500, width 112, 18px), the reason on the next line in `--ink-2` at 15px.
+- **Paywall panel:** smoke on green with the reference's `.paid` treatment (yellow-tinted border). Price in the price style, "Unlock the full plan, one-off", three items with yellow ticks, full-width primary button, and one line "Everything on the left stays free, including the bad news."
+- **Dialog:** frost, radius 24px, max width 440px, over a `rgba(9,26,20,0.45)` scrim. Focus moves to its primary button; Escape closes it.
+- **Improvement card:** light panel, radius 20px, two columns on desktop. Header row: score name (card title) and its rating word in `--ink-2`. Then the change in 500 weight, "Why:" and "Check it cheaply:" lines.
+- **Route (full plan):** the reference route with every stop unlocked: solid 6px `--field` line, yellow dots with ink rings, light tiles showing name, time and cost (tabular numbers) and one sentence. Locked stops (dashed tile, hollow dot) appear only before payment.
+- **Writing card:** solid `--ink` panel, radius 22px, a static yellow marker, a 18px title ending in "…" and one `--on-field-2` line. Placeholder lines below are 16px bars at 8% ink.
+- **Expandable section:** native `<details>`, 18px summary at weight 500, chevron rotates 180° on open, hairlines between sections.
+- **Example tag:** the reference's pill ("Example with fictional answers"). On green use 8% white with a 16% white border.
+- **Icons:** thin line icons, 1.8 stroke, `currentColor`. No emoji.
 - **Browser details:** themed `::selection` (yellow), focus ring (3px yellow, 3px offset), caret colour, `text-underline-offset`.
 
 ## 8. Copy
@@ -153,6 +195,9 @@ Fix anything that answers yes:
 - [ ] A library's default theme left unmodified?
 - [ ] A bare spinner?
 - [ ] Unthemed selection, focus ring or caret?
+- [ ] A paper page using the see-through nav, or an app screen not built on one of the three page types?
+- [ ] A looping animation or spinner in a loading state?
+- [ ] A score label where a better rating means a worse outcome (for example "Saturation")?
 
 ## 13. Sources consulted
 
