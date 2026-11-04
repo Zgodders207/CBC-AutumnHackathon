@@ -4,7 +4,7 @@ The visual and interaction rules for this project. Every Claude session building
 
 Owner: Lane C (Michael). Product behaviour lives in `idea.md`; this file only covers how it looks and feels.
 
-**Reference build:** `docs/design/example.html`. Open it in a browser. It is the approved look (signed off by Zac as PM). When this file and the reference disagree, the reference wins and this file gets fixed. All content in it is fictional and "Groundwork" is a working name only.
+**Reference build:** `docs/design/example.html`. Open it in a browser. It is the approved look (signed off by Zac as PM). When this file and the reference disagree, the reference wins and this file gets fixed. All content in it is fictional and "Groundworking" is a working name only.
 
 **App screens reference:** `docs/design/app-screens.html`. A clickable build of every screen after the landing page (PDF review, round 1, follow-ups, generating, score page, checkout, writing, full plan, error), built on `example.html`. **To build a screen, copy its `<section>` and the CSS it uses from this file, then change only the content.** Do not re-create it from the text below, and do not rewrite its CSS into Tailwind classes; import it as one global stylesheet and reuse the class names. When this file and the reference disagree, the reference wins. Sections 6 and 7 describe what the reference contains.
 
