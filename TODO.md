@@ -1,85 +1,101 @@
 # TODO.md
 
-Tick items as you finish them and push. Only edit your own lane's section, plus the shared checkpoints when you complete one. Add new tasks at the bottom of your lane. Lanes match `CLAUDE.md`; product decisions are in `idea.md` section 11b.
+Prototype review fixes. Tick items as you finish them and push. Mention the item in your commit message.
 
-## Shared checkpoints
+## Highest priorities
 
-- [ ] 2:00 Stack confirmed in CLAUDE.md
-- [ ] 2:00 Skeleton pushed to `main`, everyone has cloned
-- [ ] 2:00 `.env.example` committed; each person has a working `.env`
-- [ ] 2:20 `src/types/roadmap.ts` contract pushed by Lane D and announced
-- [ ] 2:20 Team confirms the idea.md 11b decisions in the group chat
-- [ ] 3:30 Stage 1 happy path works end to end: round 1, one follow-up round, verdict preview, unlock, full plan
-- [ ] 3:30 Decide: add up to 3 follow-up rounds (stage 2) only if the happy path works
-- [ ] 4:30 Feature freeze; bugs and polish only. If call 2 is not working, drop it
-- [ ] 5:15 Full demo rehearsal at 125% zoom on the demo machine
-- [ ] 5:15 Phone check at 375px width
-- [ ] 5:45 Repo public, deck and paragraph submitted
+- [ ] Remove the debug text and the overflowing prototype bar.
+- [ ] Make the answers panels show real answers.
+- [ ] Fix the broken #plan section links.
+- [ ] Add real Skip, edit and validation behaviour.
+- [ ] Make the free-verdict explanations and the paid-plan value clearer.
+- [ ] Move the disclaimers up and remove the internal wording.
 
-## Lane A: Zac (project manager / intake)
+## Across the whole prototype
 
-- [ ] Scaffold the skeleton (React + Vite + TypeScript + Tailwind, `server/` folder) and push
-- [ ] Routing in `src/App.tsx`: landing, intake, follow-ups, generating, verdict preview, writing full plan, full plan
-- [ ] Landing screen with the idea textarea as the hero (see `docs/design/DESIGN.md`)
-- [ ] Intake round 1: idea, skills, weekly hours, budget, location; "I'm not sure" on each
-- [ ] Follow-up round screen that renders the AI's questions from Lane E's endpoint
-- [ ] Labels, helper text, inline validation, focus on first error
-- [ ] README: problem, solution, how to run, how we used AI, known limitations
-- [ ] Fill PROJECT_BRIEF.md slides 4 and 5; replace assumed costs with Lane D's token log
-- [ ] Pitch deck from the template and submission paragraph (confirm owner with the team)
-- [ ] Merge lane branches into `main` every 30 minutes
+- [ ] Prototype bar: remove the stray text "silent type: other (hidden from users)", which looks like leaked debug text. Stop it overflowing with a horizontal scrollbar and covering page content at the bottom of every screen.
+- [ ] Answers aren't carried between screens: the "Your answers so far" panels show "Not given" or "Next" everywhere, and "Idea" is blank even after the home screen. Link the home screen to the later screens.
+- [ ] Fictional example: "Example with fictional answers" appears on the home screen, but the real flow would never show that badge. That makes the final screens hard to judge.
+- [ ] Navigation: every "Back" link goes to a fixed screen rather than the previous one, and "Start again" has no confirmation. A user could lose their answers by mistake.
 
-## Lane B: Eric (research)
+## 1. Home
 
-- [ ] One or two fictional demo personas in `demo-data/`
-- [ ] Scripted demo conversation (fictional answers to round 1 and follow-ups) for the fallback
-- [ ] Rough number of potential customers in the North East, with source
-- [ ] "Why now" sentence, with source
-- [ ] Source for the 2% to 5% free-to-paid conversion rule of thumb, or tell Zac to drop it
-- [ ] Verified local support list only (name, what it offers, link), for the prompt and the demo
-- [ ] Three realistic, fictional test ideas for Lane D
+- [ ] Input: the idea box looks like it's already filled in. The grey placeholder reads like real text, and there's no visible label.
+- [ ] Empty or very short ideas: nothing is shown for these, and there are no examples or prompts for vague ideas.
+- [ ] Price note: the "£4.99… not advice" line is small and low-contrast on green, and so is the PDF link below it.
+- [ ] Trust: there's no explanation of how the check works or who built it. The tool asks for money and personal plans, so that matters.
+- [ ] Verdict preview: the example verdict exists in the page but isn't shown, so new visitors can't see what they'd get.
 
-## Lane C: Michael (UI design)
+## 2. PDF upload ("Here's what we found")
 
-- [ ] Own and update `docs/design/DESIGN.md`; map its tokens into the Tailwind config
-- [ ] Confirm the rating labels with Lane D (proposed: Strong / Promising / Needs work / Not viable yet)
-- [ ] Staged generating screen with real progress messages
-- [ ] Verdict preview: overall and area ratings as words, top 2 risks, "A rough view, not a prediction"
-- [ ] Paywall panel: what unlocks, £4.99, one primary button
-- [ ] "Writing your full plan" loading screen (20 to 40 seconds)
-- [ ] Full plan: improvements, roadmap route, improved business plan reading column
-- [ ] Error / fallback notice with "Try again" and "See an example plan"
-- [ ] Run the anti-slop checklist in DESIGN.md before each merge
+- [ ] Missing details: "Hours a week" and "How far along" say "Not in the PDF, we'll ask", but there's no way to fill them in on this screen.
+- [ ] Editing: the extracted details can't be edited here. The screen says "fix anything wrong", but no edit controls are visible.
+- [ ] File checks: handle file size, scanned PDFs, a wrong file type, and a password-protected PDF.
+- [ ] Data privacy: the privacy note is tucked into small text, and the "Why upload?" box sits to the side. Make both more prominent.
+- [ ] Wording: "Claude read your PDF" names the AI vendor and assumes success. A parsing failure has no message.
 
-## Lane D: Khaliq (AI and API usage)
+## 3. Round 1 (Question 1 of 5)
 
-- [x] Define `src/types/roadmap.ts` first (follow-up round, verdict, improvements, roadmap, improved business plan, preview/paid flags) and announce it
-- [x] Decide whether to rename the contract file now it holds the whole plan (kept as `roadmap.ts`)
-- [x] Prompt: follow-up questions (up to about 5, plus an "enough" flag)
-- [x] Prompt: call 1, JSON only, word ratings, honest reasons, cheap tests, professional advice
-- [x] Prompt: call 2, improved business plan (build after stage 1 works)
-- [x] Prompts forbid invented organisations, grants and statistics; local support only from Lane B's list
-- [x] Anthropic API call code with key from `.env` and model from `CLAUDE_MODEL`
-- [x] Strip code fences and parse inside `try/catch`
-- [ ] Log input and output tokens for every call; give Zac the real cost per person and per payer
-- [ ] Test with Lane B's three fictional ideas
+- [ ] Progress bar: it has no text labels for the steps.
+- [ ] Layout: the answer cards are tall, so one question takes about two screens of scrolling. The Continue button sits below the fold.
+- [ ] Continue button: it isn't disabled or explained when nothing is selected, and there's no validation message.
+- [ ] Radio options: "You can add others later" conflicts with the single-select radio buttons.
+- [ ] Questions: question 1 says "Pick the group you'd most like as customers", which is slightly awkward.
+- [ ] Answers panel: "Answering now…" and "Next" are unclear. A plain "Not answered yet" would read better.
 
-## Lane E: George (backend flow)
+## 4. Follow-ups (Round 2 of up to 3)
 
-- [ ] Route for follow-up rounds, enforcing a hard cap of 3 rounds and about 5 questions each
-- [ ] Route for call 1; send only preview fields to the browser before unlock
-- [ ] Mock unlock or Stripe test mode at £4.99
-- [ ] Route for call 2 after unlock
-- [ ] Fallback to `demo-data/` on any API or parse failure: scripted conversation, cached verdict, cached full plan
-- [ ] Timeouts on every AI call so the demo never hangs
-- [ ] `.env.example` with variable names only
+- [ ] Round count: "up to 3" is vague. Users can't tell how long this will take.
+- [ ] Text boxes: they have no placeholder, example answer or character guidance, and the empty boxes look unfinished.
+- [ ] Chips: the "Several / One or two / None I know of / Not sure" options sit under the second question with the heading partly hidden.
+- [ ] Skipping: the intro says "Skip any you can't answer", but there's no Skip button. The user has to leave a box blank.
+- [ ] Label: "Written by Claude from your answers so far" doesn't explain why these questions were chosen.
 
-## Decisions needed (team)
+## 5. Generating
 
-- [ ] Confirm idea.md 11b decisions
-- [ ] Product name
-- [ ] Final rating labels
-- [ ] Who owns the pitch deck (provisionally Zac)
-- [ ] Who presents, and the speaker split
-- [ ] First customer segment for slide 5
-- [ ] Export format, or drop it
+- [ ] Progress: the five steps are timed, not real. The build needs real progress or an honest "this can take up to a minute".
+- [ ] Cancelling: there's no way to cancel or leave and come back.
+- [ ] Answers panel: it shows all "Not given". If real answers were missing, the check would be meaningless, and nothing warns the user.
+- [ ] Accessibility: a screen reader needs the status changes announced.
+
+## 6. Verdict (free)
+
+- [ ] Layout: the rating scale pills are small, and "Overall. A rough view, not a prediction." is easy to miss. The page is long.
+- [ ] Conflicting scores: two "Promising" ratings sit next to two "Needs work" ratings, but the overall verdict doesn't explain how they combine.
+- [ ] Reasons: each score has one sentence, which feels thin for the "honest check" the page promises.
+- [ ] Risks: the two risks aren't ranked or tied back to a score.
+- [ ] Paywall: the card appears right after the risks. The price is shown big, but the description of what the paid plan adds is cramped.
+- [x] "Everything on the left stays free": wrong on mobile, where the layout stacks. (Fixed in PR #10: now "Your verdict and risks stay free".)
+- [ ] Disclaimers: "What it can't know" and "When to get proper advice" are small grey text at the bottom, so most people will miss them.
+- [ ] Edit answers: this link is tiny and sits in the header line.
+
+## 7. Payment dialog
+
+- [ ] Test mode: the message reads like a placeholder, and it's easy to mistake for part of the real checkout.
+- [ ] Missing content: there's no list of what's included, no refund policy, no VAT note, and no mention of how receipts or payment data are handled.
+- [ ] Dismissing: there's no close button, and the "Not now" link is small.
+- [ ] Keyboard focus: the dialog needs to trap focus.
+
+## 8. Writing plan
+
+- [ ] Placement: the "Writing your improved business plan…" banner sits below a large header and is mostly out of view. The nav bar covers it.
+- [ ] Download button: "Download as PDF (not built)" is visible and looks like a bug if shipped. "Export format still to be decided" is also visible.
+- [ ] Header scores: the scores are packed in one wrapped line, with "Skills" on its own line.
+
+## 9. Full plan
+
+- [ ] Section links: all four plan section links go to the same #plan address, so they jump nowhere. They need their own anchors.
+- [ ] Improvements: each is a single short line, so it's too thin to justify £4.99.
+- [ ] Roadmap: the "Price it fairly" step has no cost. "Grow or stop" has no cost either, and the "8 weeks" step overlaps the earlier ones.
+- [ ] Improved business plan: it shows only three short sections, and it has no market, finance or risk sections.
+- [ ] Assumptions: these sit at the very bottom, but they matter (for example, "own most of your tools"). Show them next to the roadmap.
+- [ ] Advice placeholder: "Only local support our research lane has checked will appear here" is internal wording that shouldn't ship.
+- [ ] Save or print: there's no way to save, share or print.
+
+## 10. Error
+
+- [ ] Cause: "Claude didn't reply in time" doesn't say whether it was a timeout, a network problem or the user's connection.
+- [ ] Try again: there's no limit or backoff, and it doesn't say what happens on repeated failure.
+- [ ] Fallback: "See an example plan" sends users to a fictional plan that could be mistaken for their own, which could mislead them.
+- [ ] Saved answers: the panel shows all "Not given" even though the text promises they're saved.
+- [ ] Missing cases: there's no error screen for payment failure, an upload error, or being offline.
