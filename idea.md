@@ -123,6 +123,28 @@ The cost-to-serve figure comes from the token logging in section 8, for the "Who
 - Rule of thumb for free-to-paid conversion is 2% to 5% (not measured).
 - Excludes anyone's time or wages.
 
+## 11d. Investor mode (second audience)
+
+The same tool also serves **investors and venture capitalists** who are weighing up a business they plan to put money into. One app, with a choice at the start: "I'm starting a business" or "I'm assessing a business to invest in".
+
+**Input (decided):**
+- The investor types in what they know: the pitch, the numbers, and answers they've gathered. The same short first round plus up to 3 AI follow-up rounds applies, reworded for an investor.
+- The investor can also **upload a pitch deck or document** for the AI to read. **Flag:** this is a new feature (file upload and reading), and CLAUDE.md says new tools need the team's agreement in the group chat first. Not built until the team agrees. Fallback if not agreed: paste the deck's text into a box.
+
+**Output (decided):**
+- **Investment risk assessment:** ratings on areas such as market, business model, team and finances (exact areas **TBD**), an overall rating, the main red flags, and a list of questions to put to the founder.
+- **A lean-invest / lean-pass view** with the reasons. **Flag:** this must never read as financial advice. It is worded as "this assessment leans towards / away from investing, and why", labelled a rough view and not a prediction, and always says to get professional, regulated advice before putting money in. It must not promise returns, and the AI must not invent figures, valuations or comparable deals.
+
+**Pricing (decided: separate investor pricing):** investors pay a different price from the £4.99 founder price. The amount is **TBD**. The pitch can argue that investors are making bigger decisions, so a higher price is easier to justify. Needs a second price in the paywall and in the break-even maths.
+
+**Data:** demo investor cases must use fictional businesses and fictional numbers (hackathon rule).
+
+**Open questions for investor mode:**
+1. Investor price, and whether it's per assessment or something else.
+2. Does the upload make it into the hackathon build, or is it shown as a next step?
+3. Which areas get rated (market, model, team, finances, others)?
+4. Who owns the investor screens and prompts? This touches Lanes A (intake), C (verdict screens) and D (prompts).
+
 ## 12. Open questions
 
 1. Who owns each lane?
