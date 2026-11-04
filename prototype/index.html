@@ -295,7 +295,7 @@ h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height
 .group .what{font-weight:500;margin:0 0 6px}
 .group p{margin:0 0 6px;font-size:15.5px;color:var(--ink-2);line-height:1.55}
 .group p b{color:var(--ink);font-weight:500}
-.line{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;padding:44px 0 0;list-style:none;margin:0}
+.line{position:relative;display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:20px;padding:44px 0 0;list-style:none;margin:0}
 .line::before{content:"";position:absolute;left:0;right:0;top:13px;height:6px;border-radius:6px;background:var(--field);transform-origin:left center}
 .stop{position:relative;border-radius:18px;padding:20px 20px 22px;background:rgba(255,255,255,0.55);border:1px solid rgba(15,34,27,0.07);box-shadow:inset 0 1px 0 #fff,0 20px 40px -30px rgba(15,34,27,0.35)}
 .dot{position:absolute;top:-44px;left:18px;width:28px;height:28px;border-radius:50%;background:var(--signal);border:4px solid var(--ink);box-shadow:0 0 0 6px var(--paper)}
@@ -356,6 +356,14 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 .mini dd[data-r]::before{box-shadow:0 0 0 1px rgba(243,246,242,0.45)}
 .caveat{display:flex;align-items:center;gap:8px;font-size:15.5px;color:var(--ink);font-weight:500}
 .caveat svg{width:18px;height:18px;color:var(--ink-2)}
+
+/* ---- Live AI results (prototype/api.js, Lane E): the 0 to 100 number sits beside each word rating ---- */
+.sc{font-size:13px;font-weight:400;font-style:normal;color:var(--ink-2);margin-left:6px;white-space:nowrap}
+.mini .sc{color:var(--on-field-2)}
+.overall-num{font-size:18px;color:var(--ink-2);margin:-8px 0 14px}
+.reading ul{margin:0 0 14px;padding-left:1.2em;font-size:18px;line-height:1.6}
+.reading li{margin:0 0 6px}
+.r1-text{width:100%;max-width:560px}
 
 @media (max-width:900px){
   .hero-grid,.app,.gen,.score-grid,.err-grid,.plan-body{grid-template-columns:minmax(0,1fr)}
@@ -516,7 +524,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
       <h2 class="h-app" id="r2-h">A few more questions</h2>
       <p class="help" id="r2-help"></p>
       <div id="r2-qs"></div>
-      <div class="row sticky" style="margin-top:32px"><a class="btn" href="#generating">Continue</a><a class="textlink" href="#round1" id="r2-back">Back</a></div>
+      <div class="row sticky" style="margin-top:32px"><a class="btn" href="#generating" id="r2-next">Continue</a><a class="textlink" href="#round1" id="r2-back">Back</a></div>
     </div>
     <aside class="answers" aria-label="Your answers so far">
       <h3>Your answers so far</h3>
@@ -543,7 +551,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
       </ol>
       <p class="sr" role="status" id="genStatus"></p>
       <div class="gen-actions"><a class="btn-quiet" href="#round2" id="genCancel">Cancel and go back</a><span class="fine">Your answers stay saved in this browser tab.</span></div>
-      <p class="gen-note">Prototype: these steps are timed, not real. In the build, each line is a real step the server is on, and if the connection drops we show an example plan instead.</p>
+      <p class="gen-note" id="gen-note">Prototype: these steps are timed, not real. In the build, each line is a real step the server is on, and if the connection drops we show an example plan instead.</p>
     </div>
     <aside class="answers" aria-label="Your answers">
       <h3>Your answers</h3>
@@ -565,8 +573,10 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
           </div>
           <p class="idea" id="scoreIdea"></p>
           <p class="overall" id="overall">Needs work</p>
+          <p class="overall-num num" id="overallNum" hidden></p>
           <p class="caveat"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>This is the overall rating: a rough view, not a prediction.</p>
           <ul class="scale" aria-label="Rating scale"><li>Not viable yet</li><li class="on" aria-current="true">Needs work</li><li>Promising</li><li>Strong</li></ul>
+          <p class="help" id="overallWhy" hidden></p>
           <dl class="scores">
             <div><dt>Financial stability</dt><dd>Needs work</dd><p>£300 covers tools, but a quiet winter month could leave you out of pocket.</p><p>It would improve with a call-out fee that covers your travel and a month of costs kept in reserve.</p></div>
             <div><dt>Long-term sustainability</dt><dd>Promising</dd><p>Bikes always need fixing, and home visits suit busy people.</p><p>Held back by demand that dips in winter, unless regular customers sign up to a service plan.</p></div>
@@ -741,6 +751,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 
 <nav class="proto" aria-label="Prototype screens" id="proto"><span title="The verdict and plan wording is one fixed example. Your answers change the headings and summary lines only.">Prototype screens</span></nav>
 
+<script src="api.js"></script>
 <script>
 (function(){
   /* ---------- Contour lines, same generator as the reference ---------- */
@@ -761,9 +772,14 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     {key:'hours',short:'Hours',q:'How many hours a week could you give it?',help:'Count the time you’d really have, around work and family. A rough guess is fine.',
       opts:[['Under 5 hours','An evening or a weekend morning'],['5 to 10 hours','A couple of evenings plus some weekend'],['10 to 20 hours','A serious side project'],['More than 20 hours','Close to part-time or full-time'],NOT_SURE]},
     {key:'stage',short:'Stage',q:'How far along is it?',help:'Honest is best. Any stage is fine.',
-      opts:[['Just an idea','Nothing tested yet'],['Tested with a few people','Some first feedback or sales'],['Already trading','Customers are paying now'],NOT_SURE]}
+      opts:[['Just an idea','Nothing tested yet'],['Tested with a few people','Some first feedback or sales'],['Already trading','Customers are paying now'],NOT_SURE]},
+    /* Two typed questions the real AI needs (IntakeAnswers.skills and .location). Only asked when the AI server is on. */
+    {key:'skills',short:'Skills',q:'What skills or experience would help you run it?',help:'Jobs you’ve done, things you’re good at. A sentence is plenty.',text:true,ph:'For example: ten years fixing my own bikes',liveOnly:true},
+    {key:'location',short:'Where',q:'Where would it be based?',help:'A town or area in the North East, for example Gateshead or Durham.',text:true,ph:'For example: Gateshead',liveOnly:true}
   ];
   var ROWS=[['idea','Idea'],['who','Who for'],['earns','Earns'],['budget','Budget'],['hours','Hours'],['stage','Stage']];
+  var ROWS_LIVE=[['skills','Skills'],['location','Where']];
+  function rows(){return GW.live?ROWS.concat(ROWS_LIVE):ROWS;}
   /* Follow-ups by silent business type. text:true = a text box (ph = example answer), otherwise chips. */
   var ROUTES={
     retail:[
@@ -814,9 +830,26 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   var state=blank();
   try{var saved=JSON.parse(sessionStorage.getItem(KEY));if(saved&&saved.a)state=Object.assign(blank(),saved);}catch(e){}
   function save(){try{sessionStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
-  function fresh(){state=blank();save();}
+  function fresh(){state=blank();save();freshLive();}
   /* seeded = the answers are the fictional example, put there because someone jumped to a late screen. */
   function ensureAnswers(){if(state.a.idea)return;state.a=Object.assign({},EXAMPLE);state.seeded=true;state.demo=true;}
+
+  /* ---------- Live AI (Lane E, prototype/api.js) ----------
+     If the AI server isn't there, GW.live stays false and none of this runs: the scripted demo is untouched.
+     The real results live in `live` (kept in this tab too, so a refresh doesn't lose a paid-for plan). */
+  var GW=window.GW||{live:false,maxRounds:1,sessionId:null,init:function(){return Promise.resolve();},reset:function(){},snapshot:function(){},restoreScore:function(){},restorePlan:function(){}};
+  var LKEY='groundworking-live',fuToken=0,genToken=0,improvedP=null;
+  function blankLive(){return {fu:null,preview:null,numbers:null,unlocked:null,improved:null,improvedState:'none',sessionId:null,errMsg:'',retry:'',viewExample:false};}
+  var live=blankLive();
+  try{var sv=JSON.parse(sessionStorage.getItem(LKEY));if(sv){live=Object.assign(blankLive(),sv);if(live.improvedState==='pending')live.improvedState='none';GW.sessionId=live.sessionId;}}catch(e){}
+  function saveLive(){live.sessionId=GW.sessionId;try{sessionStorage.setItem(LKEY,JSON.stringify(live));}catch(e){}}
+  function freshLive(){live=blankLive();improvedP=null;GW.reset();saveLive();}
+  function liveOn(){return GW.live&&!state.seeded&&!!state.a.idea;}
+  /* Send the person to the error screen. kind = timeout or payment; retry = where "Try again" goes. */
+  function failTo(kind,retry,e){
+    live.retry=retry||'';live.errMsg=(e&&(e.code==='rate_limit'||e.code==='daily_cap'))?e.message:'';saveLive();
+    location.hash=kind==='payment'?'#error-payment':'#error';
+  }
 
   var $=function(id){return document.getElementById(id);};
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
@@ -855,7 +888,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   function renderAnswers(current){
     document.querySelectorAll('[data-answers]').forEach(function(dl){
       dl.innerHTML='';
-      ROWS.forEach(function(r){
+      rows().forEach(function(r){
         var v=state.a[r[0]],d=el('div',current===r[0]?'now':''),dd=el('dd');
         if(v)dd.textContent=v;else{dd.textContent='Not answered yet';dd.className='wait';}
         if(current===r[0])d.setAttribute('aria-current','step');
@@ -866,7 +899,21 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   }
 
   /* ---------- Round 1 ---------- */
-  function steps(){return R1.filter(function(q){return !state.prefilled[q.key];});}
+  function steps(){return R1.filter(function(q){return !state.prefilled[q.key]&&!(q.liveOnly&&!GW.live);});}
+  /* A typed question: a text box, plus a "Not sure" button so nobody is stuck. */
+  function buildTextStep(q,box){
+    var tin=el('input','r1-text');tin.type='text';tin.id='r1-text';tin.autocomplete='off';tin.maxLength=200;tin.placeholder=q.ph||'';
+    tin.setAttribute('aria-labelledby','r1-h');
+    tin.value=state.a[q.key]&&state.a[q.key]!=='Not sure'?state.a[q.key]:'';
+    tin.addEventListener('input',function(){
+      if(tin.value.trim())state.a[q.key]=tin.value.trim();else delete state.a[q.key];
+      save();var ok=!!state.a[q.key];$('r1-next').setAttribute('aria-disabled',ok?'false':'true');$('r1-hint').hidden=ok;$('r1-val').textContent='';renderAnswers(q.key);
+    });
+    tin.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('r1-next').click();}});
+    var ns=el('button','chip'+(state.a[q.key]==='Not sure'?' on':''),'Not sure');ns.type='button';ns.style.marginTop='12px';
+    ns.addEventListener('click',function(){state.a[q.key]='Not sure';save();renderRound1();});
+    box.appendChild(tin);box.appendChild(el('div')).appendChild(ns);
+  }
   function renderRound1(){
     var list=steps();
     if(state.step>=list.length)state.step=list.length-1;
@@ -877,7 +924,10 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     list.forEach(function(x,i){bar.appendChild(el('div',(i<=state.step?'on':'')+(i===state.step?' now':''),x.short));});
     $('r1-h').textContent=q.q;$('r1-help').textContent=q.help;
     var box=$('r1-opts');box.innerHTML='';
-    q.opts.forEach(function(o,i){
+    box.style.display=q.text?'block':'';box.setAttribute('role',q.text?'group':'radiogroup');
+    $('r1-hint').textContent=q.text?'Type an answer, or choose “Not sure”':'Pick an answer to continue';
+    if(q.text)buildTextStep(q,box);
+    (q.text?[]:q.opts).forEach(function(o,i){
       var on=state.a[q.key]===o[0];
       var t=el('div','opt'+(on?' on':'')+(o[0]==='Not sure'?' unsure':''));
       t.setAttribute('role','radio');t.setAttribute('aria-checked',on?'true':'false');t.tabIndex=(on||(!state.a[q.key]&&i===0))?0:-1;
@@ -901,11 +951,11 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     var list=steps(),q=list[state.step];
     if(!state.a[q.key]){
       $('r1-val').textContent='Pick one answer to continue. If you don’t know, choose “Not sure”.';
-      $('r1-opts').querySelector('[tabindex="0"]').focus();
+      var f=$('r1-opts').querySelector('[tabindex="0"],input');if(f)f.focus();
       return;
     }
     if(state.step<list.length-1){state.step++;save();renderRound1();window.scrollTo(0,0);}
-    else{location.hash='#round2';}
+    else{live.fu=null;saveLive();location.hash='#round2';} // new answers, so any earlier AI questions are out of date
   });
 
   /* Back goes to the screen the person came from. Only falls back to the link's own address if they landed here directly. */
@@ -920,6 +970,8 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 
   /* ---------- Round 2 ---------- */
   function renderRound2(){
+    if(liveOn())return renderLiveRound2();
+    $('r2-next').hidden=false;
     if(!state.type)state.type=guessType();
     var items=ROUTES[state.type];
     $('r2-step').textContent='Round 2 of up to 3: '+items.length+' short questions';
@@ -956,6 +1008,59 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     });
     renderAnswers(null);
   }
+  /* Live follow-up rounds: the questions are written by the AI from the answers so far. */
+  function renderLiveRound2(){
+    if(!live.fu)live.fu={n:1,data:null,answers:[],vals:{}};
+    var fu=live.fu,wrap=$('r2-qs'),next=$('r2-next');
+    $('r2-step').textContent='Round '+(fu.n+1)+(GW.maxRounds>1?' of up to ':' of ')+(GW.maxRounds+1);
+    $('r2-help').textContent='Written by an AI model from your answers so far. Leave any you can’t answer.';
+    renderAnswers(null);
+    if(fu.data){buildLiveQuestions(fu);return;}
+    wrap.innerHTML='<p class="help" role="status">Writing your questions…</p>';next.hidden=true;
+    var tok=++fuToken;
+    GW.followups(state.a,fu.answers,fu.n).then(function(round){
+      if(tok!==fuToken||location.hash!=='#round2')return;
+      fu.data=round;saveLive();
+      if(round.enough||!round.questions.length){location.hash='#generating';return;} // the AI already has enough
+      buildLiveQuestions(fu);
+    }).catch(function(e){if(tok===fuToken&&location.hash==='#round2')failTo('timeout','#round2',e);});
+  }
+  function buildLiveQuestions(fu){
+    var wrap=$('r2-qs');wrap.innerHTML='';$('r2-next').hidden=false;
+    fu.data.questions.forEach(function(item,i){
+      var q=el('div','q'),id='fq'+i;
+      if(item.type==='text'){
+        var l=el('label','ql',item.text);l.htmlFor=id;q.appendChild(l);
+        if(item.why)q.appendChild(el('p','why',item.why));
+        var inp=el('input');inp.type='text';inp.id=id;inp.autocomplete='off';inp.maxLength=200;inp.placeholder='Leave blank if you’re not sure';inp.value=fu.vals[item.id]||'';
+        inp.addEventListener('input',function(){fu.vals[item.id]=inp.value;saveLive();});
+        q.appendChild(inp);
+      }else{
+        q.appendChild(el('span','ql',item.text)).id=id+'l';
+        if(item.why)q.appendChild(el('p','why',item.why));
+        var g=el('div','chips');g.setAttribute('role','radiogroup');g.setAttribute('aria-labelledby',id+'l');
+        var opts=item.options.slice();if(opts.indexOf('Not sure')<0)opts.push('Not sure');
+        opts.forEach(function(c){
+          var b=el('button','chip'+(fu.vals[item.id]===c?' on':''),c);b.type='button';b.setAttribute('role','radio');b.setAttribute('aria-checked',fu.vals[item.id]===c?'true':'false');
+          b.addEventListener('click',function(){fu.vals[item.id]=c;saveLive();[].forEach.call(g.children,function(x){x.classList.remove('on');x.setAttribute('aria-checked','false');});b.classList.add('on');b.setAttribute('aria-checked','true');});
+          g.appendChild(b);
+        });
+        q.appendChild(g);
+      }
+      wrap.appendChild(q);
+    });
+  }
+  $('r2-next').addEventListener('click',function(e){
+    var fu=live.fu;
+    if(!liveOn()||!fu)return; // scripted demo: the link goes straight to the generating screen
+    e.preventDefault();
+    fu.answers=fu.answers.filter(function(a){return a.round!==fu.n;}); // coming back and pressing Continue again must not double up
+    if(fu.data)fu.data.questions.forEach(function(item){
+      fu.answers.push({round:fu.n,id:item.id,question:item.text,answer:(fu.vals[item.id]||'').trim()||'Not sure'});
+    });
+    if(fu.n<GW.maxRounds){fu.n++;fu.data=null;saveLive();renderLiveRound2();window.scrollTo(0,0);}
+    else{saveLive();location.hash='#generating';}
+  });
   $('r2-back').addEventListener('click',function(e){state.step=steps().length-1;save();goBack(e);});
   $('r2-change').addEventListener('click',function(){toFirstQuestion();});
   $('score-edit').addEventListener('click',function(){toFirstQuestion();});
@@ -1039,11 +1144,12 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     doReset();closeDialog();
     if(location.hash==='#home'||!location.hash)show();else location.hash='#home';
   });
-  document.querySelectorAll('[data-example]').forEach(function(a){a.addEventListener('click',function(){state.demo=true;save();renderResult();});});
+  document.querySelectorAll('[data-example]').forEach(function(a){a.addEventListener('click',function(){state.demo=true;live.viewExample=true;save();renderResult();if(location.hash===a.getAttribute('href'))show();});});
 
   /* ---------- Generating ---------- */
   var TICK='<svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>';
-  function runStages(list,done){
+  /* gate (optional, live AI): a promise the screen must also wait for, i.e. the real plan. If it fails, onFail runs. */
+  function runStages(list,done,gate,onFail){
     var items=[].slice.call(list.children),status=$('genStatus');
     items.forEach(function(li){li.className='';li.removeAttribute('aria-current');li.querySelector('.mk').innerHTML='';});
     function tick(li){li.className='done';li.removeAttribute('aria-current');li.querySelector('.mk').innerHTML=TICK;}
@@ -1054,7 +1160,20 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
         status.textContent='Step '+(i+1)+' of '+items.length+': '+li.textContent;
       },i*900);
     });
-    later(function(){tick(items[items.length-1]);status.textContent='Done.';later(done,500);},items.length*900);
+    var minTime=new Promise(function(r){later(r,items.length*900);});
+    Promise.all([minTime,gate||0]).then(function(){tick(items[items.length-1]);status.textContent='Done.';later(done,500);},function(e){if(onFail)onFail(e);});
+  }
+  /* The real thing: ask the server, keep the stage list moving, and only leave once the plan has arrived. */
+  var GEN_NOTE=$('gen-note').textContent;
+  function runLiveGenerating(){
+    var tok=genToken;
+    live.preview=live.numbers=live.unlocked=live.improved=null;live.improvedState='none';improvedP=null;saveLive();
+    $('gen-note').textContent='Your answers are sent to our server, which asks an AI model to write your check.';
+    var gate=GW.plan(state.a,live.fu?live.fu.answers:[]).then(function(r){live.preview=r.preview;live.numbers=r.numbers;saveLive();});
+    runStages($('genStages'),
+      function(){if(tok===genToken&&location.hash==='#generating'){state.fails=0;save();location.replace('#score');}},
+      gate,
+      function(e){if(tok===genToken&&location.hash==='#generating')failTo('timeout','#generating',e);});
   }
   $('genCancel').addEventListener('click',goBack);
 
@@ -1139,6 +1258,10 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     p.textContent=e.pri[0];p.setAttribute('href',e.pri[1]);p.dataset.act=e.pri[2]||'';
     s.textContent=e.sec[0];s.setAttribute('href',e.sec[1]);s.dataset.act=e.sec[2]||'';
     setupRetry(kind);
+    /* A real AI failure: retry from the step that failed, and say why if the server told us (e.g. the daily limit). */
+    if(kind==='timeout'&&live.retry)p.setAttribute('href',live.retry);
+    if(kind==='timeout'&&live.errMsg)$('err-cause').textContent=live.errMsg+' '+$('err-cause').textContent;
+    live.retry='';live.errMsg='';
   }
   $('err-primary').addEventListener('click',function(e){
     if(this.getAttribute('aria-disabled')==='true'){e.preventDefault();return;}
@@ -1146,7 +1269,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     if(this.dataset.act==='noPdf'){dropPdf();save();}
   });
   $('err-secondary').addEventListener('click',function(){
-    if(this.dataset.act==='example'){state.demo=true;save();}
+    if(this.dataset.act==='example'){state.demo=true;live.viewExample=true;save();}
     if(this.dataset.act==='pick')$('pdf').click();
   });
   window.addEventListener('online',function(){if(currentErr==='offline'&&$('error').classList.contains('on'))setupRetry('offline');});
@@ -1154,8 +1277,40 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 
   /* ---------- Routing by URL hash ---------- */
   var firstShow=true;
+  /* Real result or fictional example? Decides, per screen, and sets state.demo so the "Example" tag and summary match. */
+  function resolveResult(target){
+    var ex=live.viewExample;live.viewExample=false;
+    if(!GW.live||state.seeded)return false;                      // scripted demo: unchanged
+    if(!ex&&(target==='score'?live.preview:live.unlocked)){state.demo=false;return true;}
+    if(state.a.idea)state.demo=true;                             // never show the fixed example as if it were this person's result
+    return false;
+  }
+  function startImproved(){
+    live.improvedState='pending';saveLive();
+    improvedP=GW.improved().then(function(p){live.improved=p;live.improvedState='done';},function(){live.improvedState='failed';}).then(function(){
+      saveLive();
+      var h=location.hash;
+      if(h==='#writing')location.replace('#plan');
+      else if(h==='#plan'){$('writingCard').hidden=true;$('printBtn').disabled=false;$('copyBtn').disabled=false;GW.renderIbp(live.improvedState,live.improved);}
+    });
+  }
+  /* Delegated: the retry button is redrawn with the plan. */
+  document.addEventListener('click',function(e){
+    if(!(e.target.closest&&e.target.closest('#retryImproved')))return;
+    startImproved();$('writingCard').hidden=false;$('printBtn').disabled=true;$('copyBtn').disabled=true;GW.renderIbp('pending');
+  });
+  /* Pay (mock): ask the server to unlock. In the scripted demo the link just goes on to the writing screen. */
+  $('coPay').addEventListener('click',function(e){
+    if(!(GW.live&&live.preview&&!state.demo))return;
+    e.preventDefault();
+    GW.unlock().then(function(r){
+      live.unlocked=r.unlocked;live.numbers=r.numbers;live.improved=null;live.improvedState='none';improvedP=null;saveLive();
+      location.hash='#writing';
+    },function(err){failTo('payment','',err);});
+  });
+
   function show(){
-    clearTimers();closeDialog();
+    clearTimers();closeDialog();genToken++;fuToken++;
     var id=(location.hash||'#home').slice(1);
     if(id==='generating'&&!navigator.onLine){location.replace('#error-offline');return;}
     var target=id==='writing'?'plan':id,kind=null;
@@ -1173,22 +1328,38 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     if(target==='round1')renderRound1();
     if(target==='round2')renderRound2();
     if(target==='error'){renderAnswers(null);renderError(kind);}
-    if(target==='score'||target==='plan')renderResult();
+    var real=false;
+    if(target==='score'||target==='plan'){
+      real=resolveResult(target);
+      renderResult();
+      if(target==='score'){if(real)GW.renderPreview(live.preview,live.numbers);else if(GW.live)GW.restoreScore();}
+      else if(real){if(live.improvedState==='none')startImproved();GW.renderUnlocked(live.unlocked,live.numbers,{state:live.improvedState,plan:live.improved});}
+      else if(GW.live)GW.restorePlan();
+    }
     if(id==='generating'){
       state.demo=!!state.seeded;
       renderAnswers(null);renderResult();
       // Warn when there is too little to base a check on.
-      var known=ROWS.filter(function(r){return state.a[r[0]]&&state.a[r[0]]!=='Not sure';}).length;
+      var known=rows().filter(function(r){return state.a[r[0]]&&state.a[r[0]]!=='Not sure';}).length;
       $('genWarn').hidden=known>=3;
-      runStages($('genStages'),function(){state.fails=0;save();location.replace('#score');});
+      if(liveOn())runLiveGenerating();
+      else{
+        $('gen-note').textContent=GEN_NOTE;
+        runStages($('genStages'),function(){state.fails=0;save();location.replace('#score');});
+      }
     }
     if(target==='score'&&pendingCheckout){pendingCheckout=false;openDialog(co,'coPay');}
 
     /* "Writing" is the full plan with the improved business plan still arriving */
     var card=$('writingCard'),ibp=$('ibpBody'),busy=id==='writing';
+    if(real&&target==='plan'){ // the real plan: "writing" lasts exactly as long as the AI is still writing
+      busy=live.improvedState==='pending';
+      if(id==='writing'&&!busy){location.replace('#plan');return;}
+    }
     card.hidden=!busy;
     $('printBtn').disabled=busy;$('copyBtn').disabled=busy;
-    if(busy){
+    if(real&&target==='plan'){/* already drawn above */}
+    else if(busy){
       ibp.innerHTML='<div class="ghost" style="width:92%"></div><div class="ghost" style="width:80%"></div><div class="ghost" style="width:86%"></div>';
       later(function(){location.replace('#plan');},4200);
     }else if(target==='plan'){
@@ -1202,7 +1373,15 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     firstShow=false;
   }
   window.addEventListener('hashchange',function(){navs++;show();});
-  show();
+  /* Find out if the AI server is there before drawing any screen that depends on it (the home screen doesn't). */
+  var h0=location.hash,onHome=!h0||h0==='#home'||h0==='#';
+  GW.snapshot();
+  if(onHome)show();
+  GW.init().then(function(){
+    protoL.appendChild(el('span',null,GW.live?'Live AI on':'Demo mode (no AI server)'));
+    if(!onHome)show();
+    else if($('round1').classList.contains('on'))renderRound1();
+  });
 })();
 </script>
 </body>
