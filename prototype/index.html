@@ -364,6 +364,15 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 .reading ul{margin:0 0 14px;padding-left:1.2em;font-size:18px;line-height:1.6}
 .reading li{margin:0 0 6px}
 .r1-text{width:100%;max-width:560px}
+.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 22px;max-width:620px}
+.mode{display:grid;gap:2px;text-align:left;font:inherit;cursor:pointer;min-height:64px;padding:12px 14px;border-radius:14px;color:var(--on-field);background:var(--glass-dark);border:1px solid rgba(243,246,242,0.28)}
+.mode b{font-weight:500}
+.mode span{font-size:14px;color:var(--on-field-2)}
+.mode:hover{border-color:rgba(243,246,242,0.6)}
+.mode[aria-checked="true"]{background:#F3F6F2;color:var(--ink);border-color:#F3F6F2}
+.mode[aria-checked="true"] span{color:var(--ink-2)}
+.mode:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
+@media (max-width:520px){.modes{grid-template-columns:minmax(0,1fr)}}
 
 @media (max-width:900px){
   .hero-grid,.app,.gen,.score-grid,.err-grid,.plan-body{grid-template-columns:minmax(0,1fr)}
@@ -426,11 +435,16 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     <div class="hero-grid">
       <div>
         <h1 id="home-h">Will your business idea last?</h1>
-        <p class="lede">An honest check before you spend money, built for people in the North East with an idea, a tight budget and not much spare time.</p>
-        <label class="f-label" for="idea">Your business idea, in a sentence</label>
+        <p class="lede" id="home-lede">An honest check before you spend money, built for people in the North East with an idea, a tight budget and not much spare time.</p>
+        <div class="modes" id="modes" role="radiogroup" aria-label="What would you like checked?">
+          <button class="mode" type="button" role="radio" aria-checked="true" data-mode="new"><b>I’m starting a business</b><span>Test a new idea</span></button>
+          <button class="mode" type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="existing"><b>I run a business</b><span>Check one that’s trading</span></button>
+          <button class="mode" type="button" role="radio" aria-checked="false" tabindex="-1" data-mode="investor"><b>I’m an investor</b><span>Weigh up a business to back</span></button>
+        </div>
+        <label class="f-label" for="idea" id="idea-label">Your business idea, in a sentence</label>
         <form class="ask smoke" id="ask" novalidate>
           <input id="idea" type="text" autocomplete="off" maxlength="200" placeholder="For example: bike repairs in Gateshead" aria-describedby="idea-err">
-          <button class="btn" type="submit">Check my idea</button>
+          <button class="btn" type="submit" id="askBtn">Check my idea</button>
         </form>
         <p class="err" id="idea-err" role="alert"></p>
         <div class="try" id="tryList"><span>Not sure what to write? Try one:</span>
@@ -438,7 +452,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
           <button class="chip" type="button">Weekend baking for local cafés</button>
           <button class="chip" type="button">Bookkeeping for small firms</button>
         </div>
-        <p class="fine-lg">The verdict is free. The full plan is <span class="num">£4.99</span>, one-off. It’s a rough view, not advice.</p>
+        <p class="fine-lg">The verdict is free. The full plan is <span class="num">£9.99</span>, one-off. It’s a rough view, not advice.</p>
         <p class="upload-line"><svg class="i" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15l3-3 3 3"/></svg><span>Already have a business plan or accounts? <button class="linkbtn" type="button" id="pickPdf">Upload a PDF to save time</button></span></p>
         <p class="err" id="pdf-err" role="alert"></p>
         <input class="sr" type="file" id="pdf" accept="application/pdf,.pdf" tabindex="-1" aria-label="Choose a PDF">
@@ -461,7 +475,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
       <ol class="how-list smoke">
         <li><h3>You answer a few questions</h3><p>Five quick taps, then a short follow-up round written from your answers. You can skip any you can’t answer.</p></li>
         <li><h3>An AI model checks the idea</h3><p>We use Claude, made by Anthropic, to look at your money, the market and your time. It gives word ratings, never numbers or promises.</p></li>
-        <li><h3>You see the bad news first, free</h3><p>The verdict and your two biggest risks cost nothing. The <span class="num">£4.99</span> plan adds what to change and how to test it cheaply.</p></li>
+        <li><h3>You see the bad news first, free</h3><p>The verdict and your two biggest risks cost nothing. The <span class="num">£9.99</span> plan adds what to change and how to test it cheaply.</p></li>
       </ol>
       <p class="how-built">Built by a student team at Northumbria University for the Claude Builder Club hackathon. It’s a working prototype, so treat the result as a rough view and speak to an adviser before you spend money.</p>
     </section>
@@ -605,8 +619,8 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
             <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span><b>A roadmap</b>Four short steps with the time and cost of each, sized to your budget and your week.</span></li>
             <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span><b>An improved business plan</b>Who it’s for, what you sell, the market, the money and the risks, written for your idea.</span></li>
           </ul>
-          <p class="price num">£4.99</p>
-          <button class="btn" type="button" id="openCheckout">Unlock full plan, £4.99</button>
+          <p class="price num">£9.99</p>
+          <button class="btn" type="button" id="openCheckout">Unlock full plan, £9.99</button>
           <p class="fine">Your verdict and risks stay free, including the bad news.</p>
         </aside>
       </div>
@@ -628,13 +642,13 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
         <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>A roadmap of cheap tests that fit your budget and week</li>
         <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>An improved business plan, written for your idea</li>
       </ul>
-      <div class="line-item"><span>Full plan, one-off payment</span><b class="num">£4.99</b></div>
+      <div class="line-item"><span>Full plan, one-off payment</span><b class="num">£9.99</b></div>
       <p class="test-card">Demo checkout: no card details are asked for and no money is taken.</p>
-      <a class="btn" href="#writing" id="coPay" data-close style="width:100%">Pay £4.99</a>
+      <a class="btn" href="#writing" id="coPay" data-close style="width:100%">Pay £9.99</a>
       <button class="btn-quiet" type="button" data-close>Not now</button>
       <ul class="terms">
-        <li><b>Refunds:</b> if your full plan doesn’t appear after you pay, you get the <span class="num">£4.99</span> back in full.</li>
-        <li><b>VAT:</b> <span class="num">£4.99</span> is the final price. Any VAT is included.</li>
+        <li><b>Refunds:</b> if your full plan doesn’t appear after you pay, you get the <span class="num">£9.99</span> back in full.</li>
+        <li><b>VAT:</b> <span class="num">£9.99</span> is the final price. Any VAT is included.</li>
         <li><b>Receipt and card details:</b> the payment provider emails your receipt. Your card details go to them, never to us.</li>
       </ul>
     </div>
@@ -755,6 +769,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 </section>
 
 <script src="api.js"></script>
+<script src="audiences.js"></script>
 <script>
 (function(){
   /* ---------- Contour lines, same generator as the reference ---------- */
@@ -782,7 +797,10 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   ];
   var ROWS=[['idea','Idea'],['who','Who for'],['earns','Earns'],['budget','Budget'],['hours','Hours'],['stage','Stage']];
   var ROWS_LIVE=[['skills','Skills'],['location','Where']];
-  function rows(){return GW.live?ROWS.concat(ROWS_LIVE):ROWS;}
+  /* The other two audiences (prototype/audiences.js). AM() is null for "starting a business", which stays exactly as it was. */
+  var AUDS=window.AUD||{};
+  function AM(){return (typeof state!=='undefined'&&state&&AUDS[state.mode])||null;}
+  function rows(){var r=GW.live?ROWS.concat(ROWS_LIVE):ROWS,A=AM();return A?r.map(function(x){return [x[0],A.rows[x[0]]||x[1]];}):r;}
   /* Follow-ups by silent business type. text:true = a text box (ph = example answer), otherwise chips. */
   var ROUTES={
     retail:[
@@ -829,13 +847,13 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 
   /* ---------- State: kept in this browser tab so a refresh doesn't lose answers ---------- */
   var KEY='groundworking-proto';
-  function blank(){return {a:{},f:{},s:{},step:0,type:null,pdfName:'',prefilled:{},found:null,scanned:false,seeded:false,demo:false,fails:0,nudged:''};}
+  function blank(){return {a:{},f:{},s:{},step:0,type:null,pdfName:'',prefilled:{},found:null,scanned:false,seeded:false,demo:false,fails:0,nudged:'',mode:'new'};}
   var state=blank();
   try{var saved=JSON.parse(sessionStorage.getItem(KEY));if(saved&&saved.a)state=Object.assign(blank(),saved);}catch(e){}
   function save(){try{sessionStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
-  function fresh(){state=blank();save();freshLive();}
+  function fresh(){var m=state&&state.mode;state=blank();if(m)state.mode=m;save();freshLive();} // keeps the chosen audience
   /* seeded = the answers are the fictional example, put there because someone jumped to a late screen. */
-  function ensureAnswers(){if(state.a.idea)return;state.a=Object.assign({},EXAMPLE);state.seeded=true;state.demo=true;}
+  function ensureAnswers(){if(state.a.idea)return;state.a=Object.assign({},(AM()&&AM().seed)||EXAMPLE);state.seeded=true;state.demo=true;}
 
   /* ---------- Live AI (Lane E, prototype/api.js) ----------
      If the AI server isn't there, GW.live stays false and none of this runs: the scripted demo is untouched.
@@ -898,7 +916,10 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   }
 
   /* ---------- Round 1 ---------- */
-  function steps(){return R1.filter(function(q){return !state.prefilled[q.key]&&!(q.liveOnly&&!GW.live);});}
+  function steps(){
+    var A=AM();
+    return R1.filter(function(q){return !state.prefilled[q.key]&&!(q.liveOnly&&!GW.live);}).map(function(q){var o=A&&A.r1[q.key];return o?Object.assign({},q,o):q;});
+  }
   /* A typed question: a text box, plus a "Not sure" button so nobody is stuck. */
   function buildTextStep(q,box){
     var tin=el('input','r1-text');tin.type='text';tin.id='r1-text';tin.autocomplete='off';tin.maxLength=200;tin.placeholder=q.ph||'';
@@ -972,9 +993,9 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     if(liveOn())return renderLiveRound2();
     $('r2-next').hidden=false;
     if(!state.type)state.type=guessType();
-    var items=ROUTES[state.type];
+    var A=AM(),items=A?A.routes:ROUTES[state.type];
     $('r2-step').textContent='Round 2 of up to 3: '+items.length+' short questions';
-    $('r2-help').textContent=ROUTE_WHY[state.type]+' Skip any you can’t answer. We stop asking as soon as we have enough, so this may be the last round.';
+    $('r2-help').textContent=(A?A.why:ROUTE_WHY[state.type])+' Skip any you can’t answer. We stop asking as soon as we have enough, so this may be the last round.';
     var wrap=$('r2-qs');wrap.innerHTML='';
     items.forEach(function(item,i){
       var q=el('div','q'+(state.s[i]?' skipped':'')),id='fq'+i,off=!!state.s[i];
@@ -1178,7 +1199,8 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 
   /* ---------- Verdict and plan: your answers go in the headings and summary lines ---------- */
   function summary(){
-    if(state.demo)return 'Mobile bike repair, Gateshead. 5 to 10 hours a week, £300 budget.';
+    if(state.demo)return AM()?AM().sheet.idea:'Mobile bike repair, Gateshead. 5 to 10 hours a week, £300 budget.';
+    if(AM())return AM().summary(state.a);
     var a=state.a,p=[a.idea||'Your idea'];
     if(a.hours&&a.hours!=='Not sure')p.push(a.hours+' a week');
     if(a.budget&&a.budget!=='Not sure')p.push(a.budget+' to start');
@@ -1187,7 +1209,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   function renderResult(){
     document.querySelectorAll('[data-example-tag]').forEach(function(t){t.hidden=!state.demo;});
     $('scoreIdea').textContent=summary();
-    $('planTitle').textContent=state.demo?'Mobile bike repair, Gateshead':(state.a.idea||'Your idea');
+    $('planTitle').textContent=state.demo?(AM()?AM().title:'Mobile bike repair, Gateshead'):(state.a.idea||'Your idea');
   }
   $('printVerdict').addEventListener('click',function(){window.print();});
   $('printBtn').addEventListener('click',function(){window.print();});
@@ -1276,6 +1298,57 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 
   /* ---------- Routing by URL hash ---------- */
   var firstShow=true;
+  /* ---------- Audience: the cards, the home screen text and the example results ---------- */
+  var HOME_NEW={h1:$('home-h').textContent,lede:$('home-lede').textContent,label:$('idea-label').textContent,ph:input.placeholder,btn:$('askBtn').textContent,
+    chips:[].map.call(document.querySelectorAll('#tryList .chip'),function(b){return b.textContent;})};
+  var sheet=document.querySelector('.home-sheet'),SHEET_NEW=sheet.innerHTML,TAG_NEW=sheet.querySelector('.tag').outerHTML;
+  var HEAD_NEW={imp:$('imp-h').textContent,road:$('road-h').textContent,ibp:$('ibp-h').textContent,
+    tocImp:document.querySelector('[data-jump=improvements]').textContent,tocRoad:document.querySelector('[data-jump=roadmap]').textContent,tocIbp:document.querySelector('[data-jump=ibp]').textContent};
+  var DIM=['Financial stability','Long-term sustainability','Room in the market','Skills and ability'];
+  function dot(w){return RATING[String(w).toLowerCase()]||'';}
+  function paintHomeSheet(A){
+    if(!A){if(sheet.innerHTML!==SHEET_NEW)sheet.innerHTML=SHEET_NEW;return;}
+    var S=A.sheet;
+    sheet.innerHTML=TAG_NEW+'<p class="idea">'+S.idea+'</p><p class="overall" data-r="'+dot(S.overall)+'" style="font-size:clamp(2.2rem,3.6vw,3.2rem)">'+S.overall+'</p>'+
+      '<ul class="scale" aria-label="Rating scale">'+['Not viable yet','Needs work','Promising','Strong'].map(function(w){return w===S.overall?'<li class="on" aria-current="true" data-r="'+dot(w)+'">'+w+'</li>':'<li data-r="'+dot(w)+'">'+w+'</li>';}).join('')+'</ul>'+
+      '<dl class="scores">'+DIM.map(function(d,i){return '<div><dt>'+d+'</dt><dd data-r="'+dot(S.scores[i])+'">'+S.scores[i]+'</dd></div>';}).join('')+'</dl>';
+  }
+  function applyMode(){
+    var A=AM(),t=A||HOME_NEW;
+    GW.ctx=A?A.ctx:'';
+    [].forEach.call(document.querySelectorAll('#modes .mode'),function(b){var on=b.dataset.mode===state.mode;b.setAttribute('aria-checked',on?'true':'false');b.tabIndex=on?0:-1;});
+    $('home-h').textContent=t.h1;$('home-lede').textContent=t.lede;$('idea-label').textContent=t.label;input.placeholder=t.ph;$('askBtn').textContent=t.btn;
+    [].forEach.call(document.querySelectorAll('#tryList .chip'),function(b,i){b.textContent=t.chips[i];});
+    paintHomeSheet(A);
+    document.querySelector('.upload-line').hidden=!!A; // the PDF step is a fixed new-business example
+  }
+  function setMode(m){
+    if(m===state.mode)return;
+    var keep=input.value;fresh();state.mode=m;save();input.value=keep;clearIdeaErr();applyMode();
+  }
+  (function(){
+    var btns=[].slice.call(document.querySelectorAll('#modes .mode'));
+    btns.forEach(function(b,i){
+      b.addEventListener('click',function(){setMode(b.dataset.mode);});
+      b.addEventListener('keydown',function(e){
+        var d={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[e.key];if(!d)return;
+        e.preventDefault();var n=btns[(i+d+btns.length)%btns.length];setMode(n.dataset.mode);n.focus();
+      });
+    });
+  })();
+  /* The fictional example for the other two audiences, drawn with the same code as a real AI result (no numbers). */
+  function paintExample(target){
+    var A=AM();if(!A||!GW.renderPreview)return;
+    if(target==='score')GW.renderPreview(A.preview,null);
+    else{GW.renderUnlocked(A.unlocked,null,{state:'none',plan:null});$('ibpBody').innerHTML=A.ibp;}
+  }
+  function paintHeadings(real){
+    var h=(!real&&AM())?AM().heads:HEAD_NEW;
+    $('imp-h').textContent=h.imp;$('road-h').textContent=h.road;$('ibp-h').textContent=h.ibp;
+    document.querySelector('[data-jump=improvements]').textContent=h.tocImp;document.querySelector('[data-jump=roadmap]').textContent=h.tocRoad;document.querySelector('[data-jump=ibp]').textContent=h.tocIbp;
+  }
+  function ibpFor(){return AM()?AM().ibp:ibpHTML;}
+
   /* Real result or fictional example? Decides, per screen, and sets state.demo so the "Example" tag and summary match. */
   function resolveResult(target){
     var ex=live.viewExample;live.viewExample=false;
@@ -1309,7 +1382,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   });
 
   function show(){
-    clearTimers();closeDialog();genToken++;fuToken++;
+    clearTimers();closeDialog();genToken++;fuToken++;applyMode();
     var id=(location.hash||'#home').slice(1);
     if(id==='generating'&&!navigator.onLine){location.replace('#error-offline');return;}
     var target=id==='writing'?'plan':id,kind=null;
@@ -1330,9 +1403,10 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     if(target==='score'||target==='plan'){
       real=resolveResult(target);
       renderResult();
-      if(target==='score'){if(real)GW.renderPreview(live.preview,live.numbers);else if(GW.live)GW.restoreScore();}
+      if(target==='score'){if(real)GW.renderPreview(live.preview,live.numbers);else{GW.restoreScore();paintExample('score');}}
       else if(real){if(live.improvedState==='none')startImproved();GW.renderUnlocked(live.unlocked,live.numbers,{state:live.improvedState,plan:live.improved});}
-      else if(GW.live)GW.restorePlan();
+      else{GW.restorePlan();paintExample('plan');}
+      if(target==='plan')paintHeadings(real);
     }
     if(id==='generating'){
       state.demo=!!state.seeded;
@@ -1361,7 +1435,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
       ibp.innerHTML='<div class="ghost" style="width:92%"></div><div class="ghost" style="width:80%"></div><div class="ghost" style="width:86%"></div>';
       later(function(){location.replace('#plan');},4200);
     }else if(target==='plan'){
-      ibp.innerHTML=ibpHTML;
+      ibp.innerHTML=ibpFor();
     }
     if(target==='plan'){markSection('improvements');drawRoute();}
 

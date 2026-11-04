@@ -14,7 +14,6 @@
   };
   var KEYS = Object.keys(LABELS);
   var DOT = { 'Not viable yet': 'notviable', 'Needs work': 'needswork', 'Promising': 'promising', 'Strong': 'strong' }; // Lane C's data-r values
-  var WARN = '<svg class="i" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
   var TICK = '<svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>';
   var SCALE = ['Not viable yet', 'Needs work', 'Promising', 'Strong'];
 
@@ -35,7 +34,7 @@
   function ul(items) {
     return items && items.length ? '<ul>' + items.map(function (i) { return '<li>' + i + '</li>'; }).join('') + '</ul>' : '';
   }
-  function num(n) { return '<span class="sc num">' + n + '/100</span>'; }
+  function num(n) { return n == null ? '' : '<span class="sc num">' + n + '/100</span>'; } // no number in the scripted examples
 
   /* ---------- Calls ---------- */
   function call(path, body) {
@@ -61,7 +60,7 @@
 
   /* The prototype's answer keys -> the contract's IntakeAnswers (src/types/roadmap.ts). */
   GW.intake = function (a) {
-    return { idea: a.idea, customer: a.who, howItMakesMoney: a.earns, budget: a.budget, hoursPerWeek: a.hours, skills: a.skills, stage: a.stage, location: a.location };
+    return { idea: (GW.ctx || '') + a.idea, customer: a.who, howItMakesMoney: a.earns, budget: a.budget, hoursPerWeek: a.hours, skills: a.skills, stage: a.stage, location: a.location };
   };
   GW.followups = function (a, followUps, round) {
     return call('/api/followups', { sessionId: GW.sessionId, intake: GW.intake(a), followUps: followUps, round: round })
@@ -101,11 +100,13 @@
 
   /* ---------- Score page (free preview) ---------- */
   GW.renderPreview = function (p, nums) {
+    nums = nums || { scores: {} };
     var v = p.verdict;
     var ov = $q('#overall');
     if (ov) { ov.textContent = v.overall.rating; ov.setAttribute('data-r', DOT[v.overall.rating] || ''); }
     extras(true);
-    $q('#overallNum').textContent = nums.overall + ' out of 100';
+    $q('#overallNum').textContent = nums.overall == null ? '' : nums.overall + ' out of 100';
+    $q('#overallNum').hidden = nums.overall == null;
     $q('#overallWhy').textContent = v.overall.reason;
 
     setHTML('#score .scale', SCALE.map(function (w) {
@@ -145,6 +146,7 @@
 
   /* ---------- Full plan ---------- */
   GW.renderUnlocked = function (u, nums, imp) {
+    nums = nums || { scores: {} };
     var v = u.verdict;
     setHTML('#plan .mini',
       '<div><dt>Overall</dt><dd data-r="' + (DOT[v.overall.rating] || '') + '">' + esc(v.overall.rating) + num(nums.overall) + '</dd></div>' +
