@@ -64,49 +64,75 @@ class HttpError extends Error {
 // Sessions (in memory). One per person's plan. The browser only ever holds the id.
 // ---------------------------------------------------------------------------
 
-interface Session {
+export interface Session {
   created: number;
   businessType: BusinessType;
   input?: PlanInput;
   plan?: ServerPlan;
   paid: boolean; // MOCK payment. Real payment (Stripe test mode) would set this from a webhook.
-  improved?: Promise<ImprovedBusinessPlan>;
+  improved?: ImprovedBusinessPlan;
 }
-const sessions = new Map<string, Session>();
 
-function getSession(id: unknown, create: boolean): [string, Session] {
-  const now = Date.now();
-  for (const [k, s] of sessions) if (now - s.created > SESSION_TTL_MS) sessions.delete(k);
-  if (typeof id === "string" && sessions.has(id)) return [id, sessions.get(id)!];
+/** Where sessions and rate-limit counters live. Memory by default; the Firebase function swaps in Firestore (functions/src/index.ts). */
+export interface Store {
+  load(id: string): Promise<Session | undefined>;
+  save(id: string, s: Session): Promise<void>;
+  /** Count one AI call for this address; returns calls this hour (this address) and today (everyone), including this one. */
+  tick(ip: string): Promise<{ ipHour: number; day: number }>;
+}
+
+// ponytail: in-memory counters reset on restart and are per-process; the Firestore store is the multi-instance answer.
+function memoryStore(): Store {
+  const sessions = new Map<string, Session>();
+  const hits = new Map<string, number[]>();
+  let today = { date: "", calls: 0 };
+  return {
+    async load(id) {
+      const now = Date.now();
+      for (const [k, s] of sessions) if (now - s.created > SESSION_TTL_MS) sessions.delete(k);
+      return sessions.get(id);
+    },
+    async save(id, s) {
+      sessions.set(id, s);
+    },
+    async tick(ip) {
+      const now = Date.now();
+      const recent = (hits.get(ip) ?? []).filter((t) => now - t < 3_600_000);
+      recent.push(now);
+      hits.set(ip, recent);
+      const date = new Date(now).toISOString().slice(0, 10);
+      if (today.date !== date) today = { date, calls: 0 };
+      today.calls++;
+      return { ipHour: recent.length, day: today.calls };
+    },
+  };
+}
+let store: Store = memoryStore();
+export const setStore = (s: Store) => {
+  store = s;
+};
+// The improved plan is a paid AI call: share one in-flight call per session so a double click costs once.
+const improving = new Map<string, Promise<ImprovedBusinessPlan>>();
+
+async function getSession(id: unknown, create: boolean): Promise<[string, Session]> {
+  const found = typeof id === "string" && /^[0-9a-f-]{36}$/.test(id) ? await store.load(id) : undefined;
+  if (found && Date.now() - found.created <= SESSION_TTL_MS) return [id as string, found];
   if (!create) throw new HttpError(404, "That plan wasn't found. Start again.", "no_session");
-  const fresh = randomUUID();
-  const s: Session = { created: now, businessType: "other", paid: false };
-  sessions.set(fresh, s);
-  return [fresh, s];
+  return [randomUUID(), { created: Date.now(), businessType: "other", paid: false }];
 }
 
 // ---------------------------------------------------------------------------
 // Cost guards: every AI call costs real money, so cap how often one address (and the whole server) can call.
-// ponytail: in-memory counters reset on restart; use a shared store if this ever runs on more than one machine.
 // ---------------------------------------------------------------------------
 
-const hits = new Map<string, number[]>();
-let today = { date: "", calls: 0 };
-
-function checkAiBudget(ip: string): void {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < 3_600_000);
-  if (recent.length >= intEnv("AI_CALLS_PER_IP_PER_HOUR", 30)) {
+async function checkAiBudget(ip: string): Promise<void> {
+  const { ipHour, day } = await store.tick(ip);
+  if (ipHour > intEnv("AI_CALLS_PER_IP_PER_HOUR", 30)) {
     throw new HttpError(429, "You've used a lot of checks this hour. Try again later.", "rate_limit");
   }
-  const date = new Date(now).toISOString().slice(0, 10);
-  if (today.date !== date) today = { date, calls: 0 };
-  if (today.calls >= intEnv("AI_CALLS_PER_DAY", 300)) {
+  if (day > intEnv("AI_CALLS_PER_DAY", 300)) {
     throw new HttpError(503, "The checker is busy today. Try again tomorrow.", "daily_cap");
   }
-  recent.push(now);
-  hits.set(ip, recent);
-  today.calls++;
 }
 
 // ---------------------------------------------------------------------------
@@ -167,18 +193,19 @@ async function route(pathname: string, body: Body, ip: string): Promise<unknown>
       if (!Number.isInteger(round) || round < 1 || round > maxRounds()) {
         throw new HttpError(400, "That round isn't allowed.", "round_cap");
       }
-      const [id, session] = getSession(body.sessionId, true);
-      checkAiBudget(ip);
+      const [id, session] = await getSession(body.sessionId, true);
+      await checkAiBudget(ip);
       const result = await generateFollowUpRound({ intake, followUps, round, maxRounds: maxRounds() }, { sessionId: id });
       session.businessType = result.businessType; // server-only: the browser never sees it
+      await store.save(id, session);
       return { sessionId: id, round: result.round };
     }
 
     case "/api/plan": {
       const intake = cleanIntake(body.intake);
       const followUps = cleanFollowUps(body.followUps);
-      const [id, session] = getSession(body.sessionId, true);
-      checkAiBudget(ip);
+      const [id, session] = await getSession(body.sessionId, true);
+      await checkAiBudget(ip);
       // verifiedLocalSupport is empty until Lane B's verified list exists, so the AI names no organisations.
       const input: PlanInput = { intake, followUps, verifiedLocalSupport: [] };
       const plan = await generatePlan(input, { sessionId: id, businessType: session.businessType });
@@ -187,28 +214,33 @@ async function route(pathname: string, body: Body, ip: string): Promise<unknown>
       session.plan = plan;
       session.paid = false;
       session.improved = undefined;
+      await store.save(id, session);
       return { sessionId: id, preview: toPreview(plan), numbers: numbersOf(plan) };
     }
 
     case "/api/unlock": {
-      const [, session] = getSession(body.sessionId, false);
+      const [id, session] = await getSession(body.sessionId, false);
       if (!session.plan) throw new HttpError(409, "Check your idea first.", "no_plan");
       session.paid = true; // MOCK payment (test mode). Swap for a confirmed Stripe test-mode payment.
+      await store.save(id, session);
       return { unlocked: toUnlocked(session.plan, null), numbers: numbersOf(session.plan) };
     }
 
     case "/api/improved-plan": {
-      const [id, session] = getSession(body.sessionId, false);
+      const [id, session] = await getSession(body.sessionId, false);
       if (!session.plan || !session.input) throw new HttpError(409, "Check your idea first.", "no_plan");
       if (!session.paid) throw new HttpError(402, "Unlock the full plan first.", "unpaid");
       if (!session.improved) {
-        checkAiBudget(ip);
-        session.improved = generateImprovedPlan(session.input, session.plan, { sessionId: id });
-        session.improved.catch(() => {
-          session.improved = undefined; // allow one more try after a failure
-        });
+        let call = improving.get(id);
+        if (!call) {
+          await checkAiBudget(ip);
+          call = generateImprovedPlan(session.input, session.plan, { sessionId: id }).finally(() => improving.delete(id));
+          improving.set(id, call);
+        }
+        session.improved = await call; // a failure throws here and leaves nothing saved, so one more try is allowed
+        await store.save(id, session);
       }
-      return { improvedPlan: await session.improved };
+      return { improvedPlan: session.improved };
     }
 
     default:
@@ -259,7 +291,9 @@ function send(res: http.ServerResponse, status: number, body: unknown) {
 async function readJson(req: http.IncomingMessage): Promise<Body> {
   const chunks: Buffer[] = [];
   let size = 0;
-  for await (const c of req) {
+  // Firebase Functions has already read the request and keeps the bytes on rawBody.
+  const raw = (req as { rawBody?: Buffer }).rawBody;
+  for await (const c of raw ? [raw] : req) {
     size += (c as Buffer).length;
     if (size > MAX_BODY_BYTES) throw new HttpError(413, "That's too much text.", "too_large");
     chunks.push(c as Buffer);
@@ -270,6 +304,12 @@ async function readJson(req: http.IncomingMessage): Promise<Body> {
   } catch {
     throw new HttpError(400, "That request wasn't valid.", "bad_json");
   }
+}
+
+/** Behind Cloud Run / Firebase the socket is Google's proxy; the caller is the first X-Forwarded-For entry. */
+function clientIp(req: http.IncomingMessage): string {
+  const fwd = process.env.K_SERVICE ? String(req.headers["x-forwarded-for"] ?? "").split(",")[0].trim() : "";
+  return fwd || req.socket.remoteAddress || "unknown";
 }
 
 export function createApp(): http.Server {
@@ -283,7 +323,7 @@ export function createApp(): http.Server {
       if (url.pathname.startsWith("/api/")) {
         if (req.method !== "POST") throw new HttpError(405, "Use POST.", "method");
         if (!aiOn()) throw new HttpError(503, "The AI isn't switched on here.", "ai_off");
-        const out = await route(url.pathname, await readJson(req), req.socket.remoteAddress ?? "unknown");
+        const out = await route(url.pathname, await readJson(req), clientIp(req));
         return send(res, 200, out);
       }
       if (req.method !== "GET" && req.method !== "HEAD") throw new HttpError(405, "Not allowed.", "method");
@@ -312,14 +352,20 @@ export function createApp(): http.Server {
   });
 }
 
-// Start only when run directly (npm start), not when imported by the test.
+/** Point the engine at the chosen non-Anthropic AI (if any) and say which one is on. The function calls this too. */
+export function selectProvider() {
+  const which = provider();
+  if (which === "gemini") useGemini();
+  if (which === "groq") useGroq();
+  return which;
+}
+
+// Start only when run directly (npm start), not when imported by the test or the Firebase function.
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const port = intEnv("PORT", 8787);
   // Local only by default: the key and the AI bill are behind this server. Set HOST to expose it on purpose.
   const host = process.env.HOST || "127.0.0.1";
-  const which = provider();
-  if (which === "gemini") useGemini();
-  if (which === "groq") useGroq();
+  const which = selectProvider();
   createApp().listen(port, host, () => {
     console.log(`Groundworking server: http://${host}:${port}/prototype/`);
     console.log(

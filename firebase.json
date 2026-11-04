@@ -2,7 +2,17 @@
   "hosting": {
     "site": "groundworking",
     "public": ".",
-    "ignore": ["firebase.json", ".firebaserc", "**/.*", "**/node_modules/**", "**/*.md", "demo-data/**"],
-    "cleanUrls": true
-  }
+    "ignore": ["firebase.json", ".firebaserc", "**/.*", "**/node_modules/**", "**/*.md", "demo-data/**", "server/**", "functions/**", "src/**", "prompts/**", "firestore.rules", "*.pptx"],
+    "cleanUrls": true,
+    "rewrites": [{ "source": "/api/**", "function": { "functionId": "api", "region": "europe-west2" } }]
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": ["node_modules", ".git", "src", "tsconfig.json"],
+      "predeploy": ["npm --prefix server ci", "npm --prefix functions ci", "npm --prefix functions run build"]
+    }
+  ],
+  "firestore": { "rules": "firestore.rules" }
 }

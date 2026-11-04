@@ -7,7 +7,7 @@ import { AiError } from "./ai/errors.js";
 import { setClientForTests, type MessagesClient } from "./ai/client.js";
 
 const URL = "https://api.groq.com/openai/v1/chat/completions";
-export const DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile"; // check console.groq.com/docs/models if Groq has retired it
+export const DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b"; // check console.groq.com/docs/models if Groq has retired it
 const RETRIES = 3; // waits 1, 2, 4 seconds
 
 export const groqModel = () => process.env.GROQ_MODEL?.trim() || DEFAULT_GROQ_MODEL;
@@ -27,6 +27,7 @@ async function create(p: Params, opts?: { timeout?: number }) {
     model: groqModel(),
     max_completion_tokens: p.max_tokens,
     response_format: { type: "json_object" },
+    ...(groqModel().includes("gpt-oss") ? { reasoning_effort: "low" } : {}), // reasoning models spend max_completion_tokens thinking
     messages: [{ role: "system", content: system }, { role: "user", content: p.messages.map((m) => m.content).join("\n\n") }],
   });
 
