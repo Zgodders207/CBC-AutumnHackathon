@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Lane E web server: serves the prototype and the AI routes. Kept separate from the root package.json (Lane A) until Zac merges them.",
   "scripts": {
-    "start": "tsx --env-file-if-exists=../.env --env-file-if-exists=.env index.ts",
+    "start": "tsx --env-file-if-exists=keys.env --env-file-if-exists=../.env --env-file-if-exists=.env index.ts",
     "test": "tsx test.ts",
     "check": "tsc --noEmit"
   },

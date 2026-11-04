@@ -22,7 +22,7 @@ npm run check             # typecheck
 
 The two adapters are small translators in `server/`; the engine is untouched. With several keys set, `AI_PROVIDER=anthropic|gemini|groq` picks one; if it is empty the first key found wins, in that order.
 
-Google's free tier allows only about 20 requests a day per model, and one person's plan takes 3. Groq refuses requests from some networks (VPNs, datacenters) with a 403 "check your network settings", whatever the key.
+Shared team keys for Gemini and Groq are committed in `server/keys.env` (on purpose, they are public), so `npm start` works with no setup. A personal `.env` overrides them. Google's free tier allows only about 20 requests a day per model, and one person's plan takes 3. Groq refuses requests from some networks (VPNs, datacenters) with a 403 "check your network settings", whatever the key.
 
 ## Routes
 
