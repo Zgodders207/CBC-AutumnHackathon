@@ -6,7 +6,7 @@ Owner: Lane C (Michael). Product behaviour lives in `idea.md`; this file only co
 
 **Reference build:** `docs/design/example.html`. Open it in a browser. It is the approved look (signed off by Zac as PM). When this file and the reference disagree, the reference wins and this file gets fixed. All content in it is fictional and "Groundwork" is a working name only.
 
-**App screens:** sections 6 and 7 extend the same look to every screen after the landing page (questions, generating, score page, checkout, full plan, error). They were written from a clickable prototype of the whole flow built on the reference.
+**App screens reference:** `docs/design/app-screens.html`. A clickable build of every screen after the landing page (PDF review, round 1, follow-ups, generating, score page, checkout, writing, full plan, error), built on `example.html`. **To build a screen, copy its `<section>` and the CSS it uses from this file, then change only the content.** Do not re-create it from the text below, and do not rewrite its CSS into Tailwind classes; import it as one global stylesheet and reuse the class names. When this file and the reference disagree, the reference wins. Sections 6 and 7 describe what the reference contains.
 
 ## 1. Direction
 
@@ -91,7 +91,7 @@ Copy the `.frost`, `.smoke`, `.nav` and `.field` rules from the reference rather
 
 ## 6. Screens
 
-The landing page follows the reference. Every app screen after it uses one of three **page types**, so the whole flow feels like one product:
+The landing page follows `example.html`; every other screen is in `app-screens.html`. Each app screen uses one of three **page types**, so the whole flow feels like one product:
 
 | Page type | Background | Used for | Layout |
 |-----------|------------|----------|--------|
@@ -127,26 +127,26 @@ Each score has a one-line reason under it. The top 2 risks follow, always free. 
 
 ## 7. Components
 
-Build to these specs, and copy `.btn`, `.frost`, `.smoke`, `.field`, `.nav`, `.sheet`, `.scale` and the route (`.line`, `.stop`, `.dot`) from the reference rather than inventing new ones. Radii nest: page panels 18 to 26px, tiles 16px, chips and inputs 11 to 12px.
+Every component below already exists in `app-screens.html` under the class names given. Copy it from there rather than building it from this description. Radii nest: page panels 18 to 26px, tiles 16px, chips and inputs 11 to 12px.
 
-- **Primary button:** `--signal` fill, `--signal-ink` label, radius 11px, min height 46px (44px minimum on mobile), inner top highlight, warm soft shadow. Label names the action: "Check my idea", "Continue", "Unlock full plan, £4.99", "Try again". One per view.
-- **Quiet button:** transparent, 1px border at 22% ink (28% white on green), same height and radius as primary. For secondary actions such as "See an example plan" or "Download as PDF".
-- **Text link:** 15px, `--ink-2`, underlined. For "Back", "Skip…", "Change an answer".
-- **Nav:** the reference's floating smoke bar. On paper pages use the solid state, `background: rgba(16,44,33,0.86)`, so it stays readable without green behind it. Right side holds "Example plan" and "Start again" links; the yellow nav button only appears on the landing page.
-- **Step label and progress bar:** 14px `--ink-2` label ("Question 4 of 5", "Round 2 of up to 3"), then a bar of 6px segments with 6px gaps, filled segments `--field`, empty segments `rgba(27,85,65,0.18)`, max width 380px.
-- **Answer tile (single choice):** radius 16px, padding 18px 20px, `rgba(255,255,255,0.6)` with an inner white highlight, a 20px radio ring, a 17px label and an optional 14.5px description. **Selected:** filled `--ink` with light text and a yellow dot in the ring. Use `role="radio"` with `aria-checked`. Two columns on desktop, one on mobile.
-- **Chip (single choice in follow-up rounds):** 15.5px text, padding 9px 15px, radius 11px, light panel; selected chip is filled `--ink` with light text.
-- **Text input:** 17px, radius 12px, `rgba(255,255,255,0.7)` with a 16% ink border, yellow focus ring.
-- **"Your answers" panel:** radius 20px, solid light panel on paper; on green it becomes `rgba(255,255,255,0.08)` with a 16% white border. Rows are label (96px, `--ink-2`) and value, split by hairlines. Ends with a "Change an answer" text link. Sticky at `top: 100px` on desktop only.
-- **Stage list (loading):** a smoke panel, radius 22px, 18px rows. Each row has a 28px marker: empty ring (to do), yellow ring with a static yellow dot (now, text at weight 500), yellow fill with a dark tick (done). No looping animations, no spinners.
-- **Score list:** inside the frost sheet, a light panel (radius 18px) of rows: score name (500) left, rating word right (500, width 112, 18px), the reason on the next line in `--ink-2` at 15px.
-- **Paywall panel:** smoke on green with the reference's `.paid` treatment (yellow-tinted border). Price in the price style, "Unlock the full plan, one-off", three items with yellow ticks, full-width primary button, and one line "Everything on the left stays free, including the bad news."
-- **Dialog:** frost, radius 24px, max width 440px, over a `rgba(9,26,20,0.45)` scrim. Focus moves to its primary button; Escape closes it.
-- **Improvement card:** light panel, radius 20px, two columns on desktop. Header row: score name (card title) and its rating word in `--ink-2`. Then the change in 500 weight, "Why:" and "Check it cheaply:" lines.
-- **Route (full plan):** the reference route with every stop unlocked: solid 6px `--field` line, yellow dots with ink rings, light tiles showing name, time and cost (tabular numbers) and one sentence. Locked stops (dashed tile, hollow dot) appear only before payment.
-- **Writing card:** solid `--ink` panel, radius 22px, a static yellow marker, a 18px title ending in "…" and one `--on-field-2` line. Placeholder lines below are 16px bars at 8% ink.
-- **Expandable section:** native `<details>`, 18px summary at weight 500, chevron rotates 180° on open, hairlines between sections.
-- **Example tag:** the reference's pill ("Example with fictional answers"). On green use 8% white with a 16% white border.
+- **Primary button** (`.btn`): `--signal` fill, `--signal-ink` label, radius 11px, min height 46px (44px minimum on mobile), inner top highlight, warm soft shadow. Label names the action: "Check my idea", "Continue", "Unlock full plan, £4.99", "Try again". One per view.
+- **Quiet button** (`.btn-quiet`): transparent, 1px border at 22% ink (28% white on green), same height and radius as primary. For secondary actions such as "See an example plan" or "Download as PDF".
+- **Text link** (`.textlink`): 15px, `--ink-2`, underlined. For "Back", "Skip…", "Change an answer".
+- **Nav** (`.navbar`, `.nav`; paper state `.navbar.on-paper`): the reference's floating smoke bar. On paper pages use the solid state, `background: rgba(16,44,33,0.86)`, so it stays readable without green behind it. Right side holds "Example plan" and "Start again" links; the yellow nav button only appears on the landing page.
+- **Step label and progress bar** (`.steps-label`, `.bar`): 14px `--ink-2` label ("Question 4 of 5", "Round 2 of up to 3"), then a bar of 6px segments with 6px gaps, filled segments `--field`, empty segments `rgba(27,85,65,0.18)`, max width 380px.
+- **Answer tile, single choice** (`.opts`, `.opt`): radius 16px, padding 18px 20px, `rgba(255,255,255,0.6)` with an inner white highlight, a 20px radio ring, a 17px label and an optional 14.5px description. **Selected:** filled `--ink` with light text and a yellow dot in the ring. Use `role="radio"` with `aria-checked`. Two columns on desktop, one on mobile.
+- **Chip, single choice in follow-up rounds** (`.chips`, `.chip`): 15.5px text, padding 9px 15px, radius 11px, light panel; selected chip is filled `--ink` with light text.
+- **Text input** (`.q input`): 17px, radius 12px, `rgba(255,255,255,0.7)` with a 16% ink border, yellow focus ring.
+- **"Your answers" panel** (`.answers`): radius 20px, solid light panel on paper; on green it becomes `rgba(255,255,255,0.08)` with a 16% white border. Rows are label (96px, `--ink-2`) and value, split by hairlines. Ends with a "Change an answer" text link. Sticky at `top: 100px` on desktop only.
+- **Stage list, loading** (`.stages`): a smoke panel, radius 22px, 18px rows. Each row has a 28px marker: empty ring (to do), yellow ring with a static yellow dot (now, text at weight 500), yellow fill with a dark tick (done). No looping animations, no spinners.
+- **Score list** (`.sheet`, `.scale`, `.scores`, `.risks`): inside the frost sheet, a light panel (radius 18px) of rows: score name (500) left, rating word right (500, width 112, 18px), the reason on the next line in `--ink-2` at 15px.
+- **Paywall panel** (`.pay.paid`): smoke on green with the reference's `.paid` treatment (yellow-tinted border). Price in the price style, "Unlock the full plan, one-off", three items with yellow ticks, full-width primary button, and one line "Everything on the left stays free, including the bad news."
+- **Dialog** (`.overlay`, `.checkout`): frost, radius 24px, max width 440px, over a `rgba(9,26,20,0.45)` scrim. Focus moves to its primary button; Escape closes it.
+- **Improvement card** (`.groups`, `.group`): light panel, radius 20px, two columns on desktop. Header row: score name (card title) and its rating word in `--ink-2`. Then the change in 500 weight, "Why:" and "Check it cheaply:" lines.
+- **Route, full plan** (`.line`, `.stop`, `.dot`): the reference route with every stop unlocked: solid 6px `--field` line, yellow dots with ink rings, light tiles showing name, time and cost (tabular numbers) and one sentence. Locked stops (dashed tile, hollow dot) appear only before payment.
+- **Writing card** (`.writing-card`, `.ghost`): solid `--ink` panel, radius 22px, a static yellow marker, a 18px title ending in "…" and one `--on-field-2` line. Placeholder lines below are 16px bars at 8% ink.
+- **Expandable section** (`details`): native `<details>`, 18px summary at weight 500, chevron rotates 180° on open, hairlines between sections.
+- **Example tag** (`.tag`): the reference's pill ("Example with fictional answers"). On green use 8% white with a 16% white border.
 - **Icons:** thin line icons, 1.8 stroke, `currentColor`. No emoji.
 - **Browser details:** themed `::selection` (yellow), focus ring (3px yellow, 3px offset), caret colour, `text-underline-offset`.
 
