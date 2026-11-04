@@ -4,7 +4,13 @@ This file is read by every team member's Claude Code session. Several people are
 
 ## The project
 
-An AI-assisted business creation platform for aspiring founders in the North East. A user describes their idea, skills, budget and time available; the AI produces a structured, honest **business roadmap**. We monetise by **selling the roadmap**: a free preview, with the full roadmap unlocked by payment.
+A business planner for people in the North East who are unsure whether their business would be sustainable. A user describes their idea, skills, budget and time available; the AI produces:
+
+1. An honest **sustainability check**, including reasons it might not work.
+2. A round-up of **what to improve before starting**, split into the idea, the business model, and the user's own situation (budget, time, skills).
+3. A **roadmap** of cheap first steps to test it.
+
+We monetise with a free preview (the verdict, the main risks, and a taste of the improvements); payment unlocks the full improvement list and roadmap. It must never promise success or invent organisations, grants or figures. See `idea.md` for the full design.
 
 - Hackathon: Claude Builder Club, Northumbria University. Track 3, "Start Something".
 - Judging: Technical quality 40%, Real-world fit 30%, Investability 15%, Go-to-market 15%.
@@ -27,23 +33,23 @@ Each person works in one lane. **Only edit files inside your own lane.** If a ch
 
 | Lane | Owner | Owns |
 |------|-------|------|
-| A. Intake | TBD | `src/features/intake/` (idea questionnaire UI) |
-| B. Roadmap view | TBD | `src/features/roadmap/` (rendering, preview vs full, export) |
-| C. AI engine | TBD | `server/` and `prompts/` (API calls, prompt design, JSON parsing, cost logging) |
-| D. Paywall | TBD | `src/features/paywall/` (unlock flow, pricing display) |
-| E. Pitch and glue | TBD | `README.md`, `docs/`, `demo-data/`, `src/App.tsx`, routing |
+| A. Project manager / Intake | Zac | `src/features/intake/` (idea questionnaire UI), `package.json` and lockfile, `README.md`, `src/App.tsx` and routing |
+| B. Research | Eric | `docs/research/`, `demo-data/` (fictional personas, verified local-support facts) |
+| C. UI design | Michael | `docs/design/`, Tailwind config and shared styles, `src/features/verdict/`, `src/features/roadmap/`, `src/features/paywall/` (screens, preview vs full, pricing display) |
+| D. AI and API usage | Khaliq | `prompts/`, the Anthropic API call code, JSON parsing, cost logging |
+| E. Backend flow | George | `server/` routes and request flow, unlock/payment (mock or Stripe test mode), fallback to cached demo data |
 
 Shared files with a single owner:
 
-- `src/types/roadmap.ts` is the **contract** between lanes. Owned by Lane C. Nobody else edits it. Changes are announced in the group chat before pushing.
-- `package.json` and the lockfile: Lane E merges dependency additions. Ask before adding a package.
+- `src/types/roadmap.ts` is the **contract** between lanes. Owned by Lane D. Nobody else edits it. Changes are announced in the group chat before pushing.
+- `package.json` and the lockfile: Lane A merges dependency additions. Ask before adding a package.
 
 ## Git rules
 
 1. One person scaffolds and pushes the skeleton. Everyone else clones after that.
-2. Work on a branch named after your lane, e.g. `lane-c-ai-engine`.
+2. Work on a branch named after your lane, e.g. `lane-d-ai-api`.
 3. `git pull --rebase origin main` before every session and before every push.
-4. Commit small and often. Prefix messages with the lane: `[C] parse roadmap JSON safely`.
+4. Commit small and often. Prefix messages with the lane: `[D] parse AI response JSON safely`.
 5. Merge to `main` at least every 30 minutes so conflicts stay small.
 6. Never force-push to `main`. Never rewrite shared history.
 7. Never run a formatter or linter fix across the whole repo. Only format files you touched.
@@ -67,7 +73,7 @@ Shared files with a single owner:
 
 ## Product guardrails (this is scored)
 
-The track brief warns against bad advice with real costs, false encouragement, and ignoring people without laptops, time or money. Therefore the roadmap prompt must:
+The track brief warns against bad advice with real costs, false encouragement, and ignoring people without laptops, time or money. Therefore the AI prompt must:
 
 - Give an honest viability assessment, including reasons the idea may not work.
 - Flag where the user should get professional advice (legal, tax, finance) rather than relying on the AI.
@@ -76,13 +82,13 @@ The track brief warns against bad advice with real costs, false encouragement, a
 - Point to real local support only if it is verified; never invent organisations, grants or figures.
 - Work on a phone screen.
 
-## Roadmap output contract
+## AI output contract
 
-The AI must return **JSON only**, matching `src/types/roadmap.ts`. Server code must strip code fences, parse inside `try/catch`, and fall back to a cached demo roadmap from `demo-data/` if the API fails, so the live demo never breaks.
+The AI must return **JSON only**, matching `src/types/roadmap.ts`. That one object holds the sustainability verdict and risks, the improvements (idea, business model, user's situation) and the roadmap, each marked as free-preview or paid. Lane D strips code fences and parses inside `try/catch`; Lane E's server falls back to a cached demo result from `demo-data/` if the API fails, so the live demo never breaks.
 
 ## Cost tracking (needed for the business case)
 
-Lane C logs input and output token counts for every roadmap generation to the console. This gives a real cost-to-serve figure for the pitch deck's "Who pays" slide.
+Lane D logs input and output token counts for every generation to the console. This gives a real cost-to-serve figure for the pitch deck's "Who pays" slide.
 
 ## Timeline
 
