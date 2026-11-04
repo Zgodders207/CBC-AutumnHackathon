@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Question flow skeleton</title>
+<!--
+  Unstyled skeleton of the page flow in idea.md section 11e. All data is fake and fictional.
+  Design goes on top: every screen is a <section data-screen="name">, styled via the classes
+  .screen .question .choices .score .risk .paywall .states. No AI, server or payment is wired in.
+  Hosted by GitHub Pages at /prototype/.
+-->
+<style>
+  body { font-family: sans-serif; max-width: 40rem; margin: 1rem auto; padding: 0 1rem; }
+  [data-screen] { display: none; }
+  [data-screen].active { display: block; }
+  .choices label { display: block; margin: .25rem 0; }
+  .question { margin: 1rem 0; }
+  #debug { color: #666; font-size: .8rem; margin-top: 2rem; }
+</style>
+</head>
+<body>
+
+<section class="screen" data-screen="home">
+  <h1>Find out whether your business idea is likely to last, before you spend money</h1>
+  <p>A rough view for people in the North East. Not advice.</p>
+  <button data-go="round">Start</button>
+  <p>Already have a business plan or accounts? <button data-go="upload">Upload a PDF to save time</button></p>
+</section>
+
+<section class="screen" data-screen="upload">
+  <h2>Upload a PDF (optional)</h2>
+  <p>Text-based PDFs work best; scanned pages may not read well. Used only for this assessment and not kept (to be confirmed).</p>
+  <input type="file" accept="application/pdf" id="pdf">
+  <div class="states" id="upload-state">Nothing uploaded yet.</div>
+  <button id="upload-go">Read it</button>
+  <button data-go="round">Skip, just answer the questions</button>
+</section>
+
+<section class="screen" data-screen="found">
+  <h2>Here's what we found</h2>
+  <p>(Fake result.) Edit anything that's wrong, then carry on.</p>
+  <label>Idea <input id="found-idea" value="A mobile coffee cart at Tynemouth market"></label>
+  <label>Budget <input value="£2,000"></label>
+  <button data-go="round">Looks right, continue</button>
+</section>
+
+<section class="screen" data-screen="round">
+  <h2 id="round-title"></h2>
+  <form id="round-form"></form>
+  <button id="round-next">Next</button>
+</section>
+
+<section class="screen" data-screen="generating">
+  <h2>Working out your view…</h2>
+  <ol class="states" id="steps"></ol>
+  <button id="fail">Simulate API failure</button>
+</section>
+
+<section class="screen" data-screen="error">
+  <h2>Something went wrong</h2>
+  <p>Showing the scripted example instead. (Fallback to demo data.)</p>
+  <button data-go="score">Continue with example</button>
+</section>
+
+<section class="screen" data-screen="score">
+  <h2>Example with fictional answers</h2>
+  <div class="score overall"><h3>Overall</h3><p><strong id="overall"></strong></p></div>
+  <div id="scores"></div>
+  <h3>Top 2 risks</h3>
+  <ul class="risk" id="risks"></ul>
+  <p>A rough view, not a prediction.</p>
+  <div class="paywall">
+    <p>Unlock the improvements for each score, the roadmap and the full improved plan: £4.99 one-off.</p>
+    <button id="unlock">Unlock (mock payment)</button>
+  </div>
+</section>
+
+<section class="screen" data-screen="plan">
+  <h2>Your full plan</h2>
+  <h3>Improvements</h3><p>(Placeholder: one block per score.)</p>
+  <h3>Roadmap</h3><ol><li>(Cheap first step 1)</li><li>(Cheap first step 2)</li></ol>
+  <h3>Improved business plan</h3><p>(Placeholder: written by a second AI call after payment.)</p>
+  <button data-go="home">Start again</button>
+</section>
+
+<p id="debug"></p>
+
+<script>
+const show = name => {
+  document.querySelectorAll('[data-screen]').forEach(s => s.classList.toggle('active', s.dataset.screen === name));
+  window.scrollTo(0, 0);
+};
+document.addEventListener('click', e => { if (e.target.dataset.go) go(e.target.dataset.go); });
+
+// Fake questions. choices = tap answers; "Not sure" is added to every one. text = free-text box.
+const NOT_SURE = 'Not sure';
+const ROUND1 = [
+  { q: 'Describe your idea in a sentence or two', text: true },
+  { q: 'Who is it for?', choices: ['Local people', 'Businesses', 'Online customers'] },
+  { q: 'How will it make money?', choices: ['Selling things', 'Subscription', 'Charging for my time'] },
+  { q: 'Start-up budget', choices: ['Under £500', '£500 to £5,000', 'Over £5,000'] },
+  { q: 'Hours a week you can give it', choices: ['Under 10', '10 to 25', '25 or more'] },
+  { q: 'How far along is it?', choices: ['Just an idea', 'Tested it', 'Already trading'] },
+];
+// Follow-up questions by silent business type. Real ones are written by the AI from earlier answers.
+const ROUTES = {
+  retail: ['How will you get stock?', 'Will you need premises?', 'What margin do you expect?'],
+  saas: ['What would you charge a month?', 'What will it cost to build?', 'How will customers find it?'],
+  services: ['What day rate would you charge?', 'How will you find clients?', 'How many hours can you sell a week?'],
+  other: ['What is the main cost you expect?', 'Who else does something similar?', 'What worries you most?'],
+};
+const MAX_ROUNDS = 3;
+const state = { round: 1, answers: [], type: null };
+
+// Silent categorisation: stand-in keyword guess. The AI does this for real and re-checks every round.
+const guessType = text => /shop|stock|sell|cart|market/i.test(text) ? 'retail'
+  : /app|software|platform|subscription/i.test(text) ? 'saas'
+  : /freelanc|consult|design|tutor|service/i.test(text) ? 'services' : 'other';
+
+const go = name => {
+  if (name === 'round') { state.round = 1; state.answers = []; renderRound(); }
+  if (name === 'generating') runGenerating();
+  if (name === 'score') renderScore();
+  show(name);
+};
+
+function renderRound() {
+  const qs = state.round === 1 ? ROUND1 : ROUTES[state.type];
+  document.getElementById('round-title').textContent =
+    state.round === 1 ? 'A few quick questions' : `Round ${state.round} of up to ${MAX_ROUNDS}`;
+  document.getElementById('round-form').innerHTML = qs.map((q, i) => {
+    const item = typeof q === 'string' ? { q, text: true } : q;
+    const body = item.text
+      ? `<textarea name="q${i}" rows="2"></textarea> <label><input type="checkbox" name="q${i}-ns"> ${NOT_SURE}</label>`
+      : [...item.choices, NOT_SURE].map(c => `<label><input type="radio" name="q${i}" value="${c}"> ${c}</label>`).join('');
+    return `<div class="question"><p>${item.q}</p><div class="choices">${body}</div></div>`;
+  }).join('');
+  document.getElementById('round-next').textContent = state.round === 1 ? 'Next' : 'Continue';
+}
+
+document.getElementById('round-next').onclick = () => {
+  const data = new FormData(document.getElementById('round-form'));
+  state.answers.push(Object.fromEntries(data)); // nothing is required: "Not sure" or blank is fine
+  if (state.round === 1) state.type = guessType(state.answers[0].q0 || '');
+  document.getElementById('debug').textContent = `debug (hidden from users): silent type = ${state.type}, round ${state.round}`;
+  // Fake "AI decides it has enough": stop after round 2 here. Real cap is 3, enforced by the server.
+  if (state.round >= 2) return go('generating');
+  state.round++;
+  renderRound();
+};
+
+// PDF upload: nothing is sent anywhere, it only fakes the "read it" step.
+document.getElementById('pdf').onchange = e => {
+  const f = e.target.files[0];
+  document.getElementById('upload-state').textContent = f ? `Chosen: ${f.name}` : 'Nothing uploaded yet.';
+};
+document.getElementById('upload-go').onclick = () => {
+  if (!document.getElementById('pdf').files[0]) {
+    document.getElementById('upload-state').textContent = 'Choose a PDF first, or skip.';
+    return;
+  }
+  go('found');
+};
+
+let timer;
+function runGenerating() {
+  const steps = ['Reading your answers', 'Checking the market', 'Writing your scores'];
+  const ol = document.getElementById('steps');
+  ol.innerHTML = '';
+  clearTimeout(timer);
+  let i = 0;
+  (function next() {
+    if (i >= steps.length) return go('score');
+    ol.insertAdjacentHTML('beforeend', `<li>${steps[i++]}</li>`);
+    timer = setTimeout(next, 700);
+  })();
+}
+document.getElementById('fail').onclick = () => { clearTimeout(timer); show('error'); };
+
+// Fictional example scores. Words only, higher always means better.
+const SCORES = [
+  ['Financial stability', 'Needs work', 'Thin cash buffer for a slow first few months.'],
+  ['Long-term sustainability', 'Promising', 'Demand looks steady, not a passing trend.'],
+  ['Room in the market', 'Needs work', 'Several similar stalls already trade nearby.'],
+  ['Skills and ability', 'Strong', 'Relevant experience and enough weekly hours.'],
+];
+function renderScore() {
+  document.getElementById('overall').textContent = 'Needs work';
+  document.getElementById('scores').innerHTML = SCORES.map(([n, w, why]) =>
+    `<div class="score"><h3>${n}</h3><p><strong>${w}</strong></p><p>${why}</p></div>`).join('');
+  document.getElementById('risks').innerHTML =
+    '<li>Risk: cash runs out before regular customers build up.</li><li>Risk: crowded local market.</li>';
+}
+document.getElementById('unlock').onclick = () => go('plan');
+
+show('home');
+</script>
+</body>
+</html>
