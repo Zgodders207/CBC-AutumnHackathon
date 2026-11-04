@@ -15,7 +15,6 @@
   (only the headings and summary lines use your answers), and the PDF details are a fixed example.
   Refund, VAT and receipt wording in the checkout is draft copy for the team to confirm.
   Hosted by GitHub Pages at /prototype/.
-  The bar at the bottom (.proto) is for browsing this prototype only: do not ship it.
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -338,11 +337,6 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 .err-cause:empty{display:none}
 
 /* ---- Prototype switcher (not part of the product) ---- */
-.proto{position:static;margin:40px auto 24px;width:max-content;max-width:calc(100% - 32px);flex-wrap:wrap;justify-content:center;z-index:60;display:flex;gap:4px;align-items:center;padding:6px;border-radius:14px;background:rgba(15,34,27,0.92);box-shadow:0 18px 40px -16px rgba(2,18,12,0.7);max-width:calc(100vw - 24px);overflow-x:auto}
-.proto span{font-size:12.5px;color:#9FB6AB;padding:0 8px 0 6px;white-space:nowrap}
-.proto a{font-size:13px;color:#DCE7E1;text-decoration:none;padding:6px 10px;border-radius:9px;white-space:nowrap}
-.proto a:hover{background:rgba(255,255,255,0.08)}
-.proto a.on{background:#F3F6F2;color:var(--ink)}
 
 /* ---- Ratings: one four-colour palette, shown as a small round dot beside the word ----
    The word itself stays in the normal text colour. Same key, same colours, everywhere. */
@@ -393,7 +387,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 }
 @media (max-width:520px){.ask{flex-direction:column}.ask .btn{width:100%}.home-sheet .scale{flex-wrap:wrap}}
 @media print{
-  .navbar,.proto,.toc,.plan-actions,.writing-card,.overlay,.pay,.no-print,body::after{display:none!important}
+  .navbar,.toc,.plan-actions,.writing-card,.overlay,.pay,.no-print,body::after{display:none!important}
   .view{display:none!important}
   .view.on{display:block!important;min-height:0;padding-bottom:0;margin-top:0}
   .field,.view.field-top{background:none!important;margin-top:0!important;padding-top:0!important}
@@ -760,8 +754,6 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   </div>
 </section>
 
-<nav class="proto" aria-label="Prototype screens" id="proto"><span title="The verdict and plan wording is one fixed example. Your answers change the headings and summary lines only.">Prototype screens</span></nav>
-
 <script src="api.js"></script>
 <script>
 (function(){
@@ -866,17 +858,13 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;}
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var views=[].slice.call(document.querySelectorAll('.view'));
-  var protoL=$('proto'),navbar=$('navbar');
+  var navbar=$('navbar');
   var fieldViews={home:1,generating:1,score:1,plan:1,writing:1,error:1};
   var timers=[];
   function clearTimers(){timers.forEach(clearTimeout);timers=[];}
   function later(fn,ms){timers.push(setTimeout(fn,reduce?0:ms));}   // animation timing: skipped for reduced motion
   function wait(fn,ms){timers.push(setTimeout(fn,ms));}              // real waiting (retry countdown): never skipped
 
-  /* ---------- Prototype screen switcher ---------- */
-  views.map(function(v){return [v.id,v.dataset.title];}).concat([['error-offline','Error: offline'],['error-payment','Error: payment'],['error-upload','Error: PDF']]).forEach(function(p){
-    var a=el('a',null,p[1]);a.href='#'+p[0];a.dataset.id=p[0];protoL.appendChild(a);
-  });
 
   /* ---------- Dialogs: focus moves in, Tab stays inside, Escape closes, focus goes back ---------- */
   var openDlg=null,lastFocus=null;
@@ -1330,7 +1318,6 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     if(/^(round2|generating|score|writing|plan)$/.test(id)||target==='error')ensureAnswers();
     if(target==='home'&&state.seeded)fresh();
     views.forEach(function(v){v.classList.toggle('on',v.id===target);});
-    [].forEach.call(protoL.querySelectorAll('a'),function(a){a.classList.toggle('on',a.dataset.id===id);});
     navbar.classList.toggle('on-paper',!fieldViews[target]);
     window.scrollTo(0,0);
 
@@ -1389,7 +1376,6 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   GW.snapshot();
   if(onHome)show();
   GW.init().then(function(){
-    protoL.appendChild(el('span',null,GW.live?'Live AI on':'Demo mode (no AI server)'));
     if(!onHome)show();
     else if($('round1').classList.contains('on'))renderRound1();
   });
