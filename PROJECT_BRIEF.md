@@ -27,6 +27,8 @@ Out (free): word ratings for the idea, business model and the person's situation
 
 Why it beats the alternatives: honest by design, constrained by the user's real budget and time, and clear about its limits and where to get professional advice.
 
+Next step (not built today unless the team agrees after 3:30): an investor mode, where the same engine assesses a business someone plans to invest in, at a separate higher price. See idea.md 11d.
+
 ## 4. Who pays, and does it make money? (slide 4)
 
 All figures must come from the team's own reasoning. Believable assumptions beat polish. If the model pays anyone, budget at least the minimum wage.
