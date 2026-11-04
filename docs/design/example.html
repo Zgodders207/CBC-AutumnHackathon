@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en-GB" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Groundwork: will your business idea last?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F4F0; --ink:#0F221B; --ink-2:#3B4F47; --line:#D2DBD5;
+  --field:#1B5541; --field-deep:#123D2F; --on-field:#F3F6F2; --on-field-2:#C6D9CF;
+  --signal:#F2C94C; --signal-hi:#F7D875; --signal-ink:#2A2208; --risk:#A9432B;
+  --glass-light:rgba(250,252,249,0.70); --glass-dark:rgba(255,255,255,0.08);
+  --font:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#0D1914;--ink:#E8EEEA;--ink-2:#AFC0B8;--line:#26362F;--glass-light:rgba(20,35,29,0.72);color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#0D1914;--ink:#E8EEEA;--ink-2:#AFC0B8;--line:#26362F;--glass-light:rgba(20,35,29,0.72);color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 90px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.6;font-variation-settings:"wdth" 100;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0.07;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+::selection{background:var(--signal);color:var(--signal-ink)}
+:focus-visible{outline:3px solid var(--signal);outline-offset:3px;border-radius:6px}
+a{color:inherit;text-underline-offset:0.22em;text-decoration-thickness:1px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* glass recipes */
+.frost{background:var(--glass-light);-webkit-backdrop-filter:blur(28px) saturate(170%);backdrop-filter:blur(28px) saturate(170%);border:1px solid rgba(255,255,255,0.75);box-shadow:inset 0 1px 0 rgba(255,255,255,0.95),inset 0 -1px 0 rgba(15,34,27,0.04),0 50px 100px -40px rgba(4,26,18,0.55),0 14px 30px -14px rgba(4,26,18,0.28)}
+.smoke{background:var(--glass-dark);-webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%);border:1px solid rgba(255,255,255,0.16);box-shadow:inset 0 1px 0 rgba(255,255,255,0.18),0 30px 60px -30px rgba(2,18,12,0.6)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.frost{background:rgba(250,252,249,0.97)}.smoke{background:rgba(255,255,255,0.12)}}
+
+/* fields with light and contours */
+.field{position:relative;isolation:isolate;color:var(--on-field);background:
+  radial-gradient(60% 70% at 85% 8%, rgba(132,201,160,0.38), transparent 70%),
+  radial-gradient(45% 55% at 8% 100%, rgba(242,201,76,0.14), transparent 70%),
+  linear-gradient(165deg,#1E5C46 0%,#174D3A 55%,#123D2F 100%)}
+.topo{position:absolute;inset:0;width:100%;height:100%;z-index:-1;fill:none;stroke:rgba(225,245,233,0.10);stroke-width:1}
+
+/* nav */
+.navbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);z-index:40;margin:0 auto;max-width:1240px;padding:0 clamp(12px,3vw,40px)}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 10px 10px 18px;border-radius:16px;color:var(--on-field);background:rgba(16,44,33,0.55);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%);border:1px solid rgba(255,255,255,0.14);box-shadow:inset 0 1px 0 rgba(255,255,255,0.12),0 12px 30px -16px rgba(2,18,12,0.6)}
+.mark{font-weight:500;font-size:18px;letter-spacing:-0.01em;font-variation-settings:"wdth" 125;text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-r{display:flex;align-items:center;gap:18px}
+.nav-r a.link{font-size:15px;color:var(--on-field-2);text-decoration:none}
+.nav-r a.link:hover{color:var(--on-field)}
+.btn{appearance:none;border:0;border-radius:11px;background:var(--signal);color:var(--signal-ink);font:inherit;font-weight:500;font-size:16px;padding:12px 20px;min-height:46px;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,0.55),0 8px 20px -10px rgba(242,201,76,0.8);transition:transform 160ms var(--ease),background-color 160ms var(--ease)}
+.btn:hover{background:var(--signal-hi)}
+.btn:active{transform:scale(0.98)}
+.btn.sm{min-height:38px;padding:8px 14px;font-size:15px;border-radius:9px}
+
+/* hero */
+.hero{margin-top:-74px;padding-top:74px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,0.92fr);gap:clamp(32px,5vw,72px);align-items:start;padding:clamp(56px,8vw,112px) 0 clamp(56px,6vw,80px)}
+h1{font-weight:500;font-variation-settings:"wdth" 112;font-size:clamp(2.8rem,6.8vw,6rem);line-height:0.95;letter-spacing:-0.04em;margin:0 0 28px;text-wrap:balance}
+.lede{font-size:clamp(18px,1.6vw,21px);line-height:1.55;color:var(--on-field-2);max-width:34ch;margin:0 0 36px}
+.ask{border-radius:18px;padding:8px;display:flex;gap:8px;max-width:560px}
+.ask input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:17px;color:var(--on-field);padding:12px 14px;caret-color:var(--signal);border-radius:10px}
+.ask input::placeholder{color:rgba(243,246,242,0.62)}
+.ask input:focus-visible{outline:2px solid var(--signal);outline-offset:0}
+.err{font-size:14px;color:var(--signal);margin:10px 0 0;min-height:1.4em}
+.fine{font-size:14px;color:var(--on-field-2);margin:4px 0 0}
+
+/* verdict sheet */
+.sheet{border-radius:24px;padding:clamp(24px,3vw,36px);transform:translateY(150px);position:relative;z-index:2;color:var(--ink)}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);background:rgba(255,255,255,0.6);border:1px solid rgba(15,34,27,0.08);border-radius:999px;padding:4px 11px}
+.idea{font-size:15px;color:var(--ink-2);margin:18px 0 2px}
+.overall{font-weight:500;font-variation-settings:"wdth" 118;font-size:clamp(2.3rem,3.8vw,3.4rem);line-height:1;letter-spacing:-0.038em;margin:6px 0 12px}
+.scale{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 6px;padding:0;list-style:none}
+.scale li{font-size:13px;padding:5px 11px;border-radius:9px;background:rgba(255,255,255,0.55);border:1px solid rgba(15,34,27,0.08);color:var(--ink-2)}
+.scale li.on{background:var(--ink);border-color:var(--ink);color:#F3F6F2;box-shadow:0 6px 14px -8px rgba(15,34,27,0.7)}
+.caveat{font-size:14px;color:var(--ink-2);margin:8px 0 22px}
+.areas{margin:0;padding:4px 16px;border-radius:16px;background:rgba(255,255,255,0.55);border:1px solid rgba(15,34,27,0.06)}
+.areas div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid rgba(15,34,27,0.08)}
+.areas div:last-child{border-bottom:0}
+.areas dt{color:var(--ink-2)}
+.areas dd{margin:0;font-weight:500}
+.risks{margin:20px 0 0;padding:0;list-style:none;display:grid;gap:12px}
+.risks li{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:15.5px;line-height:1.5}
+.risks svg{color:var(--risk);margin-top:2px}
+.risks b{font-weight:500;color:var(--risk)}
+.status:empty{display:none}
+.status{font-size:14px;color:var(--field);font-weight:500;margin:18px 0 0}
+
+/* route */
+.route{padding:clamp(230px,22vw,270px) 0 clamp(80px,10vw,140px)}
+h2{font-weight:500;font-variation-settings:"wdth" 112;font-size:clamp(2.1rem,4.6vw,3.8rem);line-height:1.0;letter-spacing:-0.038em;margin:0 0 18px;max-width:18ch;text-wrap:balance}
+.sub{color:var(--ink-2);max-width:56ch;font-size:18px;margin:0 0 clamp(56px,6vw,88px)}
+.line{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;padding:44px 0 0;list-style:none;margin:0}
+.line::before{content:"";position:absolute;left:0;right:0;top:13px;height:6px;border-radius:6px;background:linear-gradient(90deg,var(--field) 0 50%,rgba(27,85,65,0.25) 50% 100%);transform-origin:left center}
+.stop{position:relative;border-radius:18px;padding:20px 20px 22px;background:rgba(255,255,255,0.55);border:1px solid rgba(15,34,27,0.07);box-shadow:inset 0 1px 0 #fff,0 20px 40px -30px rgba(15,34,27,0.35)}
+.dot{position:absolute;top:-44px;left:18px;width:28px;height:28px;border-radius:50%;background:var(--signal);border:4px solid var(--ink);box-shadow:0 0 0 6px var(--paper)}
+.stop.locked{background:transparent;box-shadow:none;border-style:dashed}
+.stop.locked .dot{background:var(--paper);border-color:rgba(15,34,27,0.45)}
+.stop h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height:1.15;letter-spacing:-0.02em;margin:0 0 6px}
+.meta{font-size:14px;color:var(--ink-2);margin:0 0 10px;display:flex;gap:14px}
+.stop p.body{font-size:15.5px;margin:0;max-width:30ch}
+.lock{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-2);margin:0}
+.motion::before{transform:scaleX(0);transition:transform 1400ms var(--ease)}
+.motion .stop{opacity:0;transform:translateY(12px);transition:opacity 700ms var(--ease),transform 700ms var(--ease)}
+.motion.drawn::before{transform:scaleX(1)}
+.motion.drawn .stop{opacity:1;transform:none}
+.motion.drawn .stop:nth-child(2){transition-delay:220ms}
+.motion.drawn .stop:nth-child(3){transition-delay:460ms}
+.motion.drawn .stop:nth-child(4){transition-delay:700ms}
+
+/* offer band */
+.offer{padding:clamp(88px,10vw,144px) 0;overflow:hidden}
+.offer h2{color:var(--on-field)}
+.offer .sub{color:var(--on-field-2)}
+.plans{display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr);gap:20px;align-items:stretch}
+.plan{border-radius:26px;padding:clamp(28px,3.4vw,44px)}
+.plan.paid{background:rgba(255,255,255,0.13);border-color:rgba(242,201,76,0.45);box-shadow:inset 0 1px 0 rgba(255,255,255,0.25),0 0 0 1px rgba(242,201,76,0.12),0 40px 80px -36px rgba(2,18,12,0.75)}
+.price{font-weight:500;font-variation-settings:"wdth" 120;font-size:clamp(3.2rem,7vw,5.6rem);letter-spacing:-0.05em;line-height:1;margin:0 0 6px}
+.plan h3{font-weight:500;font-size:20px;margin:0 0 22px;font-variation-settings:"wdth" 108}
+.plan ul{margin:0 0 28px;padding:0;list-style:none;display:grid;gap:12px;color:var(--on-field-2)}
+.plan li{display:grid;grid-template-columns:22px 1fr;gap:10px}
+.plan li svg{color:var(--signal);margin-top:3px}
+.pull{font-weight:500;font-variation-settings:"wdth" 112;font-size:clamp(1.7rem,3.2vw,2.6rem);letter-spacing:-0.03em;line-height:1.08;margin:clamp(56px,7vw,88px) 0 0;max-width:22ch}
+
+/* honest */
+.honest{padding:clamp(88px,10vw,140px) 0}
+.vows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,32px);margin:48px 0 0;padding:0;list-style:none}
+.vows li{padding:26px 26px 28px;border-radius:20px;background:rgba(255,255,255,0.6);border:1px solid rgba(15,34,27,0.07);box-shadow:inset 0 1px 0 #fff,0 24px 48px -36px rgba(15,34,27,0.4)}
+.vows strong{display:block;font-weight:500;font-size:20px;line-height:1.25;margin:16px 0 8px;font-variation-settings:"wdth" 108}
+.vows span{color:var(--ink-2);font-size:16px}
+.vows svg{color:var(--field)}
+
+/* close */
+.close{padding:0 0 clamp(64px,8vw,104px)}
+.close-panel{border-radius:32px;overflow:hidden;padding:clamp(48px,7vw,96px) clamp(24px,5vw,72px)}
+.close-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:end}
+.close h2{color:var(--on-field);margin:0}
+footer{border-top:1px solid var(--line);padding:28px 0 40px;font-size:14px;color:var(--ink-2)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:minmax(0,1fr)}
+  .sheet{transform:none;margin-bottom:-140px}
+  .route{padding-top:200px}
+  .line{grid-template-columns:minmax(0,1fr);gap:20px;padding:0 0 0 52px}
+  .line::before{left:11px;right:auto;top:0;bottom:0;width:6px;height:auto;transform-origin:center top;background:linear-gradient(180deg,var(--field) 0 50%,rgba(27,85,65,0.25) 50% 100%)}
+  .motion::before{transform:scaleY(0)}
+  .motion.drawn::before{transform:scaleY(1)}
+  .dot{top:20px;left:-52px}
+  .plans,.close-row{grid-template-columns:minmax(0,1fr)}
+  .vows{grid-template-columns:minmax(0,1fr)}
+  .nav-r a.link{display:none}
+}
+@media (max-width:520px){.ask{flex-direction:column}.ask .btn{width:100%}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  .motion::before{transform:none}.motion .stop{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div class="navbar">
+  <nav class="nav" aria-label="Main">
+    <a class="mark" href="#top">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="2" y="11" width="22" height="4" rx="2" fill="currentColor"/><circle cx="6" cy="13" r="4.5" fill="#F2C94C" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="13" r="4.5" fill="#F2C94C" stroke="currentColor" stroke-width="2"/></svg>
+      Groundwork
+    </a>
+    <div class="nav-r">
+      <a class="link" href="#example">Example plan</a>
+      <a class="link" href="#pricing">Pricing</a>
+      <a class="btn sm" href="#top" data-focus-idea>Check my idea</a>
+    </div>
+  </nav>
+</div>
+
+<header class="hero field" id="top">
+  <svg class="topo" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-topo="hero"></svg>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <h1>Will your business idea last?</h1>
+        <p class="lede">An honest check before you spend money, built for people in the North East with an idea, a tight budget and not much spare time.</p>
+        <form class="ask smoke" id="ask" novalidate>
+          <label class="sr" for="idea">Describe your idea</label>
+          <input id="idea" name="idea" type="text" autocomplete="off" placeholder="Mobile bike repairs around Gateshead" aria-describedby="idea-err">
+          <button class="btn" type="submit">Check my idea</button>
+        </form>
+        <p class="err" id="idea-err" role="alert"></p>
+        <p class="fine">The verdict is free. The full plan is <span class="num">£4.99</span>, one-off.</p>
+      </div>
+      <div id="example">
+        <article class="sheet frost" aria-labelledby="overall">
+          <span class="tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>Example with fictional answers</span>
+          <p class="idea">Mobile bike repair, Gateshead. 6 hours a week, £300 budget.</p>
+          <p class="overall" id="overall">Needs work</p>
+          <ul class="scale" aria-label="Rating scale"><li>Not viable yet</li><li class="on" aria-current="true">Needs work</li><li>Promising</li><li>Strong</li></ul>
+          <p class="caveat">Overall. A rough view, not a prediction.</p>
+          <dl class="areas">
+            <div><dt>Idea</dt><dd>Promising</dd></div>
+            <div><dt>Business model</dt><dd>Needs work</dd></div>
+            <div><dt>Your situation</dt><dd>Needs work</dd></div>
+          </dl>
+          <ul class="risks" aria-label="Top risks">
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span><b>Risk</b> Repair demand may cluster in spring and summer, leaving winter weeks quiet.</span></li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span><b>Risk</b> Travel between jobs could use up most of your 6 hours a week.</span></li>
+          </ul>
+          <p class="status" id="status" aria-live="polite"></p>
+        </article>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="route" aria-labelledby="route-h">
+    <div class="wrap">
+      <h2 id="route-h">Then, the cheapest way to find out.</h2>
+      <p class="sub">Your roadmap is a short line of steps that fit your budget and your week. Each one tests the idea before you put real money in.</p>
+      <ol class="line" id="line">
+        <li class="stop"><span class="dot" aria-hidden="true"></span><h3>Test demand</h3><p class="meta num"><span>2 weeks</span><span>£20</span></p><p class="body">Post one simple offer in two local groups and count real replies before buying kit.</p></li>
+        <li class="stop"><span class="dot" aria-hidden="true"></span><h3>First paying customer</h3><p class="meta num"><span>4 weeks</span><span>£120</span></p><p class="body">Fixed-price tune-ups in one postcode, so travel stays short.</p></li>
+        <li class="stop locked"><span class="dot" aria-hidden="true"></span><h3>Price it fairly</h3><p class="lock"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>In the full plan</p></li>
+        <li class="stop locked"><span class="dot" aria-hidden="true"></span><h3>Grow or stop</h3><p class="lock"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>In the full plan</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="offer field" id="pricing" aria-labelledby="offer-h">
+    <svg class="topo" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-topo="band"></svg>
+    <div class="wrap">
+      <h2 id="offer-h">What you get.</h2>
+      <p class="sub">Start free. Pay only if the verdict makes you want the full plan.</p>
+      <div class="plans">
+        <div class="plan smoke">
+          <p class="price">Free</p>
+          <h3>The honest verdict</h3>
+          <ul>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>An overall rating, in words</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Ratings for your idea, business model and situation</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Your two biggest risks</li>
+          </ul>
+        </div>
+        <div class="plan smoke paid">
+          <p class="price num">£4.99</p>
+          <h3>The full plan, one-off</h3>
+          <ul>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>What to improve in each area, and why</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>Your roadmap of cheap tests</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>An improved business plan, written for your idea</li>
+          </ul>
+          <a class="btn" href="#top" data-focus-idea>Check my idea</a>
+        </div>
+      </div>
+      <p class="pull">Bad news is always free. We never hide a risk behind the paywall.</p>
+    </div>
+  </section>
+
+  <section class="honest" aria-labelledby="honest-h">
+    <div class="wrap">
+      <h2 id="honest-h">What it will never do.</h2>
+      <ul class="vows">
+        <li><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/></svg><strong>Promise success</strong><span>Every verdict is a rough view. Some ideas need work, and it says so.</span></li>
+        <li><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><strong>Invent help that isn't there</strong><span>It only names local support our team has checked. No made-up grants or figures.</span></li>
+        <li><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M17 11l2 2 3.5-3.5"/></svg><strong>Replace a professional</strong><span>It tells you when to speak to an accountant, solicitor or adviser before you commit.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="close" aria-labelledby="close-h">
+    <div class="wrap">
+      <div class="close-panel field">
+        <svg class="topo" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true" data-topo="band"></svg>
+        <div class="close-row">
+          <h2 id="close-h">Find out before you spend.</h2>
+          <div><a class="btn" href="#top" data-focus-idea>Check my idea</a><p class="fine" style="margin-top:14px">Takes a few minutes. The verdict is free.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Groundwork is a working name. Design example with fictional data.</span>
+    <span>Not financial, legal or tax advice.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+  function rings(r,cx,cy,n,base,step,amp){var p=[r()*6.283,r()*6.283,r()*6.283],out='';for(var k=0;k<n;k++){var rad=base+k*step,d='';for(var i=0;i<=360;i+=6){var a=i*Math.PI/180,rr=rad*(1+amp*(0.55*Math.sin(3*a+p[0]+k*0.15)+0.3*Math.sin(5*a+p[1])+0.15*Math.sin(2*a+p[2]-k*0.1)));d+=(i?' L':'M')+Math.round(cx+rr*Math.cos(a)*1.25)+' '+Math.round(cy+rr*Math.sin(a));}out+='<path d="'+d+'Z"/>';}return out;}
+  var sets={hero:function(){var r=rng(7);return rings(r,1150,180,16,40,46,0.12)+rings(r,120,820,10,60,52,0.1);},band:function(){var r=rng(11);return rings(r,1300,520,14,50,48,0.13)+rings(r,200,80,9,40,50,0.11);}};
+  document.querySelectorAll('svg[data-topo]').forEach(function(s){s.innerHTML=sets[s.getAttribute('data-topo')]();});
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var form=document.getElementById('ask'),input=document.getElementById('idea'),err=document.getElementById('idea-err'),status=document.getElementById('status');
+  input.addEventListener('input',function(){if(err.textContent){err.textContent='';input.removeAttribute('aria-invalid');}});
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!input.value.trim()){err.textContent='Describe your idea first, in a sentence or two.';input.setAttribute('aria-invalid','true');input.focus();return;}
+    var steps=['Reading your answers…','Checking whether it could last…','Design preview: in the app, Claude writes this verdict from your answers.'],i=0;
+    document.getElementById('example').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});
+    status.textContent=steps[0];
+    var t=setInterval(function(){i++;status.textContent=steps[i];if(i>=steps.length-1)clearInterval(t);},900);
+  });
+  document.querySelectorAll('[data-focus-idea]').forEach(function(a){a.addEventListener('click',function(){setTimeout(function(){input.focus({preventScroll:true});},450);});});
+  var line=document.getElementById('line');
+  if(!reduce&&'IntersectionObserver' in window){
+    line.classList.add('motion');
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){line.classList.add('drawn');io.disconnect();}});},{threshold:0.3});
+    io.observe(line);
+  }
+})();
+</script>
+</body>
+</html>

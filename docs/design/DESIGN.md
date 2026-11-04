@@ -4,292 +4,159 @@ The visual and interaction rules for this project. Every Claude session building
 
 Owner: Lane C (Michael). Product behaviour lives in `idea.md`; this file only covers how it looks and feels.
 
+**Reference build:** `docs/design/example.html`. Open it in a browser. It is the approved look (signed off by Zac as PM). When this file and the reference disagree, the reference wins and this file gets fixed. All content in it is fictional and "Groundwork" is a working name only.
+
 ## 1. Direction
 
-**Subject:** an honest business planner for people in the North East who are unsure whether their business idea would last. It gives a sustainability verdict, what to improve, and a roadmap of cheap tests.
+**Subject:** an honest business planner for people in the North East who are unsure whether their business idea would last.
 
-**Feeling:** a calm, trustworthy adviser who tells you the truth kindly. Closer to a well-made planning notebook than a startup landing page. It should feel designed for this product, not generated for any product.
+**Feeling:** premium, calm and trustworthy. Deep Tyne Bridge green fields carrying faint topographic contour lines (a nod to North East landscape maps), with frosted glass panels floating over them and one warm signal yellow.
 
-**The one memorable thing: the route.** The roadmap is rendered as a single vertical route line with stops, like a transit map. Each stop is a step. This is the only place we spend visual boldness; the verdict and improvements screens stay quiet and typographic. Numbered stops are legitimate here because the roadmap genuinely is a sequence.
+**Light mode only for the hackathon.** The pitch is on a projector in a lit room. Do not build a dark theme.
+
+**Signature moments (spend boldness only here):**
+1. The frosted verdict sheet overlapping out of the green hero into the page below.
+2. The roadmap route line that draws itself across the page on scroll.
 
 **Why this wins with the judges:**
 
 | Criterion | Weight | What the design does for it |
 |-----------|--------|-----------------------------|
-| Technical quality | 40% | A visible, staged generation process; the AI's assumptions and limits are shown, not hidden |
-| Real-world fit | 30% | Works on a phone, plain language, respects budget and time, an honest verdict |
+| Technical quality | 40% | Staged generation, visible assumptions and limits, polished states |
+| Real-world fit | 30% | Works on a phone, plain language, an honest verdict |
 | Investability | 15% | A clear paywall that shows exactly what the buyer gets |
-| Go-to-market | 15% | Landing screen states who it is for in one sentence |
+| Go-to-market | 15% | The first screen says who it is for in one sentence |
 
 ## 2. Non-negotiables
 
-1. Light theme by default. Dark theme is a stretch goal, opt-in via `[data-theme="dark"]`.
-2. Warm-grey neutrals. Never pure `#FFFFFF` page backgrounds or pure `#000000` text.
-3. Two font weights only: 400 and 500. No 700.
-4. Sentence case everywhere: buttons, headings, labels, nav.
-5. Gently rounded corners, 6 to 14px. No pills unless it is genuinely a tag or toggle.
-6. Flat by default. Depth from surface colour and hairline borders. Shadows only on overlays (modals, popovers).
-7. One primary button per screen.
-8. No invented numbers anywhere in the UI: no fake user counts, testimonials, ratings, or "trusted by" logos. Demo data is fictional and labelled as an example.
-9. The verdict is never dressed up as good news. Neutral, honest presentation for every outcome.
+1. Light mode. Warm-cool off-white paper, never pure `#FFFFFF` pages or pure `#000000` text.
+2. One typeface: **Archivo**, using its width axis. Weights 400 and 500 only.
+3. Sentence case everywhere.
+4. **No eyebrow labels** (small text above a heading). The heading speaks for itself.
+5. One primary button per view, always signal yellow with dark ink text.
+6. Ratings are **words**, never numbers, stars, bars or percentages. Neutral colour for every rating; no green-for-good.
+7. Bad news is never hidden behind the paywall.
+8. No invented numbers, testimonials, logos, organisations or grants. Demo data is fictional and labelled "Example with fictional answers".
 
 ## 3. Colour tokens
 
-Accent is a muted river teal (a nod to the Tyne, not a brand colour). It is rationed: primary buttons, links, the route line, and focus rings only.
+Strategy: **committed**. Green owns whole regions (hero, pricing band, closing panel); paper owns the rest. Yellow is rationed to primary buttons, route stops, text selection and the focus ring.
 
 ```css
-:root {
-  /* Neutrals: warm grey, not cream */
-  --bg: #F7F6F3;
-  --surface: #FCFBF9;
-  --card: #FFFFFF;          /* cards only, never the page background */
-  --text: #1E1C19;
-  --text-muted: #5F5B55;    /* darkened for projector legibility */
-  --text-faint: #97928A;    /* decorative only, never for information */
-  --border: #E2DED7;
-  --border-strong: #CFCAC1;
-
-  /* Accent: muted river teal (swappable, keep it muted) */
-  --accent: #3F5F5A;
-  --accent-hover: #334E4A;
-  --accent-bg: #E4ECEA;
-  --accent-text: #2C4541;
-  --on-accent: #FFFFFF;
-
-  /* Semantic roles (always paired with an icon or label, never colour alone) */
-  --success: #5E7A4F;
-  --warning: #9A6A1A;
-  --risk: #A6503C;
-  --risk-bg: #F5E6E1;
-
-  /* Type */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
-
-  /* Radius */
-  --radius-sm: 6px;
-  --radius: 10px;
-  --radius-lg: 14px;
-
-  /* Spacing scale */
-  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
-  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
-  --space-9: 96px;
-
-  /* Elevation: overlays only */
-  --shadow-overlay: 0 10px 30px rgba(30,28,25,0.10), 0 1px 3px rgba(30,28,25,0.06);
-
-  /* Motion */
-  --dur-fast: 120ms;
-  --dur: 200ms;
-  --dur-slow: 320ms;
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-[data-theme="dark"] {
-  --bg: #161512;  --surface: #1E1C18;  --card: #232019;
-  --text: #ECE9E2; --text-muted: #B0AAA0; --text-faint: #7C776E;
-  --border: #322E28; --border-strong: #423D35;
-  --accent: #8FB3AC; --accent-hover: #A6C4BE; --accent-bg: #1F2D2A;
-  --accent-text: #B9D2CC; --on-accent: #14201E;
-  --risk: #D88A74; --risk-bg: #33201A;
-  --shadow-overlay: 0 12px 34px rgba(0,0,0,0.55), 0 1px 3px rgba(0,0,0,0.4);
+:root{
+  --paper:#F2F4F0; --ink:#0F221B; --ink-2:#3B4F47; --line:#D2DBD5;
+  --field:#1B5541; --field-deep:#123D2F; --on-field:#F3F6F2; --on-field-2:#C6D9CF;
+  --signal:#F2C94C; --signal-hi:#F7D875; --signal-ink:#2A2208; --risk:#A9432B;
+  --glass-light:rgba(250,252,249,0.70); --glass-dark:rgba(255,255,255,0.08);
+  --font:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --ease:cubic-bezier(0.16,1,0.3,1);
 }
 ```
 
-Expose these as CSS variables and reference them in the Tailwind theme. **Never ship the default shadcn/ui palette or any library's default theme unmodified;** it is one of the most recognisable generated looks.
+Green fields are lit, not flat: a linear base from `#1E5C46` to `#123D2F`, a soft pale-green light top right, and a faint warm glow bottom left. Copy the `.field` rule from the reference.
+
+Risks use `--risk` with a warning icon and the word "Risk". Never colour alone.
 
 ## 4. Typography
 
-Serif for headings carries the personality; sans for body and UI stays out of the way. Maximum two typefaces. Load both from Google Fonts with `font-display: swap`.
+Archivo from Google Fonts (`wdth 62..125`, `wght 400..600`, `display=swap`). Width carries the hierarchy:
 
-| Role | Size (desktop / mobile) | Family | Weight | Line height | Tracking |
-|------|------|--------|--------|-------------|----------|
-| Display | 52 / 34px | serif | 500 | 1.1 | -0.02em |
-| H1 | 40 / 30px | serif | 500 | 1.15 | -0.01em |
-| H2 | 30 / 24px | serif | 500 | 1.2 | -0.01em |
-| H3 (step titles) | 22 / 20px | serif | 500 | 1.3 | 0 |
-| Body large | 18 / 18px | sans | 400 | 1.6 | 0 |
-| Body | 16 / 16px | sans | 400 | 1.65 | 0 |
-| Caption | 14 / 14px | sans | 400 | 1.5 | 0.01em |
+| Role | Size | Width | Weight | Line height | Tracking |
+|------|------|-------|--------|-------------|----------|
+| Display (h1) | clamp(2.8rem, 6.8vw, 6rem) | 112 | 500 | 0.95 | -0.04em |
+| Section heading (h2) | clamp(2.1rem, 4.6vw, 3.8rem) | 112 | 500 | 1.0 | -0.038em |
+| Verdict word | clamp(2.3rem, 3.8vw, 3.4rem) | 118 | 500 | 1.0 | -0.038em |
+| Price | clamp(3.2rem, 7vw, 5.6rem) | 120 | 500 | 1.0 | -0.05em |
+| Card title (h3) | 20 to 22px | 108 | 500 | 1.15 | -0.02em |
+| Body | 17px | 100 | 400 | 1.6 | 0 |
+| Small | 14px | 100 | 400 | 1.5 | 0 |
 
-Rules:
-- Reading columns max 68 to 72 characters.
-- Use `font-variant-numeric: tabular-nums` for all prices, costs and timeframes.
-- Use curly quotes and the `…` character.
-- Do not highlight a single word in a headline with a different colour, italic or weight.
-- No all-caps labels. No eyebrow label above every heading.
+Rules: `text-wrap: balance` on headings, reading columns max about 60 characters, `tabular-nums` on every price, cost and timeframe, curly quotes and `…`.
 
-## 5. Layout and screens
+## 5. Glass
 
-Content is **left aligned** throughout. Max content width about 1080px; result columns about 720px. Section padding up to 96px on desktop, 48px on mobile.
+Glass is deliberate here, not decoration. It only works with texture behind it, which is why green fields carry contour lines.
 
-### Landing (the demo starts here)
+- **Frost** (light glass): the verdict sheet. `--glass-light`, `backdrop-filter: blur(28px) saturate(170%)`, 1px white border at 75%, a bright inner top highlight, and a deep soft shadow.
+- **Smoke** (dark glass on green): idea input, pricing panels, closing elements. `--glass-dark`, `blur(22px) saturate(150%)`, 1px white border at 16%, inner top highlight.
+- **Nav:** a floating frosted dark bar, sticky, with the persistent "Check my idea" button.
+- Only these surfaces get glass. Roadmap tiles and the honesty cards use solid light panels with an inner highlight instead.
+- Always include `-webkit-backdrop-filter`, and the `@supports not` fallback to near-solid panels from the reference.
+- Contour lines: thin strokes at 10% opacity, generated by the script in the reference (`svg[data-topo]`).
+- A subtle film grain covers the page (`body::after`, 7% multiply). Keep it subtle.
 
-The hero is the product itself: the first input, not a marketing banner.
+Copy the `.frost`, `.smoke`, `.nav` and `.field` rules from the reference rather than reinventing them.
 
-```
-+------------------------------------------------------------+
-| [wordmark]                                                 |
-|                                                            |
-| Find out if your business idea would last,                 |  <- H1, serif
-| before you spend money on it.                              |
-| An honest check, what to fix first, and the cheapest       |  <- body large, muted
-| way to test it. Free to preview.                           |
-|                                                            |
-| +--------------------------------------------------------+ |
-| | Describe your idea in a sentence or two…               | |  <- textarea
-| +--------------------------------------------------------+ |
-| [ Check my idea ]   See an example plan                    |  <- primary + link
-|                                                            |
-| How it works: three plain sentences, no icon grid.         |
-+------------------------------------------------------------+
-```
+## 6. Screens
 
-### Intake
+Use the reference for the landing page. App screens follow the same system:
 
-Round 1 is one short question per step, with a quiet progress indicator. Follow-up rounds show the AI's tailored questions together on one screen, headed "A few more questions" with "Round 2 of up to 3". Every field has a visible label and helper text. "I'm not sure" is always allowed. Never show the AI "thinking" as chat bubbles; this is a form, not a chat.
+- **Landing:** green hero, headline left, smoke-glass idea input with yellow button, frosted verdict sheet right overlapping into the page. Then roadmap, pricing band, honesty section, closing panel.
+- **Intake:** round 1 is one question per screen on paper. Follow-up rounds show the AI's questions together under "A few more questions" with "Round 2 of up to 3". A form, never chat bubbles.
+- **Generating:** staged messages that reflect real work ("Reading your answers…", "Checking whether it could last…"). Never a bare spinner.
+- **Verdict preview (free):** the frosted sheet: idea summary, overall word rating with the four-word scale (Not viable yet / Needs work / Promising / Strong) and the chosen one filled in ink, "A rough view, not a prediction", the three area ratings, the top 2 risks, then the paywall panel.
+- **Paywall:** "Unlock the full plan: improvements for each area, your roadmap and an improved business plan. £4.99, one-off." One yellow button. No timers or pressure.
+- **Writing your full plan (paid):** may take 20 to 40 seconds; staged progress, reveal sections as they arrive.
+- **Full plan:** improvements in three groups, the roadmap as the route (filled yellow stops for unlocked steps, hollow dashed tiles for locked ones), the improved business plan in a reading column, then "What this plan assumes" and "Where to get proper advice" as expandable sections.
+- **Error / fallback:** say what happened, offer "Try again" and "See an example plan". Never only "Something went wrong".
 
-### Generating
+## 7. Components
 
-Never a bare spinner. Staged progress that reflects what is really happening, e.g. "Reading your answers…", "Checking whether it could last…", "Working out what to fix first…", "Building your roadmap…". Keep the user's answers visible so the screen is never empty.
-
-### Verdict preview (free)
-
-Typographic and calm. Everything here is free, including bad news.
-
-```
- Your idea: mobile bike repair, Gateshead
- Based on 6 hours a week and a £300 budget.   [Edit answers]
-
- Overall: Needs work                              <- H1, serif, word label
- A rough view, not a prediction.                  <- caption, always shown
-
- Idea              Promising
- Business model    Needs work
- Your situation    Needs work
-
- Top risks
-   [!] Risk  Demand may be seasonal…
-   [!] Risk  Travel time eats into 6 hours a week…
-
- [ Unlock full plan, £4.99 ]                      <- paywall panel
-```
-
-- Ratings are **words**, never numbers, stars, bars or percentages. Proposed labels: Strong / Promising / Needs work / Not viable yet.
-- Every rating uses neutral text colour; no green-for-good or red-for-bad.
-- Risks use `--risk` with a warning icon and the word "Risk". Never colour alone.
-
-### Writing your full plan (paid)
-
-The second AI call may take 20 to 40 seconds. Show staged progress ("Improving your business model…", "Writing your improved business plan…") and reveal sections as they arrive. Show the improvements and roadmap immediately if they are already available.
-
-### Full plan (paid)
-
-1. **Improvements**, in three plainly labelled groups: idea, business model, your situation. Each item: what to change, why, and how to check it cheaply.
-2. **Roadmap**, rendered as the route:
-
-```
- ●  Test demand cheaply          2 weeks    £20
- |  First step: …
- |  Test it cheaply: …
- |
- ●  First paying customer        4 weeks    £120
- |
- ●  Decide: grow or stop
-```
-
-- Route line: 2px `--accent`, stops are 12px circles. Before unlock, stops are hollow with a lock icon and the word "locked".
-- Cost and time in tabular figures.
-3. **Improved business plan**: long-form reading column (68 to 72 characters), serif subheads, body large.
-4. **What this plan assumes** and **Where to get proper advice**, as expandable sections at the end.
-
-### Paywall
-
-- Show exactly what unlocks: locked section titles stay visible; only their detail is hidden.
-- Do not blur fake text behind the lock. State it plainly: "Unlock the full plan: improvements for each area, your roadmap and an improved business plan. £4.99, one-off."
-- One primary button. Price in tabular figures. No countdown timers, no "limited offer" pressure.
-## 6. Components
-
-- **Primary button:** `--accent` fill, `--on-accent` label, radius 10px, padding 10px 18px, min height 44px on mobile. Label names the action: "Check my idea", "Unlock full plan, £4.99".
-- **Secondary button:** transparent, `--border-strong` hairline, `--text` label.
-- **Card:** `--card` on `--bg`, 1px `--border`, radius 14px, padding 24px, no shadow at rest. Use sparingly; not every item needs a card.
-- **Input / textarea:** `--surface` fill, `--border` hairline, radius 10px, min height 44px, font size at least 16px (prevents iOS zoom). Focus: 2px `--accent` ring via `:focus-visible`.
-- **Expandable section:** native `<details>`/`<summary>` or an accessible disclosure; chevron rotates on open.
-- **Icons:** Lucide, stroke 1.5, 20px inline, `currentColor`. One set only. No emoji in the interface.
-- **Nested radius:** a child's radius is never larger than its parent's.
-
-## 7. AI-specific patterns
-
-These directly support the technical quality criterion ("explain how it works, where it fails and how you used AI").
-
-1. **Show assumptions.** Every plan lists what it assumed from the user's answers, editable in one click.
-2. **Show limits.** A short, permanent note: what the AI cannot know (local regulations, exact prices) and where to check.
-3. **Graceful failure.** If generation fails, say what happened and offer "Try again" plus "See an example plan". Errors never apologise and never say only "Something went wrong".
-4. **No fake confidence.** No percentage scores or "92% chance of success" style numbers the model cannot justify.
+- **Primary button:** `--signal` fill, `--signal-ink` label, radius 11px, min height 46px (44px minimum on mobile), inner top highlight, warm soft shadow. Label names the action: "Check my idea", "Unlock full plan, £4.99".
+- **Input:** at least 16px text (prevents iOS zoom), visible label (visually hidden is fine if the placeholder is an example), yellow caret, 2px focus outline.
+- **Panels:** radius 18 to 26px; children always have a smaller radius than their parent.
+- **Icons:** thin line icons, one consistent stroke, `currentColor`. No emoji.
+- **Browser details:** themed `::selection` (yellow), focus ring (3px yellow, 3px offset), caret colour, `text-underline-offset`.
 
 ## 8. Copy
 
-- Plain words, active voice, one idea per sentence, sentence case.
-- Write for someone without a business background. "Money you need before you start", not "capital requirements".
-- Fixed vocabulary, used everywhere: **plan** (the whole result), **verdict** (the ratings and reasons), **improvements**, **roadmap**, **step** (a stop on the roadmap), **improved business plan** (the paid long-form section). Do not swap in "journey", "report", "score" or "phase".
-- No filler ("Welcome!", "Let's get started!", "Unlock your potential"). No hype words ("revolutionary", "seamless", "supercharge").
-- Loading states end in an ellipsis: "Building your roadmap…".
+- Plain words, active voice, sentence case, one idea per sentence.
+- Fixed vocabulary: **plan** (the whole result), **verdict**, **improvements**, **roadmap**, **step**, **improved business plan**.
+- No filler or hype ("Welcome!", "seamless", "unlock your potential").
+- Loading states end in `…`.
 
 ## 9. Motion
 
-- Motion only responds to the user: expanding a section, confirming a step, a stop appearing on the route as it is generated.
-- One orchestrated moment only: stops drawing onto the route. No fade-up on every section, no hover lift on every card.
-- Animate `transform` and `opacity` only. Never `transition: all`.
-- Honour `prefers-reduced-motion: reduce` by removing transitions.
+- One orchestrated moment: the route line draws and its stops rise in sequence when scrolled into view. Content is visible by default if script fails.
+- Everything else only responds to the user (button press, expanding a section).
+- Exponential ease-out (`--ease`). Never `transition: all`.
+- Honour `prefers-reduced-motion` by removing transitions.
 
 ## 10. Accessibility floor
 
-- Fully keyboard operable; visible `:focus-visible` rings everywhere.
-- Every input has a `<label>`. Icon-only buttons have `aria-label`.
-- Text contrast at least WCAG AA (4.5:1 for body text) in both themes.
-- Errors appear next to their field; focus moves to the first error on submit.
-- Links that navigate are `<a>`, not styled buttons or divs.
+- Keyboard operable throughout, visible focus everywhere.
+- Every input has a label; icon-only buttons have `aria-label`.
+- Text contrast at least 4.5:1, including text on glass. Check the verdict sheet where it sits over green.
+- Errors next to their field; focus moves to the first error.
+- Links that navigate are `<a>`.
 - Never block zoom or paste.
 
 ## 11. Demo and projector rules
 
-The pitch room projector washes out colour and thin lines (visible in our photos of the briefing slides). Therefore:
+- Demo at 125% browser zoom; check the verdict sheet and roadmap at that zoom before 5:15pm.
+- Test the full flow at 375px width; judges may use their phones.
+- The demo must work on the cached example plan if the API or Wi-Fi fails.
+- Glass costs rendering performance on older phones; keep it to the surfaces in section 5.
 
-- Demo at 125% browser zoom. Check the verdict and roadmap screens at that zoom before 5:15pm.
-- Never put information in `--text-faint`. Hairline borders are decoration only; nothing should depend on seeing them.
-- The demo path must work with the cached example plan if the API or Wi-Fi fails.
-- Judges may open the app on their phones: test the full flow at 375px width.
-- Type the idea live on stage; use "See an example plan" only as the fallback.
+## 12. Pre-merge checklist
 
-## 12. Pre-merge anti-slop checklist
+Fix anything that answers yes:
 
-Run before merging any UI change. If any answer is yes, fix it.
-
-- [ ] Purple, indigo or blue gradients, or gradient text on a heading?
-- [ ] A cream background with a terracotta or clay accent?
-- [ ] Glassmorphism or glow without a functional reason?
-- [ ] Identical rounded cards in a grid with the same soft shadow under each?
-- [ ] A centred hero with a floating blob, orb or abstract 3D shape?
-- [ ] An all-caps eyebrow label above a heading?
-- [ ] Middle-dot metadata strings ("A · B · C") or arrows appended to button text?
+- [ ] An eyebrow label above a heading?
+- [ ] Glass on a surface not listed in section 5, or glass with nothing behind it?
+- [ ] Purple or blue gradients, gradient text, neon glows?
+- [ ] More than one yellow button in a view?
+- [ ] A number, star, bar or percentage used as a rating, or green on a good verdict?
+- [ ] A risk hidden behind the paywall?
+- [ ] Any invented statistic, testimonial, logo, organisation or grant?
 - [ ] Emoji used as icons?
 - [ ] A library's default theme left unmodified?
-- [ ] Any invented statistic, testimonial or logo?
-- [ ] Pulsing badges, sparkle icons or "AI-powered" labels as decoration?
-- [ ] A bare spinner with no explanation?
-- [ ] A green or celebratory treatment on the verdict?
-- [ ] A number, star, bar or percentage used as a rating?
-- [ ] Bad news or a risk hidden behind the paywall?
-- [ ] An element whose position cannot be explained by the grid or an alignment edge?
-
-Final pass, from Chanel: before shipping a screen, remove one decoration.
+- [ ] A bare spinner?
+- [ ] Unthemed selection, focus ring or caret?
 
 ## 13. Sources consulted
 
-- Anthropic, frontend-design skill (September 2026 revision): named clusters of current generated-design tells.
-- capitalandcompute.net, "How to Fix AI Slop in Web Design, Tell by Tell" (2026).
-- Impeccable by Paul Bakaus: browser detector for 41 UI anti-patterns.
-- Vercel, Web Interface Guidelines: keyboard, forms, motion and layout MUST rules.
-- HackerEarth, "How to Win a Hackathon: 10 Tips" and Reskilll judging guides: rubric-led scoping, demo resilience, mobile checks.
-- Claude Builder Club Northumbria briefing slides: judging weights and Track 3 "Think about" prompts.
+- Impeccable by Paul Bakaus (craft floor, new-work and anti-pattern references): committed colour at page scale, no eyebrow labels, themed browser surfaces, one authored motion moment.
+- Anthropic, frontend-design skill (September 2026 revision): current generated-design tells.
+- Vercel, Web Interface Guidelines: keyboard, forms, motion and layout rules.
+- Claude Builder Club Northumbria briefing slides: judging weights and Track 3 prompts.
