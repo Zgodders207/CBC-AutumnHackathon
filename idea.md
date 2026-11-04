@@ -109,6 +109,27 @@ The cost-to-serve figure comes from the token logging in section 8. Full busines
 | Investability | 15% | Token cost log, paid full plan |
 | Go-to-market | 15% | First 100 customers plan in `PROJECT_BRIEF.md` (**TBD**) |
 
+## 11b. Decisions made (grilling session)
+
+1. **Verdict:** a rating on three areas (Idea, Business model, Your situation) plus an overall rating, with the main reasons. Labelled "a rough view, not a prediction".
+2. **Intake:** a short first round of quick questions, then the AI writes tailored follow-up questions from those answers. Up to **3 rounds**, with the AI deciding when it has enough.
+3. **Safety net:** the server enforces a hard cap of 3 rounds and about 5 questions per round. If the API fails or times out, the app switches to a scripted demo conversation from `demo-data/` (fictional answers). The token log counts every round.
+4. **Free preview:** overall rating, the three area ratings and the top 2 risks. Bad news is never hidden behind the paywall.
+5. **Paid:** the detailed improvement list for each area, the roadmap of cheap first steps, and a **full improved business plan** (how to improve the business as a whole and make it the best it can be within its niche).
+6. **Full plan is written only after payment, as a second AI call.** Non-payers never cost the extra tokens. Needs a good loading state (maybe 20 to 40 seconds) and a cached full plan in the demo fallback.
+
+7. **Price:** £4.99 one-off per plan, mocked or Stripe test mode.
+8. **Local support:** left for Eric (Research lane) to research. Until the team decides, the CLAUDE.md rule stands: never invent organisations, grants or figures. George's preference was for the AI to suggest local support freely; that conflicts with the rule and needs the team to agree and CLAUDE.md to change first.
+
+## 11c. Rough costs (assumed, not measured; replace with the token log)
+
+- About 3 question rounds plus 1 big call per person: roughly 10k tokens in, 4k out (assumed).
+- Cost per person: cheap model about 3p, mid-range about 7p, top model about 35p. The full plan adds about 6p (mid-range), paid users only.
+- Card fees about 1.5% + 20p (assumed). At a £4.99 price we keep about £4.72.
+- Share of people who must pay to break even (£4.99, AI cost only): about 0.6% cheap, **1.5% mid-range**, 7.4% top model. With £20/month running costs: 2.3% at 500 people a month, 5.7% at 100 a month.
+- Rule of thumb for free-to-paid conversion is 2% to 5% (not measured).
+- Excludes anyone's time or wages.
+
 ## 12. Open questions
 
 1. Stack confirmation at 2:00pm.
