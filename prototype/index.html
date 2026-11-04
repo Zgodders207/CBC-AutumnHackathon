@@ -66,6 +66,9 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .field .btn-quiet{color:var(--on-field);border-color:rgba(255,255,255,0.28)}
 .field .btn-quiet:hover{background:rgba(255,255,255,0.08)}
 .textlink{font-size:15px;color:var(--ink-2)}
+/* text links are tap targets too: 44px tall on every screen */
+.textlink,.answers .edit,.linkbtn{display:inline-flex;align-items:center;min-height:44px}
+
 /* a real <button> that looks like a text link (used where the action is not a page link) */
 .linkbtn{appearance:none;background:none;border:0;padding:0;font:inherit;font-size:15px;color:inherit;text-decoration:underline;text-underline-offset:0.22em;text-decoration-thickness:1px;cursor:pointer}
 .textlink.linkbtn{color:var(--ink-2)}

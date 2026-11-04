@@ -65,6 +65,9 @@ svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .field .btn-quiet{color:var(--on-field);border-color:rgba(255,255,255,0.28)}
 .field .btn-quiet:hover{background:rgba(255,255,255,0.08)}
 .textlink{font-size:15px;color:var(--ink-2)}
+/* text links are tap targets too: 44px tall on every screen */
+.textlink,.answers .edit,.linkbtn{display:inline-flex;align-items:center;min-height:44px}
+
 
 /* type */
 h1{font-weight:500;font-variation-settings:"wdth" 112;font-size:clamp(2.8rem,6.8vw,6rem);line-height:0.95;letter-spacing:-0.04em;margin:0 0 28px;text-wrap:balance}
