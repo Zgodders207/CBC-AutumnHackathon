@@ -1,3 +1,5 @@
 .firebase/
 .env
 node_modules/
+functions/lib/
+functions/prompts/
