@@ -1,107 +1,92 @@
 # PROJECT_BRIEF.md
 
-The single source of truth for **what** we are building and **why**. CLAUDE.md covers how we work; DESIGN.md covers how it looks. Humans may edit any section. Placeholders in [brackets] must be filled by the team, not by Claude.
+The pitch and the business case. For what the product does, see `idea.md` (source of truth). For how we work, see `CLAUDE.md`. Owner: Lane A (Zac). Placeholders in [brackets] must be filled by the team, not by Claude.
 
-## 1. One line
+## 1. One line (cover slide)
 
-[Product name] turns a rough business idea into an honest, step-by-step roadmap, so people in the North East can get from idea to first paying customer.
+[Product name] tells people in the North East, honestly, whether their business idea would last, what to fix first, and the cheapest way to test it.
 
-## 2. Hackathon context
+Track 3, "Start Something".
 
-- Event: Claude Builder Club, Northumbria University.
-- Track 3, "Start Something": how might we help more people in the North East start and grow something of their own?
-- Track warnings we must answer: bad advice with real costs, false encouragement, and people without laptops, time or money.
-- Build window 2:00pm to 5:45pm. Pitch 3 minutes with live demo, then 2 minutes of questions.
+## 2. The problem and who has it (slide 2)
 
-## 3. The problem
+- **Who:** aspiring founders in the North East (students, career changers, people in insecure work) with limited money and time, often on a phone.
+- **The pain:** they find out whether an idea holds up only after spending money. The organisers' brief notes that few get as far as a first paying customer.
+- **Why now:** [one sentence, only with a source from Lane B].
 
-Many people in the region have ideas (students, career changers, people in insecure work), but the organisers' brief notes that few reach a first paying customer. The gap is not ideas; it is knowing what to do next, what it will cost, and whether the idea is worth pursuing at all.
+Alternatives and their gaps:
+- Generic AI chat: unstructured, overly encouraging, ignores the user's budget and time.
+- Business advisers and courses: valuable, but slower to access and not always affordable.
+- Templates and online guides: not tailored to the person.
 
-Existing options and their gaps:
-- Generic AI chat: unstructured, overly encouraging, forgets the user's constraints.
-- Business advisers and courses: valuable, but slow to access and not always affordable.
-- Templates and online guides: not tailored to the person's budget, time or location.
+## 3. What we built (slide 3)
 
-Why now: [team to add one sentence, e.g. cost-of-living pressure or growth in side incomes, only with a source].
+In: the idea, skills, budget and weekly hours.
+Product: Claude produces one structured plan.
+Out: a sustainability verdict with reasons it may fail, improvements split into idea / business model / own situation, and a roadmap of cheap tests.
 
-## 4. Who it is for
+Why it beats the alternatives: honest by design, constrained by the user's real budget and time, and clear about its limits and where to get professional advice.
 
-**Primary user:** an aspiring founder in the North East with an idea, limited money, and limited hours each week.
+## 4. Who pays, and does it make money? (slide 4)
 
-Example persona (fictional, for the demo only): [name], a [career changer / student] in [town], with [N] hours a week and a £[budget] budget, who wants to [idea].
-
-## 5. The solution
-
-1. **Intake:** a short, one-question-per-step form covering the idea, skills, weekly hours, budget and location.
-2. **Generate:** Claude produces a structured roadmap as JSON: an honest viability assessment, then phases, each with a first step, a cheap way to test it, a cost estimate, a timeframe and risks.
-3. **Preview free:** the viability assessment and the first phase or two are free.
-4. **Unlock:** the full roadmap is a paid, one-off purchase.
-
-What makes it better than asking a chatbot:
-- Structured and constrained by the user's real budget and time.
-- Honest by design: it states reasons the idea may fail and recommends cheap tests before spending.
-- Visible assumptions the user can correct, and clear signposting to professional advice.
-
-## 6. Who pays (business case)
-
-All figures below must come from the team's own reasoning. Believable assumptions beat polish.
+All figures must come from the team's own reasoning. Believable assumptions beat polish. If the model pays anyone, budget at least the minimum wage.
 
 | Item | Value | Basis |
 |------|-------|-------|
-| Payer | The founder (user pays) | [confirm, or name an alternative payer such as a council, university or enterprise agency] |
-| Price per full roadmap | £[ ] | [why this price] |
-| AI cost per roadmap | £[ ] | From Lane C's logged token counts |
+| Payer | The founder (user pays) | [confirm, or name an alternative payer such as a council, university or enterprise agency, and how both get on board] |
+| Price for the full plan | £[ ] | [why this price] |
+| AI cost per plan | £[ ] | Lane D's logged token counts |
 | Other cost per customer | £[ ] | Payment fees, hosting |
-| Fixed monthly costs | £[ ] | Hosting, domain, any wages at minimum wage or above |
+| Fixed monthly costs | £[ ] | Hosting, domain, any wages |
 | Break-even customers per month | [ ] | Fixed costs ÷ (price minus cost per customer) |
 | Monthly revenue at 100 customers | £[ ] | |
 | Monthly profit at 100 customers | £[ ] | |
+| Roughly how many potential customers | [ ] | Lane B, with source |
 
-## 7. First 100 customers (go-to-market)
+## 5. Our first 100 customers (slide 5)
 
-- First target: [e.g. final-year students with a side project, or a specific community group].
+- First target: [segment].
 - Their problem and our offer: [ ].
-- Route in: [e.g. university enterprise teams, student societies, local business networks], with target numbers per route.
-- Biggest risk: [e.g. people will not pay for advice they could get free], and how we would test it: [ ].
+- Route in, with target numbers: [e.g. university enterprise teams, student societies, local business networks].
+- Biggest risk: [e.g. people will not pay when free AI chat exists], and how we would test it: [ ].
 
-## 8. MVP scope (today)
+## 6. The team (slide 6)
 
-**In scope**
-- Landing screen with the idea input as the hero.
-- Intake flow.
-- Roadmap generation via the Anthropic API, server side.
-- Roadmap view with the route design, preview and locked phases.
-- Mock paywall or Stripe test mode.
-- Cached example roadmap as a fallback.
-- Token cost logging.
+| Name | Lane | One line on why |
+|------|------|-----------------|
+| Zac | A. Project manager / Intake | [ ] |
+| Eric | B. Research | [ ] |
+| Michael | C. UI design | [ ] |
+| Khaliq | D. AI and API usage | [ ] |
+| George | E. Backend flow | [ ] |
 
-**Out of scope today**
-- User accounts and saved roadmaps.
-- Real payments.
-- Verified directory of local funding or support (mention only if verified).
-- Dark mode (stretch only).
+The deck must be the organisers' PowerPoint template: a title slide plus up to 5 slides. Slides 4 and 5 are the business case.
 
-## 9. Ethics and safety
+## 7. Three-minute demo script (draft)
 
-- No real personal data anywhere (hackathon rule 4).
-- The roadmap states its limits and points to professional legal, tax and financial advice.
-- No invented organisations, grants, statistics or testimonials.
-- Mobile-first so people without laptops can use it.
-
-## 10. Three-minute demo script (draft)
+Hard stop at 3:00, then 2 minutes of judges' questions.
 
 | Time | Who | What |
 |------|-----|------|
 | 0:00 to 0:30 | [ ] | The problem and who has it, in one story |
-| 0:30 to 2:00 | [ ] | Live demo: type an idea, intake, generation, roadmap, locked phases, unlock |
-| 2:00 to 2:30 | [ ] | How it works and where it fails (assumptions, limits, fallback) |
+| 0:30 to 2:00 | [ ] | Live demo: type an idea, intake, generating, verdict preview, unlock, full plan |
+| 2:00 to 2:30 | [ ] | How it works and where it fails (assumptions, limits, cached fallback) |
 | 2:30 to 3:00 | [ ] | Who pays, price, break-even, first 100 customers |
 
-Likely judge questions to prepare for: cost per roadmap, why someone would pay instead of using free AI chat, how we stop bad advice, and who our first customers are.
+Likely judge questions:
+- What does one plan cost you to generate?
+- Why pay instead of asking free AI chat?
+- How do you stop bad advice or false encouragement?
+- Who are your first customers, and how do you reach them?
+- Where does it fail?
 
-## 11. Submission checklist (5:45pm)
+## 8. Submission checklist (5:45pm)
 
-- [ ] Working prototype, demoed live
+- [ ] Working prototype, shown live in the pitch
 - [ ] Public GitHub repo with README
 - [ ] PowerPoint from the template: title slide plus up to 5 slides
 - [ ] One paragraph: the problem, our solution and who pays
+
+### Submission paragraph (draft)
+
+[Team to write once sections 2 to 4 are filled.]

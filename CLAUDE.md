@@ -10,12 +10,24 @@ A business planner for people in the North East who are unsure whether their bus
 2. A round-up of **what to improve before starting**, split into the idea, the business model, and the user's own situation (budget, time, skills).
 3. A **roadmap** of cheap first steps to test it.
 
-We monetise with a free preview (the verdict, the main risks, and a taste of the improvements); payment unlocks the full improvement list and roadmap. It must never promise success or invent organisations, grants or figures. See `idea.md` for the full design.
+We monetise with a free preview (the verdict, the main risks, and a taste of the improvements); payment unlocks the full improvement list and roadmap. It must never promise success or invent organisations, grants or figures.
 
 - Hackathon: Claude Builder Club, Northumbria University. Track 3, "Start Something".
 - Judging: Technical quality 40%, Real-world fit 30%, Investability 15%, Go-to-market 15%.
 - All code is written on the day between 2:00pm and 5:45pm. **Code freeze at 5:45pm.**
 - The demo must run live, end to end, on realistic input.
+
+## Project documents (read the relevant one before starting)
+
+| File | What it is for | Owner |
+|------|----------------|-------|
+| `CLAUDE.md` | How we work: lanes, git rules, guardrails | Lane A |
+| `idea.md` | **Source of truth for the product**: flow, features, data needs, AI design | Lane A merges; anyone proposes changes in the group chat |
+| `PROJECT_BRIEF.md` | The pitch: business case, first 100 customers, demo script, submission checklist | Lane A |
+| `docs/design/DESIGN.md` | Visual and interaction rules. **Read before any UI work** | Lane C |
+| `TODO.md` | Tasks per lane | Each owner ticks only their own section |
+
+If two documents disagree, `idea.md` wins on the product and `CLAUDE.md` wins on process. Tell the human so the other file gets fixed.
 
 ## Stack (confirm and edit at 2:00pm, then do not change)
 
@@ -33,8 +45,8 @@ Each person works in one lane. **Only edit files inside your own lane.** If a ch
 
 | Lane | Owner | Owns |
 |------|-------|------|
-| A. Project manager / Intake | Zac | `src/features/intake/` (idea questionnaire UI), `package.json` and lockfile, `README.md`, `src/App.tsx` and routing |
-| B. Research | Eric | `docs/research/`, `demo-data/` (fictional personas, verified local-support facts) |
+| A. Project manager / Intake | Zac | `src/features/intake/` (idea questionnaire UI), `package.json` and lockfile, `README.md`, `src/App.tsx` and routing, `CLAUDE.md`, `idea.md`, `PROJECT_BRIEF.md`, pitch deck and submission paragraph (pitch ownership provisional until the team confirms) |
+| B. Research | Eric | `docs/research/`, `demo-data/` (fictional personas, verified local-support facts), research figures for the business case |
 | C. UI design | Michael | `docs/design/`, Tailwind config and shared styles, `src/features/verdict/`, `src/features/roadmap/`, `src/features/paywall/` (screens, preview vs full, pricing display) |
 | D. AI and API usage | Khaliq | `prompts/`, the Anthropic API call code, JSON parsing, cost logging |
 | E. Backend flow | George | `server/` routes and request flow, unlock/payment (mock or Stripe test mode), fallback to cached demo data |
