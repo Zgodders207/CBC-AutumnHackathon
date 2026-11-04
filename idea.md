@@ -163,6 +163,86 @@ The same tool also serves **investors and venture capitalists** who are weighing
 3. Which areas get rated (market, model, team, finances, others)?
 4. Who owns the investor screens and prompts? This touches Lanes A (intake), C (verdict screens) and D (prompts).
 
+## 11e. Page flow (proposed, from a George design session)
+
+**Status: proposed.** It fleshes out how the pages work. It changes some earlier text (listed at the end of this section) and adds one new feature (PDF upload) that needs the team's agreement. Zac to update the older sections if the team accepts it.
+
+### Pages, in order
+
+**1. Home page.** A headline and one plain sentence about what it does ("Find out whether your business idea is likely to last, before you spend money"), one big **Start** button, and a short line that this is a rough view and not advice. Works on a phone. Beside Start: "Already have a business plan or accounts? Upload a PDF to save time."
+
+**2. Round 1: the first few questions.** About 5 quick questions, mostly tap-to-answer, plus one free-text box for the idea. Covers: what the business is, who it's for and how it makes money, start-up budget, hours a week, relevant skills, and how far along it is (just an idea, tested, or already trading). Every question has a **"Not sure"** option, because the people using this are unsure. Nobody is blocked for not knowing.
+
+**3. PDF upload (optional shortcut, at the start of round 1).** Anyone can upload a PDF of their business plan, accounts or pitch. The AI reads it and pre-fills what it can. The person sees "Here's what we found" and can fix anything. Round 1 then only asks for what's missing. People with no PDF just answer the questions. See "PDF upload rules" below.
+
+**4. Business type, decided silently.** After round 1, the AI places the business in one of four types and the person is **not** asked or shown it:
+- Retail
+- SaaS (software sold on subscription or licence)
+- Professional services / freelance
+- Other (anything that doesn't fit the three above)
+
+The type only **steers which questions come next**; it does not label the person. Example routes: retail asks about stock, premises and margins; SaaS about pricing, build cost and how customers are found; services/freelance about day rate, finding clients and how many hours they can sell; other gets general questions. The questions are still written from the person's own answers, so a wrong guess just means slightly less relevant first questions. The AI re-checks the type each round and can change it.
+
+**5. Follow-up rounds.** Up to 3 rounds of about 5 tailored questions each, headed "Round 2 of up to 3". The AI decides when it has enough and moves on. Staged build as in 11b item 2: stage 1 is one follow-up round, stage 2 is up to 3. The server enforces the cap.
+
+**6. Generating.** Staged progress screen. Falls back to the scripted demo conversation if the API fails.
+
+**7. The score page (free preview).** The **overall score** is shown big at the top. Below it, four scores:
+- **Financial stability:** can the money work, and could it survive a slow start?
+- **Long-term sustainability:** will it still make sense in a few years?
+- **Saturation in the market:** is there room for it, or is the market already crowded with similar businesses?
+- **Skills and ability:** does this person have the skills, time and means to actually run it?
+
+Each score has a one-line reason. Also free: the **top 2 risks**. Bad news is never behind the paywall.
+
+**8. Unlock (£4.99 one-off).** Paid: the detailed improvements for each of the four scores, the roadmap of cheap first steps, and the full improved business plan (written after payment as a second AI call, as in 11b item 6).
+
+**9. Full plan page.** Improvements per score, roadmap, full improved business plan, export (format **TBD**).
+
+States to design on every page: loading, error, empty.
+
+### How the scores work
+
+- Same rule as 11b: **words, not numbers**. Each of the four scores and the overall score uses the same word labels (proposed: Strong / Promising / Needs work / Not viable yet; Lanes C and D can edit them). "Big score" means big on screen, not a number out of 100.
+- **Direction:** a higher label always means better for the person. For saturation that means "Strong" = plenty of room in the market, so the name on screen should read as something like "Room in the market" (final wording **TBD**, Lane C).
+- The overall score is the AI's judgement across the four, not a sum, and it can be no better than the weakest area deserves (a Not viable yet on any one area should hold the overall down). Exact rule **TBD**, Lane D.
+- Always labelled "A rough view, not a prediction".
+
+### PDF upload rules (proposed)
+
+- **Optional.** Never required. The track warns against ignoring people without laptops, time or paperwork, and most first-time founders won't have a plan document.
+- PDF files only. Text-based PDFs first; scanned pages may not read well, so say so on the page. Maximum file size **TBD**.
+- The AI reads it on the server only. The key and the file never reach the browser's code.
+- **Privacy:** a real person's PDF can contain personal details. Say on the upload box what happens to the file. Intended: used only for this assessment and not kept afterwards (Lane E to confirm what is actually possible). Demo PDFs must be fictional (hackathon rule).
+- Reading a PDF adds input tokens, so it adds cost. Not yet estimated in 11c.
+- **New feature flag:** CLAUDE.md says new tools need the team's agreement first. Lane D to check whether the Anthropic API can take a PDF directly, which may avoid adding a library. Fallback if not agreed: a box to paste text from the document.
+- The demo fallback needs a cached "what we found in the PDF" result for the fictional persona.
+
+### Who builds what
+
+| Piece | Lane |
+|---|---|
+| Home page, round 1 and follow-up screens, upload box | A (Zac) |
+| Score page, paywall, full plan page | C (Michael) |
+| Prompts for the type decision, PDF reading, follow-up questions, four scores and overall | D (Khaliq) |
+| Upload route, round cap, fallback, unlock | E (George) |
+| Fictional personas and PDF, scripted demo conversation | B (Eric) |
+
+### What this changes in earlier text
+
+- Sections 3 (item 1), 4 (steps 4 and 7), 6, 7 and 11b items 1 and 4: "three areas (idea, business model, your situation)" becomes **four scores** (financial stability, long-term sustainability, market saturation, skills and ability) plus the overall. Improvements are grouped by the four scores instead of the three areas.
+- Sections 4 and 6: add the home page, the PDF upload, and the silent business-type step.
+- Section 7 (data model): add the business type, the four scores, and what was read from the PDF.
+- Section 11d: the investor's "upload a pitch deck" is the same upload feature as this one.
+
+### Open questions for this section
+
+1. Do we build the PDF upload today, or show it as a next step? (needs the group chat)
+2. Final on-screen names for the four scores, especially saturation.
+3. How the overall score is worked out from the four.
+4. Maximum PDF size, and whether files are kept at all.
+5. Do the four business types change anything on the score page, or only the questions?
+
 ## 12. Open questions
 
 1. Stack confirmation at 2:00pm.
