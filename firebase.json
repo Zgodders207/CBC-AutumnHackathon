@@ -1,0 +1,8 @@
+{
+  "hosting": {
+    "site": "groundworking",
+    "public": ".",
+    "ignore": ["firebase.json", ".firebaserc", "**/.*", "**/node_modules/**", "**/*.md", "demo-data/**"],
+    "cleanUrls": true
+  }
+}
