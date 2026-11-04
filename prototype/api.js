@@ -77,7 +77,7 @@
   };
 
   /* ---------- Snapshot of the fictional example, so it can be put back after a real run ---------- */
-  var SNAP = ['#overall', '#score .scale', '#score .scores', '#score .risks', '#score .notice', '#score .pay ul',
+  var SNAP = ['#overall', '#score .scale', '#score .scores', '#score .watch', '#score .notice', '#score .pay ul',
     '#plan .mini', '#plan .groups', '#roadmap .sub', '#line', '#assumptions ul', '#advice p', '#ibpBody'];
   var snap = {}, snapR = null;
   GW.snapshot = function () {
@@ -89,7 +89,7 @@
     ['#overallNum', '#overallWhy'].forEach(function (s) { var n = $q(s); if (n) { n.hidden = !show; if (!show) n.textContent = ''; } });
   }
   GW.restoreScore = function () {
-    restore(['#overall', '#score .scale', '#score .scores', '#score .risks', '#score .notice', '#score .pay ul']);
+    restore(['#overall', '#score .scale', '#score .scores', '#score .watch', '#score .notice', '#score .pay ul']);
     var ov = $q('#overall'); if (ov && snapR) ov.setAttribute('data-r', snapR);
     extras(false);
   };
@@ -115,10 +115,13 @@
       var r = v.scores[k];
       return '<div><dt>' + LABELS[k] + ' ' + num(nums.scores[k]) + '</dt><dd data-r="' + (DOT[r.rating] || '') + '">' + esc(r.rating) + '</dd><p>' + esc(r.reason) + '</p></div>';
     }).join(''));
-    var labels = ['Biggest risk', 'Second risk'];
-    setHTML('#score .risks', v.topRisks.map(function (r, i) {
-      return '<li>' + WARN + '<span><b>' + (labels[i] || 'Risk') + '</b> ' + esc(r.title) + ': ' + esc(r.detail) + '</span></li>';
+    // Risks fill Lane C's ranked "things to watch" note: number, short title, then the detail.
+    setHTML('#score .watch-list', v.topRisks.map(function (r, i) {
+      return '<li><span class="watch-n" aria-hidden="true">' + (i + 1) + '</span><div><p class="watch-t">' + esc(r.title) +
+        '</p><p class="watch-d">' + esc(r.detail) + '</p></div></li>';
     }).join(''));
+    var wh = $q('#watch-h');
+    if (wh && v.topRisks.length !== 2) wh.lastChild.textContent = v.topRisks.length === 1 ? 'One thing to watch' : 'Things to watch';
 
     var advice = (p.professionalAdvice || []).map(function (a) {
       return esc(a.topic) + ': ' + esc(a.why) + ' Ask ' + esc(a.whoToAsk) + '.';
