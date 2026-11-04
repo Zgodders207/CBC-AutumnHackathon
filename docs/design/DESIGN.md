@@ -36,7 +36,7 @@ Owner: Lane C (Michael). Product behaviour lives in `idea.md`; this file only co
 3. Sentence case everywhere.
 4. **No eyebrow labels** (small text above a heading). The heading speaks for itself.
 5. One primary button per view, always signal yellow with dark ink text.
-6. Ratings are **words**, never numbers, stars, bars or percentages. Each word has its own colour so it stands out (Lane C decision, 4 Nov): Not viable yet `#A9432B` on `#F6E1D9`, Needs work `#8F5409` on `#FAEBCB`, Promising `#2D6A50` on `#DCEEE3`, Strong `#0F4A35` on `#C4E3D2`. The word is always shown, so colour is never the only signal. Set colours with the `data-r` attribute (`notviable`, `needswork`, `promising`, `strong`), never by hand. Keep them muted: no bright greens, glows or celebration effects.
+6. Ratings are **words**, never numbers, stars, bars or percentages. Each word sits beside a small round dot in its rating colour, the same everywhere (Lane C decision, 4 Nov): Strong `#1B5541` (forest), Promising `#7FA88E` (sage), Needs work `#D9A93B` (ochre), Not viable yet `#A9432B` (rust). The word stays in the normal text colour; no coloured text, no tinted pills or badges. Set colours only through the `data-r` attribute (`strong`, `promising`, `needswork`, `notviable`) and the `--rate-*` tokens.
 7. Bad news is never hidden behind the paywall.
 8. No invented numbers, testimonials, logos, organisations or grants. Demo data is fictional and labelled "Example with fictional answers".
 
@@ -188,7 +188,7 @@ Fix anything that answers yes:
 - [ ] Glass on a surface not listed in section 5, or glass with nothing behind it?
 - [ ] Purple or blue gradients, gradient text, neon glows?
 - [ ] More than one yellow button in a view?
-- [ ] A number, star, bar or percentage used as a rating, or a rating colour shown without its word?
+- [ ] A number, star, bar or percentage used as a rating, a rating colour without its word, or a rating shown as a coloured pill or coloured text?
 - [ ] A risk hidden behind the paywall?
 - [ ] Any invented statistic, testimonial, logo, organisation or grant?
 - [ ] Emoji used as icons?

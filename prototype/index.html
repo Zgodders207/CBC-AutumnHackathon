@@ -166,7 +166,7 @@ h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height
 
 /* ---- Score page ---- */
 .score-top{padding-top:clamp(48px,6vw,88px)}
-.score-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,0.75fr);gap:clamp(24px,3vw,40px);align-items:stretch;position:relative;z-index:2;transform:translateY(120px)}
+.score-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,0.75fr);gap:clamp(24px,3vw,40px);align-items:start;position:relative;z-index:2;transform:translateY(120px)}
 .sheet{border-radius:26px;padding:clamp(26px,3vw,40px);position:relative;z-index:2;color:var(--ink)}
 .tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);background:rgba(255,255,255,0.6);border:1px solid rgba(15,34,27,0.08);border-radius:999px;padding:4px 11px}
 .idea{font-size:15px;color:var(--ink-2);margin:18px 0 2px}
@@ -193,7 +193,7 @@ h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height
 .pay li{display:grid;grid-template-columns:22px 1fr;gap:10px}
 .pay li svg{color:var(--signal);margin-top:3px}
 .pay .btn{width:100%}
-.pay .price{margin:auto 0 18px;padding-top:24px}
+.pay .price{margin:24px 0 16px}
 .pay .fine{margin-top:12px}
 .score-bottom{padding-block:180px 40px}
 .limits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;max-width:860px}
@@ -250,6 +250,7 @@ summary::-webkit-details-marker{display:none}
 summary svg{transition:transform 200ms var(--ease)}
 details[open] summary svg{transform:rotate(180deg)}
 details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
+.writing-card[hidden]{display:none}
 .writing-card{border-radius:22px;padding:24px 26px;margin:0 0 32px;background:var(--ink);color:var(--on-field);display:flex;gap:18px;align-items:center}
 .writing-card .mk{width:28px;height:28px;border-radius:50%;border:2px solid var(--signal);display:grid;place-items:center;flex:none}
 .writing-card .mk::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--signal)}
@@ -267,18 +268,23 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 .proto a:hover{background:rgba(255,255,255,0.08)}
 .proto a.on{background:#F3F6F2;color:var(--ink)}
 
-/* ---- Rating colours: every rating word carries its own colour, always with the word itself ---- */
-[data-r="notviable"]{--rc:#A9432B;--rb:#F6E1D9}
-[data-r="needswork"]{--rc:#8F5409;--rb:#FAEBCB}
-[data-r="promising"]{--rc:#2D6A50;--rb:#DCEEE3}
-[data-r="strong"]{--rc:#0F4A35;--rb:#C4E3D2}
-.overall[data-r]{color:var(--rc)}
-.overall[data-r]::before{content:"";display:inline-block;width:0.42em;height:0.42em;border-radius:50%;background:var(--rc);margin:0 0.22em 0.12em 0;vertical-align:middle}
-.scale li{font-size:15px;padding:7px 14px}
-.home-sheet .scale li{font-size:13.5px;padding:5px 11px}
-.scale li.on[data-r]{background:var(--rc);border-color:var(--rc);color:#fff;box-shadow:0 6px 14px -8px var(--rc)}
-.scores dd[data-r]{align-self:start;justify-self:end}
-.scores dd[data-r],.group-h span[data-r],.verdict-mini b[data-r]{display:inline-block;padding:3px 11px;border-radius:9px;background:var(--rb);color:var(--rc);font-weight:500;white-space:nowrap}
+/* ---- Ratings: one four-colour palette, shown as a small round dot beside the word ----
+   The word itself stays in the normal text colour. Same key, same colours, everywhere. */
+:root{--rate-strong:#1B5541;--rate-promising:#7FA88E;--rate-needswork:#D9A93B;--rate-notviable:#A9432B}
+[data-r="strong"]{--rc:var(--rate-strong)}
+[data-r="promising"]{--rc:var(--rate-promising)}
+[data-r="needswork"]{--rc:var(--rate-needswork)}
+[data-r="notviable"]{--rc:var(--rate-notviable)}
+[data-r]::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--rc);margin:0 8px 0 0;vertical-align:0}
+.overall[data-r]::before{width:0.32em;height:0.32em;margin-right:0.2em;vertical-align:0.1em}
+.scale li{font-size:14.5px;padding:6px 12px}
+.scale li[data-r]::before{width:8px;height:8px;margin-right:7px}
+/* the small example card on the home page keeps the scale on one line */
+.home-sheet .scale{flex-wrap:nowrap;gap:5px}
+.home-sheet .scale li{font-size:12.5px;padding:5px 8px;white-space:nowrap}
+.home-sheet .scale li[data-r]::before{width:7px;height:7px;margin-right:5px}
+.scale li.on[data-r]::before{box-shadow:0 0 0 1.5px rgba(243,246,242,0.85)}
+.verdict-mini b[data-r]::before{box-shadow:0 0 0 1px rgba(243,246,242,0.45)}
 .caveat{display:flex;align-items:center;gap:8px;font-size:15.5px;color:var(--ink);font-weight:500}
 .caveat svg{width:18px;height:18px;color:var(--ink-2)}
 
@@ -321,7 +327,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   .found dt{grid-column:1/-1}
   .nav-r .hide-sm{display:none}
 }
-@media (max-width:520px){.ask{flex-direction:column}.ask .btn{width:100%}}
+@media (max-width:520px){.ask{flex-direction:column}.ask .btn{width:100%}.home-sheet .scale{flex-wrap:wrap}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition:none!important;animation:none!important}
   .motion::before{transform:none}.motion .stop{opacity:1;transform:none}
@@ -349,7 +355,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <h1 id="home-h">Don’t bet your savings on a guess.</h1>
+        <h1 id="home-h">Don’t quit your job for an untested idea.</h1>
         <p class="lede">Find out if your business idea would last before you spend a penny. An honest check for people in the North East with a tight budget and not much spare time.</p>
         <label class="ask-label" for="idea">Your business idea, in a sentence</label>
         <form class="ask smoke" id="ask" novalidate>
