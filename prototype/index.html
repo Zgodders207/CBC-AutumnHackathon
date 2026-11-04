@@ -183,7 +183,7 @@ h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height
 .q input[type=text]:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
 
 /* ---- Generating (field) ---- */
-.gen{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:clamp(32px,5vw,80px);align-items:start;padding-block:clamp(56px,8vw,104px) clamp(64px,8vw,112px)}
+.gen{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:clamp(32px,5vw,80px);align-items:start;padding-block:clamp(48px,6vw,80px) clamp(64px,8vw,112px)}
 .stages{border-radius:22px;padding:28px 30px;margin:8px 0 0;list-style:none;display:grid;gap:18px;max-width:560px}
 .stages li{display:flex;align-items:center;gap:14px;font-size:18px;color:var(--on-field-2);transition:color 300ms var(--ease)}
 .stages .mk{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;border:2px solid rgba(255,255,255,0.3)}
@@ -204,8 +204,8 @@ h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height
 .gen-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:24px}
 
 /* ---- Score page ---- */
-.score-top{padding-top:clamp(48px,6vw,88px)}
-.score-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,0.75fr);gap:clamp(24px,3vw,40px);align-items:start;position:relative;z-index:2;transform:translateY(120px)}
+.score-top{padding-top:clamp(48px,6vw,80px);display:flow-root} /* flow-root keeps the cards' negative margin inside, so the green band ends 120px early */
+.score-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,0.75fr);gap:clamp(24px,3vw,40px);align-items:start;position:relative;z-index:2;margin-bottom:-120px}
 .sheet{border-radius:26px;padding:clamp(26px,3vw,40px);position:relative;z-index:2;color:var(--ink)}
 .sheet-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;min-height:44px}
 .tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);background:rgba(255,255,255,0.6);border:1px solid rgba(15,34,27,0.08);border-radius:999px;padding:4px 11px}
@@ -223,11 +223,17 @@ h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height
 .scores p+p{margin-top:2px}
 .combine{font-size:16px;color:var(--ink);margin:16px 0 0;padding:14px 16px;border-radius:14px;background:rgba(27,85,65,0.08)}
 .combine strong{font-weight:500}
-.risks{margin:22px 0 0;padding:0;list-style:none;display:grid;gap:12px}
-.risks li{display:grid;grid-template-columns:22px 1fr;gap:10px;font-size:15.5px;line-height:1.5}
-.risks svg{color:var(--risk);margin-top:2px}
-.risks b{font-weight:500;color:var(--risk)}
-.risks .ties{display:block;font-size:14px;color:var(--ink-2);margin-top:2px}
+.watch{margin:22px 0 0;padding:20px 22px 8px;border-radius:16px;background:#F7EFE6;border:1px solid rgba(169,67,43,0.16)}
+.watch-h{display:flex;align-items:center;gap:10px;font-weight:500;font-variation-settings:"wdth" 108;font-size:19px;line-height:1.2;letter-spacing:-0.01em;margin:0 0 4px}
+.watch-h svg{width:20px;height:20px;color:var(--risk)}
+.watch-sub{margin:0 0 6px;font-size:15px;color:var(--ink-2)}
+.watch-list{margin:0;padding:0;list-style:none}
+.watch-list li{display:grid;grid-template-columns:30px 1fr;gap:14px;padding:14px 0;border-top:1px solid rgba(169,67,43,0.14)}
+.watch-list li:first-child{border-top:0}
+.watch-n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:500;font-size:15px;color:var(--risk);border:1.5px solid rgba(169,67,43,0.55);background:#FBF6F1}
+.watch-t{margin:2px 0 2px;font-weight:500;font-size:16.5px;line-height:1.35;color:var(--ink)}
+.watch-d{margin:0;font-size:15.5px;line-height:1.5;color:var(--ink)}
+.watch-a{margin:6px 0 0;font-size:14px;color:var(--ink-2)}
 .notice{margin:22px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:18px 20px;border-radius:16px;background:rgba(255,255,255,0.6);border:1px solid rgba(15,34,27,0.14)}
 .notice p{margin:0;font-size:15.5px;color:var(--ink)}
 .notice strong{display:block;font-weight:500;margin-bottom:2px}
@@ -326,7 +332,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 .ghost{height:16px;border-radius:6px;background:rgba(15,34,27,0.08);margin:0 0 12px}
 
 /* ---- Error ---- */
-.err-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:clamp(32px,5vw,80px);align-items:start;padding-block:clamp(72px,9vw,128px)}
+.err-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:clamp(32px,5vw,80px);align-items:start;padding-block:clamp(48px,6vw,80px) clamp(72px,9vw,128px)}
 .lede.wide{max-width:46ch;margin-bottom:18px}
 .err-cause{font-size:16px;color:var(--on-field);max-width:46ch;margin:0 0 24px}
 .err-cause:empty{display:none}
@@ -360,6 +366,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 @media (max-width:900px){
   .hero-grid,.app,.gen,.score-grid,.err-grid,.plan-body{grid-template-columns:minmax(0,1fr)}
   .sheet,.score-grid{transform:none}
+  .score-grid{margin-bottom:0}
   .score-bottom{padding-top:56px}
   .answers{position:static}
   .opts,.groups,.notice,.how-list{grid-template-columns:minmax(0,1fr)}
@@ -384,7 +391,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   .field,.view.field-top{background:none!important;margin-top:0!important;padding-top:0!important}
   .field,.field *{color:var(--ink)!important}
   .topo{display:none}
-  .score-grid{transform:none;display:block}
+  .score-grid{transform:none;display:block;margin-bottom:0}
   .sheet{box-shadow:none;background:none;border:0;-webkit-backdrop-filter:none;backdrop-filter:none}
   .plan-body{display:block}
   .motion::before{transform:none}.motion .stop{opacity:1;transform:none}
@@ -574,10 +581,14 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
             <div><dt>Skills and ability</dt><dd>Needs work</dd><p>You can fix bikes, but haven’t charged for it or run bookings yet.</p><p>It would improve with a few paid jobs and a simple way to take bookings on set evenings.</p></div>
           </dl>
           <p class="combine"><strong>How the overall rating is worked out.</strong> It leans towards your weakest scores, so two Promising scores can’t cancel out two Needs work scores. Fix the weak ones first and the overall rating moves.</p>
-          <ul class="risks" aria-label="Top risks, biggest first">
-            <li><svg class="i" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span><b>Biggest risk</b> Repair demand may cluster in spring and summer, leaving winter weeks quiet.<span class="ties">Affects: Long-term sustainability</span></span></li>
-            <li><svg class="i" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span><b>Second risk</b> Cycling between jobs could use up most of your hours.<span class="ties">Affects: Financial stability, because travel time is unpaid</span></span></li>
-          </ul>
+          <section class="watch" aria-labelledby="watch-h">
+            <h3 class="watch-h" id="watch-h"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg>Two things to watch</h3>
+            <p class="watch-sub">Your biggest risks, most serious first. Plan for these before you spend.</p>
+            <ol class="watch-list">
+              <li><span class="watch-n" aria-hidden="true">1</span><div><p class="watch-t">Quiet winter months</p><p class="watch-d">Repair demand may cluster in spring and summer, leaving winter weeks quiet.</p><p class="watch-a">Affects long-term sustainability</p></div></li>
+              <li><span class="watch-n" aria-hidden="true">2</span><div><p class="watch-t">Travel eats your hours</p><p class="watch-d">Cycling between jobs could use up most of your hours.</p><p class="watch-a">Affects financial stability, because travel time is unpaid</p></div></li>
+            </ol>
+          </section>
           <div class="notice" role="note">
             <p><strong>What it can’t know</strong>Local rules, insurance and exact prices. Check these before you spend.</p>
             <p><strong>When to get proper advice</strong>Speak to an accountant or adviser before signing anything or taking a loan.</p>
