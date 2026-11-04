@@ -2,6 +2,19 @@
 
 This file is read by every team member's Claude Code session. Several people are prompting Claude on this repo **at the same time**. Your top priority is to avoid stepping on anyone else's work.
 
+## VITAL: stay in sync with the team at all times
+
+Teammates push constantly. Your memory of this repo goes stale within minutes. **Before EVERY response or action in this repo, without exception:**
+
+1. Run `git fetch --all`, then check `git log --all --oneline -n 10` and `git branch -r` for new commits and branches.
+2. If `origin/main` has moved, commit or stash your own work, then run `git pull --rebase origin main`. Never discard or overwrite a teammate's changes.
+3. Tell the human in one line what changed since your last check (who, which files), or "No changes".
+4. If any of these changed, re-read them before continuing, because they override anything you remember: `CLAUDE.md`, `idea.md`, `PROJECT_BRIEF.md`, `docs/design/DESIGN.md`, `TODO.md`, `src/types/roadmap.ts`.
+5. If a change conflicts with the current task, or touches a file you are editing, **stop and tell the human** before going further.
+6. Fetch and rebase again immediately before every push.
+
+Never answer from memory of the repo. Work that teammates have not pushed is invisible to you, so commit and push small changes often.
+
 ## The project
 
 A business planner for people in the North East who are unsure whether their business would be sustainable. A user describes their idea, skills, budget and time available; the AI produces:
