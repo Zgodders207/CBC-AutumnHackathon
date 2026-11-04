@@ -81,10 +81,10 @@ h2{font-weight:500;font-variation-settings:"wdth" 112;font-size:clamp(2.1rem,4.6
 h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height:1.15;letter-spacing:-0.02em;margin:0 0 6px}
 .lede{font-size:clamp(18px,1.6vw,21px);line-height:1.55;color:var(--on-field-2);max-width:34ch;margin:0 0 36px}
 .sub{color:var(--ink-2);max-width:56ch;font-size:18px;margin:0 0 32px}
-.fine{font-size:14px;color:var(--on-field-2);margin:4px 0 0}
+.fine{font-size:15px;color:var(--on-field);margin:4px 0 0}
 
 /* views: one screen at a time, driven by the URL hash */
-.view{display:none;min-height:100vh;padding-bottom:110px}
+.view{display:none;min-height:100vh;padding-bottom:48px}
 .view.on{display:block}
 .view.field-top{margin-top:-74px;padding-top:74px}
 
@@ -92,7 +92,7 @@ h3{font-weight:500;font-variation-settings:"wdth" 108;font-size:21px;line-height
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,0.92fr);gap:clamp(32px,5vw,72px);align-items:start;padding:clamp(56px,8vw,112px) 0 clamp(56px,6vw,80px)}
 .ask{border-radius:18px;padding:8px;display:flex;gap:8px;max-width:560px}
 .ask input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:17px;color:var(--on-field);padding:12px 14px;caret-color:var(--signal);border-radius:10px}
-.ask input::placeholder{color:rgba(243,246,242,0.62)}
+.ask input::placeholder{color:rgba(243,246,242,0.78)}
 .ask input:focus-visible{outline:2px solid var(--signal);outline-offset:0}
 .err{font-size:14px;color:var(--signal);margin:10px 0 0;min-height:1.4em}
 .upload-line{display:flex;align-items:center;gap:10px;margin-top:22px;font-size:15px;color:var(--on-field-2)}
@@ -261,17 +261,55 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 .err-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:clamp(32px,5vw,80px);align-items:start;padding-block:clamp(72px,9vw,128px)}
 
 /* ---- Prototype switcher (not part of the product) ---- */
-.proto{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;display:flex;gap:4px;align-items:center;padding:6px;border-radius:14px;background:rgba(15,34,27,0.92);box-shadow:0 18px 40px -16px rgba(2,18,12,0.7);max-width:calc(100vw - 24px);overflow-x:auto}
+.proto{position:static;margin:40px auto 24px;width:max-content;max-width:calc(100% - 32px);flex-wrap:wrap;justify-content:center;z-index:60;display:flex;gap:4px;align-items:center;padding:6px;border-radius:14px;background:rgba(15,34,27,0.92);box-shadow:0 18px 40px -16px rgba(2,18,12,0.7);max-width:calc(100vw - 24px);overflow-x:auto}
 .proto span{font-size:12.5px;color:#9FB6AB;padding:0 8px 0 6px;white-space:nowrap}
 .proto a{font-size:13px;color:#DCE7E1;text-decoration:none;padding:6px 10px;border-radius:9px;white-space:nowrap}
 .proto a:hover{background:rgba(255,255,255,0.08)}
 .proto a.on{background:#F3F6F2;color:var(--ink)}
 
+/* ---- Rating colours: every rating word carries its own colour, always with the word itself ---- */
+[data-r="notviable"]{--rc:#A9432B;--rb:#F6E1D9}
+[data-r="needswork"]{--rc:#8F5409;--rb:#FAEBCB}
+[data-r="promising"]{--rc:#2D6A50;--rb:#DCEEE3}
+[data-r="strong"]{--rc:#0F4A35;--rb:#C4E3D2}
+.overall[data-r]{color:var(--rc)}
+.overall[data-r]::before{content:"";display:inline-block;width:0.42em;height:0.42em;border-radius:50%;background:var(--rc);margin:0 0.22em 0.12em 0;vertical-align:middle}
+.scale li{font-size:15px;padding:7px 14px}
+.home-sheet .scale li{font-size:13.5px;padding:5px 11px}
+.scale li.on[data-r]{background:var(--rc);border-color:var(--rc);color:#fff;box-shadow:0 6px 14px -8px var(--rc)}
+.scores dd[data-r]{align-self:start;justify-self:end}
+.scores dd[data-r],.group-h span[data-r],.verdict-mini b[data-r]{display:inline-block;padding:3px 11px;border-radius:9px;background:var(--rb);color:var(--rc);font-weight:500;white-space:nowrap}
+.caveat{display:flex;align-items:center;gap:8px;font-size:15.5px;color:var(--ink);font-weight:500}
+.caveat svg{width:18px;height:18px;color:var(--ink-2)}
+
+/* ---- Verdict page ---- */
+#score-edit{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;margin-left:6px;border-radius:10px;border:1px solid rgba(15,34,27,0.22);text-decoration:none;font-weight:500;color:var(--ink);background:rgba(255,255,255,0.5)}
+.pay ul{gap:16px;font-size:16.5px;color:var(--on-field)}
+.limits p{padding:22px 24px;border-radius:18px;background:rgba(255,255,255,0.6);border:1px solid rgba(15,34,27,0.08);box-shadow:inset 0 1px 0 #fff;color:var(--ink);font-size:17px}
+.limits strong{font-size:18px;margin-bottom:6px}
+
+/* ---- Home ---- */
+.ask-label{display:block;font-weight:500;font-size:16px;color:var(--on-field);margin:0 0 10px}
+
+/* ---- Full plan ---- */
+.verdict-mini{display:grid !important;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 16px;max-width:900px}
+.verdict-mini span{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--on-field-2)}
+.verdict-mini b{align-self:flex-start}
+.plan-head .writing-card{margin:24px 0 0;max-width:720px;border:1px solid rgba(242,201,76,0.35)}
+
+/* ---- Checkout dialog ---- */
+.checkout{position:relative}
+.co-x{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:12px;border:0;background:transparent;color:var(--ink);cursor:pointer;display:grid;place-items:center}
+.co-x:hover{background:rgba(15,34,27,0.06)}
+.co-list{margin:0 0 18px;padding:0;list-style:none;display:grid;gap:8px;font-size:15.5px}
+.co-list li{display:grid;grid-template-columns:20px 1fr;gap:8px}
+.co-list svg{color:var(--field);width:18px;height:18px;margin-top:3px}
+.checkout .btn-quiet{width:100%;justify-content:center;margin-top:10px}
+
 @media (max-width:900px){
   .hero-grid,.app,.gen,.score-grid,.err-grid,.plan-body{grid-template-columns:minmax(0,1fr)}
   .sheet,.score-grid{transform:none}
   .score-bottom{padding-top:56px}
-  .home-sheet{display:none}
   .answers{position:static}
   .opts,.groups,.limits{grid-template-columns:minmax(0,1fr)}
   .toc{display:none}
@@ -311,11 +349,11 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <h1 id="home-h">Will your business idea last?</h1>
-        <p class="lede">An honest check before you spend money, built for people in the North East with an idea, a tight budget and not much spare time.</p>
+        <h1 id="home-h">Don’t bet your savings on a guess.</h1>
+        <p class="lede">Find out if your business idea would last before you spend a penny. An honest check for people in the North East with a tight budget and not much spare time.</p>
+        <label class="ask-label" for="idea">Your business idea, in a sentence</label>
         <form class="ask smoke" id="ask" novalidate>
-          <label class="sr" for="idea">Describe your idea</label>
-          <input id="idea" type="text" autocomplete="off" placeholder="Mobile bike repairs around Gateshead" aria-describedby="idea-err">
+          <input id="idea" type="text" autocomplete="off" placeholder="For example: bike repairs in Gateshead" aria-describedby="idea-err">
           <button class="btn" type="submit">Check my idea</button>
         </form>
         <p class="err" id="idea-err" role="alert"></p>
@@ -328,7 +366,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
         <p class="idea">Mobile bike repair, Gateshead. <span class="num">5 to 10</span> hours a week, <span class="num">£300</span> budget.</p>
         <p class="overall" style="font-size:clamp(2.2rem,3.6vw,3.2rem)">Needs work</p>
         <ul class="scale" aria-label="Rating scale"><li>Not viable yet</li><li class="on" aria-current="true">Needs work</li><li>Promising</li><li>Strong</li></ul>
-        <p class="caveat">Overall. A rough view, not a prediction.</p>
+        <p class="caveat"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>Overall. A rough view, not a prediction.</p>
         <dl class="scores">
           <div><dt>Financial stability</dt><dd>Needs work</dd></div>
           <div><dt>Long-term sustainability</dt><dd>Promising</dd></div>
@@ -437,7 +475,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
           <p class="idea">Mobile bike repair, Gateshead. <span class="num">5 to 10</span> hours a week, <span class="num">£300</span> budget. <a href="#round1" id="score-edit">Edit answers</a></p>
           <p class="overall" id="overall">Needs work</p>
           <ul class="scale" aria-label="Rating scale"><li>Not viable yet</li><li class="on" aria-current="true">Needs work</li><li>Promising</li><li>Strong</li></ul>
-          <p class="caveat">Overall. A rough view, not a prediction.</p>
+          <p class="caveat"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>Overall. A rough view, not a prediction.</p>
           <dl class="scores">
             <div><dt>Financial stability</dt><dd>Needs work</dd><p>£300 covers tools, but a quiet winter month could leave you out of pocket.</p></div>
             <div><dt>Long-term sustainability</dt><dd>Promising</dd><p>Bikes always need fixing, and home visits suit busy people.</p></div>
@@ -474,11 +512,17 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
 <!-- mock checkout (Stripe test mode in the real build) -->
 <div class="overlay" id="checkout" role="dialog" aria-modal="true" aria-labelledby="co-h">
   <div class="checkout frost">
+    <button class="co-x" type="button" aria-label="Close" data-x><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <h3 id="co-h">Unlock the full plan</h3>
-    <div class="line-item"><span>Full plan, one-off</span><b class="num">£4.99</b></div>
-    <p class="test-card">Test mode. No real payment is taken in this demo.</p>
-    <a class="btn" href="#writing" data-close>Pay £4.99</a>
-    <a class="cancel" href="#score" data-close>Not now</a>
+    <ul class="co-list">
+      <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>What to improve for each of the four scores</li>
+      <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>A roadmap of cheap tests that fit your budget and week</li>
+      <li><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>An improved business plan, written for your idea</li>
+    </ul>
+    <div class="line-item"><span>Full plan, one-off payment</span><b class="num">£4.99</b></div>
+    <p class="test-card">Demo checkout: no card details are asked for and no money is taken.</p>
+    <a class="btn" href="#writing" data-close style="width:100%">Pay £4.99</a>
+    <a class="btn-quiet" href="#score" data-close>Not now</a>
   </div>
 </div>
 
@@ -492,16 +536,15 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
         <div>
           <span class="tag" style="color:var(--on-field-2);background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.16)">Example with fictional answers</span>
           <h2 id="plan-h" style="color:var(--on-field);margin-top:18px">Your plan: mobile bike repair, Gateshead</h2>
+          <div class="writing-card" id="writingCard" hidden><span class="mk"></span><div><strong>Writing your improved business plan…</strong><p>This can take up to a minute. Your improvements and roadmap are ready below.</p></div></div>
           <div class="verdict-mini"><span>Overall <b>Needs work</b></span><span>Financial stability <b>Needs work</b></span><span>Long-term <b>Promising</b></span><span>Room in the market <b>Promising</b></span><span>Skills <b>Needs work</b></span></div>
         </div>
-        <span class="btn-quiet" aria-disabled="true" title="Export format still to be decided">Download as PDF (not built)</span>
       </div>
     </div>
   </div>
   <div class="wrap plan-body">
-    <nav class="toc" aria-label="Plan sections"><a class="on" href="#plan">Improvements</a><a href="#plan">Roadmap</a><a href="#plan">Improved business plan</a><a href="#plan">Assumptions and advice</a></nav>
+    <nav class="toc" aria-label="Plan sections"><a class="on" href="#plan" data-jump="imp-h">Improvements</a><a href="#plan" data-jump="road-h">Roadmap</a><a href="#plan" data-jump="ibp-h">Improved business plan</a><a href="#plan" data-jump="adv-s">Assumptions and advice</a></nav>
     <div>
-      <div class="writing-card" id="writingCard" hidden><span class="mk"></span><div><strong>Writing your improved business plan…</strong><p>This can take up to a minute. Your improvements and roadmap are ready below.</p></div></div>
 
       <section class="block" aria-labelledby="imp-h">
         <h2 id="imp-h" style="font-size:clamp(1.8rem,3vw,2.6rem)">Improvements</h2>
@@ -524,6 +567,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
         </ol>
       </section>
 
+      <details open id="adv-s" class="last" style="margin:-40px 0 72px"><summary>What this plan assumes <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary><p>You own most of your tools, can cycle to jobs, and can keep two evenings a week free.</p></details>
       <section class="block reading" aria-labelledby="ibp-h" id="ibp">
         <h2 id="ibp-h" style="font-size:clamp(1.8rem,3vw,2.6rem)">Improved business plan</h2>
         <div id="ibpBody">
@@ -536,8 +580,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
         </div>
       </section>
 
-      <details open><summary>What this plan assumes <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary><p>You own most of your tools, can cycle to jobs, and can keep two evenings a week free.</p></details>
-      <details class="last"><summary>Where to get proper advice <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary><p>Only local support our research lane has checked will appear here. Speak to an accountant about tax before your first paid job.</p></details>
+      <details class="last"><summary>Where to get proper advice <svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></summary><p>Speak to an accountant about tax before your first paid job, and check your council’s rules on trading from home or in public places.</p></details>
     </div>
   </div>
 </section>
@@ -558,7 +601,7 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   </div>
 </section>
 
-<nav class="proto" aria-label="Prototype screens" id="proto"><span>Prototype</span><span id="dbg"></span></nav>
+<nav class="proto" aria-label="Prototype screens" id="proto"><span>Prototype screens</span></nav>
 
 <script>
 (function(){
@@ -685,7 +728,6 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
   /* ---------- Round 2 ---------- */
   function renderRound2(){
     if(!state.type)state.type=guessType();
-    $('dbg').textContent='silent type: '+state.type+' (hidden from users)';
     var wrap=$('r2-qs');wrap.innerHTML='';
     ROUTES[state.type].forEach(function(item,i){
       var q=el('div','q'),id='fq'+i;
@@ -763,11 +805,39 @@ details p{margin:10px 0 0;color:var(--ink-2);max-width:62ch}
     io.observe(line);
   }
 
+
+  /* ---------- Rating colours: tag every rating word so CSS can colour it ---------- */
+  var RATING={'not viable yet':'notviable','needs work':'needswork','promising':'promising','strong':'strong'};
+  function tagRatings(){
+    document.querySelectorAll('.overall,.scores dd,.scale li,.group-h span,.verdict-mini b').forEach(function(n){
+      var k=RATING[n.textContent.trim().toLowerCase()];
+      if(k)n.setAttribute('data-r',k);else n.removeAttribute('data-r');
+    });
+  }
+  tagRatings();
+
+  /* ---------- Plan section links scroll to their section (the hash drives screens) ---------- */
+  document.querySelectorAll('[data-jump]').forEach(function(a){a.addEventListener('click',function(e){
+    e.preventDefault();var t=$(a.dataset.jump);if(t)window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-96,behavior:reduce?'auto':'smooth'}); /* 96px clears the sticky nav */
+    document.querySelectorAll('.toc a').forEach(function(x){x.classList.toggle('on',x===a);});
+  });});
+
   /* ---------- Checkout (mock) ---------- */
   var co=$('checkout');
-  $('openCheckout').addEventListener('click',function(){co.classList.add('on');co.querySelector('.btn').focus();});
+  var opener=null;
+  $('openCheckout').addEventListener('click',function(){opener=document.activeElement;co.classList.add('on');co.querySelector('.btn').focus();});
+  function closeCo(){co.classList.remove('on');if(opener)opener.focus();}
+  co.querySelector('[data-x]').addEventListener('click',closeCo);
+  co.addEventListener('click',function(e){if(e.target===co)closeCo();});
+  /* keep keyboard focus inside the dialog while it is open */
+  co.addEventListener('keydown',function(e){
+    if(e.key!=='Tab')return;
+    var f=co.querySelectorAll('button,a[href]'),first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  });
   co.querySelectorAll('[data-close]').forEach(function(a){a.addEventListener('click',function(){co.classList.remove('on');});});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')co.classList.remove('on');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&co.classList.contains('on'))closeCo();});
 
   /* ---------- Routing by URL hash ---------- */
   function show(){
