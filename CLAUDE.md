@@ -17,13 +17,14 @@ Never answer from memory of the repo. Work that teammates have not pushed is inv
 
 ## The project
 
-A business planner for people in the North East who are unsure whether their business would be sustainable. A user describes their idea, skills, budget and time available; the AI produces:
+A business planner for people in the North East who are unsure whether their business would be sustainable. A user describes their idea, skills, budget and time available, then answers a few AI-written follow-up questions; the AI produces:
 
-1. An honest **sustainability check**, including reasons it might not work.
+1. An honest **verdict**: word ratings (never numbers) for the idea, the business model and the user's own situation, plus an overall rating and the main reasons it might not work.
 2. A round-up of **what to improve before starting**, split into the idea, the business model, and the user's own situation (budget, time, skills).
 3. A **roadmap** of cheap first steps to test it.
+4. A **full improved business plan**, written by a second AI call only after payment.
 
-We monetise with a free preview (the verdict, the main risks, and a taste of the improvements); payment unlocks the full improvement list and roadmap. It must never promise success or invent organisations, grants or figures.
+We monetise with a free preview (all ratings and the top 2 risks; bad news is never hidden behind the paywall); **£4.99 one-off** unlocks the improvements, roadmap and improved business plan. Decisions and staging: `idea.md` section 11b. It must never promise success or invent organisations, grants or figures.
 
 - Hackathon: Claude Builder Club, Northumbria University. Track 3, "Start Something".
 - Judging: Technical quality 40%, Real-world fit 30%, Investability 15%, Go-to-market 15%.
@@ -109,7 +110,7 @@ The track brief warns against bad advice with real costs, false encouragement, a
 
 ## AI output contract
 
-The AI must return **JSON only**, matching `src/types/roadmap.ts`. That one object holds the sustainability verdict and risks, the improvements (idea, business model, user's situation) and the roadmap, each marked as free-preview or paid. Lane D strips code fences and parses inside `try/catch`; Lane E's server falls back to a cached demo result from `demo-data/` if the API fails, so the live demo never breaks.
+The AI must return **JSON only**, matching `src/types/roadmap.ts`. There are three AI calls: follow-up questions (per round), call 1 (verdict, improvements, roadmap, each marked free-preview or paid) and call 2 (improved business plan, paid only). Lane D strips code fences and parses inside `try/catch`. Lane E's server enforces the round cap (3 rounds, about 5 questions each), never sends paid fields to the browser before unlock, and falls back to cached data from `demo-data/` if the API fails, so the live demo never breaks.
 
 ## Cost tracking (needed for the business case)
 

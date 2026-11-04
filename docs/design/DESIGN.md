@@ -148,7 +148,7 @@ The hero is the product itself: the first input, not a marketing banner.
 
 ### Intake
 
-One question per step, with a quiet progress indicator ("Step 2 of 4"). Every field has a visible label and helper text. "I'm not sure" is always allowed.
+Round 1 is one short question per step, with a quiet progress indicator. Follow-up rounds show the AI's tailored questions together on one screen, headed "A few more questions" with "Round 2 of up to 3". Every field has a visible label and helper text. "I'm not sure" is always allowed. Never show the AI "thinking" as chat bubbles; this is a form, not a chat.
 
 ### Generating
 
@@ -156,27 +156,33 @@ Never a bare spinner. Staged progress that reflects what is really happening, e.
 
 ### Verdict preview (free)
 
-Typographic and calm. The verdict is the headline; reasons sit directly beneath it.
+Typographic and calm. Everything here is free, including bad news.
 
 ```
  Your idea: mobile bike repair, Gateshead
  Based on 6 hours a week and a £300 budget.   [Edit answers]
 
- Could work, with changes                         <- H1, serif, plain text
- Reasons it might not work:
+ Overall: Needs work                              <- H1, serif, word label
+ A rough view, not a prediction.                  <- caption, always shown
+
+ Idea              Promising
+ Business model    Needs work
+ Your situation    Needs work
+
+ Top risks
    [!] Risk  Demand may be seasonal…
    [!] Risk  Travel time eats into 6 hours a week…
 
- What to improve first (preview)
-   Idea              1 of 3 shown
-   Business model    locked
-   Your situation    locked
-
- [ Unlock full plan ]                              <- paywall panel
+ [ Unlock full plan, £4.99 ]                      <- paywall panel
 ```
 
-- The verdict uses neutral text colour for every outcome; no green-for-good or red-for-bad headline.
+- Ratings are **words**, never numbers, stars, bars or percentages. Proposed labels: Strong / Promising / Needs work / Not viable yet.
+- Every rating uses neutral text colour; no green-for-good or red-for-bad.
 - Risks use `--risk` with a warning icon and the word "Risk". Never colour alone.
+
+### Writing your full plan (paid)
+
+The second AI call may take 20 to 40 seconds. Show staged progress ("Improving your business model…", "Writing your improved business plan…") and reveal sections as they arrive. Show the improvements and roadmap immediately if they are already available.
 
 ### Full plan (paid)
 
@@ -195,17 +201,17 @@ Typographic and calm. The verdict is the headline; reasons sit directly beneath 
 
 - Route line: 2px `--accent`, stops are 12px circles. Before unlock, stops are hollow with a lock icon and the word "locked".
 - Cost and time in tabular figures.
-3. **What this plan assumes** and **Where to get proper advice**, as expandable sections at the end.
+3. **Improved business plan**: long-form reading column (68 to 72 characters), serif subheads, body large.
+4. **What this plan assumes** and **Where to get proper advice**, as expandable sections at the end.
 
 ### Paywall
 
 - Show exactly what unlocks: locked section titles stay visible; only their detail is hidden.
-- Do not blur fake text behind the lock. State it plainly: "Unlock the full plan: all improvements and your roadmap. £[price], one-off."
+- Do not blur fake text behind the lock. State it plainly: "Unlock the full plan: improvements for each area, your roadmap and an improved business plan. £4.99, one-off."
 - One primary button. Price in tabular figures. No countdown timers, no "limited offer" pressure.
-
 ## 6. Components
 
-- **Primary button:** `--accent` fill, `--on-accent` label, radius 10px, padding 10px 18px, min height 44px on mobile. Label names the action: "Check my idea", "Unlock full plan".
+- **Primary button:** `--accent` fill, `--on-accent` label, radius 10px, padding 10px 18px, min height 44px on mobile. Label names the action: "Check my idea", "Unlock full plan, £4.99".
 - **Secondary button:** transparent, `--border-strong` hairline, `--text` label.
 - **Card:** `--card` on `--bg`, 1px `--border`, radius 14px, padding 24px, no shadow at rest. Use sparingly; not every item needs a card.
 - **Input / textarea:** `--surface` fill, `--border` hairline, radius 10px, min height 44px, font size at least 16px (prevents iOS zoom). Focus: 2px `--accent` ring via `:focus-visible`.
@@ -226,7 +232,7 @@ These directly support the technical quality criterion ("explain how it works, w
 
 - Plain words, active voice, one idea per sentence, sentence case.
 - Write for someone without a business background. "Money you need before you start", not "capital requirements".
-- Fixed vocabulary, used everywhere: **plan** (the whole result), **verdict** (the sustainability check), **improvements**, **roadmap**, **step** (a stop on the roadmap). Do not swap in "journey", "report" or "phase".
+- Fixed vocabulary, used everywhere: **plan** (the whole result), **verdict** (the ratings and reasons), **improvements**, **roadmap**, **step** (a stop on the roadmap), **improved business plan** (the paid long-form section). Do not swap in "journey", "report", "score" or "phase".
 - No filler ("Welcome!", "Let's get started!", "Unlock your potential"). No hype words ("revolutionary", "seamless", "supercharge").
 - Loading states end in an ellipsis: "Building your roadmap…".
 
@@ -273,6 +279,8 @@ Run before merging any UI change. If any answer is yes, fix it.
 - [ ] Pulsing badges, sparkle icons or "AI-powered" labels as decoration?
 - [ ] A bare spinner with no explanation?
 - [ ] A green or celebratory treatment on the verdict?
+- [ ] A number, star, bar or percentage used as a rating?
+- [ ] Bad news or a risk hidden behind the paywall?
 - [ ] An element whose position cannot be explained by the grid or an alignment edge?
 
 Final pass, from Chanel: before shipping a screen, remove one decoration.

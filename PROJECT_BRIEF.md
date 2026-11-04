@@ -21,9 +21,9 @@ Alternatives and their gaps:
 
 ## 3. What we built (slide 3)
 
-In: the idea, skills, budget and weekly hours.
+In: the idea, skills, budget and weekly hours, then a few AI-written follow-up questions.
 Product: Claude produces one structured plan.
-Out: a sustainability verdict with reasons it may fail, improvements split into idea / business model / own situation, and a roadmap of cheap tests.
+Out (free): word ratings for the idea, business model and the person's situation, plus the top 2 risks. Out (paid, £4.99): improvements for each area, a roadmap of cheap tests, and an improved business plan written only after payment.
 
 Why it beats the alternatives: honest by design, constrained by the user's real budget and time, and clear about its limits and where to get professional advice.
 
@@ -34,11 +34,11 @@ All figures must come from the team's own reasoning. Believable assumptions beat
 | Item | Value | Basis |
 |------|-------|-------|
 | Payer | The founder (user pays) | [confirm, or name an alternative payer such as a council, university or enterprise agency, and how both get on board] |
-| Price for the full plan | £[ ] | [why this price] |
-| AI cost per plan | £[ ] | Lane D's logged token counts |
-| Other cost per customer | £[ ] | Payment fees, hosting |
+| Price for the full plan | £4.99 one-off | idea.md 11b; [team to add why this price] |
+| AI cost per person | about 4.4p (assumed, Sonnet 5.5); call 2 adds about 4p for payers | idea.md 11c; replace with Lane D's token log |
+| Card fee per sale | about 27p (1.5% + 20p) | Stripe standard UK card rate; premium and international cards cost more |
 | Fixed monthly costs | £[ ] | Hosting, domain, any wages |
-| Break-even customers per month | [ ] | Fixed costs ÷ (price minus cost per customer) |
+| Share who must pay to break even | about 0.9% (AI only); 5.2% at 100 people a month with £20 fixed costs | idea.md 11c |
 | Monthly revenue at 100 customers | £[ ] | |
 | Monthly profit at 100 customers | £[ ] | |
 | Roughly how many potential customers | [ ] | Lane B, with source |
