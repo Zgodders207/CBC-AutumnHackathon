@@ -56,7 +56,7 @@ All figures must come from the team's own reasoning. Believable assumptions beat
 
 | Name | Lane | One line on why |
 |------|------|-----------------|
-| Zac | A. Project manager / Intake | [ ] |
+| Zac | A. Project lead and pull request management | [ ] |
 | Eric | B. Research | [ ] |
 | Michael | C. UI design | [ ] |
 | Khaliq | D. AI and API usage | [ ] |

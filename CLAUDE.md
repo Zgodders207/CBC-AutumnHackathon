@@ -59,7 +59,7 @@ Each person works in one lane. **Only edit files inside your own lane.** If a ch
 
 | Lane | Owner | Owns |
 |------|-------|------|
-| A. Project manager / Intake | Zac | `src/features/intake/` (idea questionnaire UI), `package.json` and lockfile, `README.md`, `src/App.tsx` and routing, `CLAUDE.md`, `idea.md`, `PROJECT_BRIEF.md`, pitch deck and submission paragraph (pitch ownership provisional until the team confirms) |
+| A. Project lead and pull request management | Zac | `src/features/intake/` (idea questionnaire UI), `package.json` and lockfile, `README.md`, `src/App.tsx` and routing, `CLAUDE.md`, `idea.md`, `PROJECT_BRIEF.md`, pitch deck and submission paragraph (pitch ownership provisional until the team confirms) |
 | B. Research | Eric | `docs/research/`, `demo-data/` (fictional personas, verified local-support facts), research figures for the business case |
 | C. UI design | Michael | `docs/design/`, Tailwind config and shared styles, `src/features/verdict/`, `src/features/roadmap/`, `src/features/paywall/` (screens, preview vs full, pricing display) |
 | D. AI and API usage | Khaliq | `prompts/`, the Anthropic API call code, JSON parsing, cost logging |
